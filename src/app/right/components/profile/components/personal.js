@@ -1,0 +1,44 @@
+// Import Dependencies
+import React, { Fragment } from "react";
+
+// Component
+const Personal = (props) => {
+    const { personalData } = props;
+
+    return (
+        <Fragment>
+            <li className="list-group-item">
+                <div className="me-3">Name:</div>
+                <div className="text-capitalize">
+                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"]}
+                </div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">Sex:</div>
+                <div className="text-capitalize">{personalData["sex"]}</div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">Phone:</div>
+                <div className="text-capitalize">{personalData["phone"]}</div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">Email:</div>
+                <div>{personalData["email"].charAt(0).toUpperCase() + personalData["email"].replace(personalData["email"][0], "")}</div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">Address:</div>
+                <div className="text-capitalize">{personalData["address"]}</div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">State:</div>
+                <div className="text-capitalize">{personalData["state"]}</div>
+            </li>
+            <li className="list-group-item">
+                <div className="me-3">Country:</div>
+                <div className="text-capitalize">{personalData["country"]}</div>
+            </li>
+        </Fragment>
+    );
+};
+
+export default Personal;

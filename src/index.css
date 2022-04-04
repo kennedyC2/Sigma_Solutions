@@ -7,7 +7,7 @@ body {
 body::-webkit-scrollbar,
 div::-webkit-scrollbar,
 select::-webkit-scrollbar {
-    width: 3px;
+    width: 5px;
 }
 
 body::-webkit-scrollbar-thumb,
@@ -24,6 +24,16 @@ select::-webkit-scrollbar-track {
     border-radius: 20px;
 }
 
+.body {
+    padding: 0 1.23rem;
+    min-height: calc(100vh - 25vh);
+    background-color: #f5f9fc !important;
+}
+
+.hide {
+    display: none;
+}
+
 @font-face {
     font-family: Cerebri book;
     src: url(./assets/fonts/Cerebri/Cerebri\ Sans\ Book.ttf);
@@ -32,6 +42,7 @@ select::-webkit-scrollbar-track {
 * {
     font-family: Cerebri book;
     letter-spacing: 0.03rem;
+    /* color: #525f7f; */
 }
 
 *:focus,
@@ -109,7 +120,6 @@ select::-webkit-scrollbar-track {
 .desktop_hdr,
 .searchBar {
     padding: 10px 0;
-    /* border-bottom: 0.15rem solid #e3ebf6; */
 }
 
 header button,
@@ -131,7 +141,7 @@ header input {
 .date_time p {
     padding: 0;
     margin: 0;
-    font-size: 12px;
+    font-size: 15px;
 }
 
 .date_time h5 {
@@ -147,26 +157,26 @@ header input {
     text-align: right;
 }
 
-.body {
-    padding: 10px 30px;
-    min-height: calc(100vh - 25vh);
-}
-
 .stat {
     width: calc((100% / 4) - 20px);
-    height: 100px;
-    border-radius: 0.6rem;
-    border: 1px solid #f6feff;
+    height: 90px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 5px 2px rgba(187, 187, 187, 0.4), 0px 2px 5px 2px #f6feff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
 .recent > div {
-    height: 350px;
-    border-radius: 0.6rem;
-    border: 1px solid #f6feff;
+    height: 360px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 5px 2px rgba(187, 187, 187, 0.4), 0px 2px 5px 2px #f6feff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+}
+
+.recent p,
+.triple p {
+    font-size: 14px;
 }
 
 .recent_1 {
@@ -174,36 +184,38 @@ header input {
 }
 
 .recent_2 {
-    width: calc(65% - 13px);
+    width: calc(65% - 12px);
 }
 
-.d > div {
-    width: calc((100% / 3) - 18px);
-    height: 350px;
-    border-radius: 0.6rem;
-    border: 1px solid #f6feff;
+.triple > div {
+    width: calc((100% / 3) - 17px);
+    height: 360px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 5px 2px rgba(187, 187, 187, 0.4), 0px 2px 5px 2px #f6feff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
 .bdt > div {
     width: 100%;
-    height: 350px;
-    border-radius: 0.6rem;
-    border: 1px solid #f6feff;
+    height: 380px;
     background-color: #ffffff;
-    box-shadow: 0px 2px 5px 2px rgba(187, 187, 187, 0.4), 0px 2px 5px 2px #f6feff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
 .register,
-.services {
+.services,
+.unsettled,
+.settled,
+.users,
+.profile {
     width: 100%;
-    min-height: calc(100vh - 3rem);
+    min-height: 623px;
+    padding: 1.23rem 0;
     height: auto;
-    /* border-radius: 0.6rem; */
-    border: 1px solid #f6feff;
-    background-color: #ffffff;
-    box-shadow: 0px 2px 5px 2px rgba(187, 187, 187, 0.4), 0px 2px 5px 2px #f6feff;
+    border-radius: 0.4rem;
 }
 
 .lvl_1 > div {
@@ -230,10 +242,9 @@ header input {
     width: calc((100% / 3) + 70px);
 }
 
-.nav-link {
-    border-radius: 0 !important;
-    color: black;
+div.nav-link {
     padding: 0.5rem;
+    color: unset;
 }
 
 .services button[type="submit"] {
@@ -250,6 +261,12 @@ header input {
 
 label {
     font-size: 14px;
+    text-transform: capitalize;
+}
+
+textarea {
+    font-size: 14px !important;
+    text-transform: capitalize;
 }
 
 .tooltip-inner {
@@ -261,9 +278,117 @@ label {
     font-size: 11px;
     /* box-shadow: 2px 3px 3px 3px rgba(128, 128, 128, 0.379); */
 }
+
 /* 
 .tooltip .tooltip-arrow::before {
     border-top-color: rgba(128, 128, 128, 0.3) !important;
     border-bottom-color: rgba(128, 128, 128, 0.3) !important;
     box-shadow: -2px -3px -3px 3px rgba(128, 128, 128, 0.379);
 } */
+
+.add {
+    padding: 0 0.5rem;
+    font-size: 20px;
+    color: #0d6efd;
+}
+
+.rmv {
+    padding: 0 0.5rem;
+    font-size: 20px;
+    color: red;
+}
+
+#pfl {
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: multiply;
+    height: 300px;
+    border-radius: 0.75rem;
+    border: 0.1rem solid #e3ebf6;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+}
+
+#pyl {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: multiply;
+    height: 230px;
+    border-radius: 0.75rem;
+    border: 0.1rem solid #e3ebf6;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+}
+
+#pfg {
+    height: 115px;
+}
+
+.avatar {
+    display: inline-block;
+    margin-top: -5rem;
+}
+
+#pf_left {
+    width: 65%;
+}
+
+#pf_right {
+    width: 33%;
+}
+
+#pf_left .list-group-item {
+    border: 0;
+    display: flex;
+    font-size: 14px;
+}
+
+.payment .list-group-item {
+    border: 1px dashed rgba(0, 0, 0, 0.125) !important;
+    border-radius: 0.5rem;
+}
+
+.dashboard .list-group-item {
+    border: 0 !important;
+}
+
+#pf_left > div,
+#pf_right > div,
+#py_1 > div,
+.rg_f {
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+}
+
+.progress {
+    height: 0.5rem !important;
+}
+
+.menu > div > div:last-child {
+    margin-bottom: 32px;
+}
+
+.extend {
+    background-color: #f5f9fc !important;
+    padding: 2px;
+}
+
+.extend::after {
+    content: " ";
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    bottom: -6px;
+    left: 23px;
+    width: 2px;
+    height: 23px;
+    z-index: 20;
+    background-color: #f0f3f7;
+}
+
+#base > canvas {
+    height: 300px;
+}

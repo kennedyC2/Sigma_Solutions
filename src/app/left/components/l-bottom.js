@@ -11,7 +11,7 @@ const LeftBottom = () => {
             <div className="accordion" id="lft">
                 <div className="accordion-item my-2">
                     <Link to="/" className="accordion-header" id="Dashboard">
-                        <button className="accordion-button" data-bs-toggle="collapse" data-bs-target="#contentOne" aria-expanded="true" aria-controls="contentOne">
+                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentOne" aria-expanded="true" aria-controls="contentOne">
                             <i className="bi bi-house-door"></i> <span>Dashboard</span>
                         </button>
                     </Link>
@@ -21,7 +21,7 @@ const LeftBottom = () => {
                 </div>
                 <div className="accordion-item my-2">
                     <div className="accordion-header" id="test">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentTwo" aria-expanded="false" aria-controls="contentTwo">
+                        <button className="accordion-button" data-bs-toggle="collapse" data-bs-target="#contentTwo" aria-expanded="false" aria-controls="contentTwo">
                             <i className="bi bi-file-medical"></i> <span>Test</span>
                         </button>
                     </div>
@@ -35,26 +35,7 @@ const LeftBottom = () => {
                                     <Link to="/unsettled">Unsettled</Link>
                                 </li>
                                 <li>
-                                    <Link to="/database">Database</Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item my-2">
-                    <div className="accordion-header" id="Users">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentThree" aria-expanded="false" aria-controls="contentThree">
-                            <i className="bi bi-people"></i> <span>Users</span>
-                        </button>
-                    </div>
-                    <div id="contentThree" className="accordion-collapse collapse" aria-labelledby="Users" data-bs-parent="#lft">
-                        <div className="accordion-body">
-                            <ul>
-                                <li>
-                                    <Link to="/listUsers">List Users</Link>
-                                </li>
-                                <li>
-                                    <Link to="/addUser">Add User</Link>
+                                    <Link to="/settled">Settled</Link>
                                 </li>
                             </ul>
                         </div>
@@ -70,10 +51,13 @@ const LeftBottom = () => {
                         <div className="accordion-body">
                             <ul>
                                 <li>
-                                    <Link to="/testkits">Test Kits</Link>
+                                    <Link to="/laboratory_Users">Users</Link>
                                 </li>
                                 <li>
-                                    <Link to="/services">Services</Link>
+                                    <Link to="/laboratory_Testkits">Test Kits</Link>
+                                </li>
+                                <li>
+                                    <Link to="/laboratory_Services">Services</Link>
                                 </li>
                             </ul>
                         </div>
