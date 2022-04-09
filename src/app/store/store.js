@@ -1,12 +1,28 @@
 // Import dependencies
 import { createStore } from "redux";
-import initialState from "../Helpers/data";
-import { hoursInString, date, month } from "../Helpers/helper";
+import { hoursInString, date, month } from "../Misc/helper";
 
-const appReducer = (state = initialState, action) => {
+const appReducer = (state = {}, action) => {
     switch (action.type) {
+        // Personal Profile
+        case "personalDetails": {
+            if (state["personal"] === undefined) {
+                const data = {};
+                data["auth"] = action.payload.auth;
+                data["personal"] = action.payload.personal;
+                return {
+                    ...state,
+                    ...data,
+                };
+            }
+
+            return state;
+        }
+
+        // Services
+        // ====================================================================================================================
         case "addServices": {
-            if (state["selected"][action.payload.category] !== undefined) {
+            if (state["services"][action.payload.category] !== undefined) {
                 //  Define Data to be Stored
                 const data = {};
                 data["title"] = action.payload.title;
@@ -14,7 +30,7 @@ const appReducer = (state = initialState, action) => {
                 data["description"] = action.payload.description;
 
                 // Merge with Previous Data
-                const oldData = state.selected;
+                const oldData = state.services;
                 const stats = state.stats;
                 const top_5 = state.top_5;
                 oldData[action.payload.category].testList.push(data);
@@ -23,7 +39,7 @@ const appReducer = (state = initialState, action) => {
 
                 return {
                     ...state,
-                    selected: { ...oldData },
+                    services: { ...oldData },
                     stats: stats,
                     top_5: top_5,
                 };
@@ -40,7 +56,7 @@ const appReducer = (state = initialState, action) => {
                 data["testList"].push(newTest);
 
                 // Merge With Previous Data
-                const oldData = state.selected;
+                const oldData = state.services;
                 const stats = state.stats;
                 const top_5 = state.top_5;
                 oldData[action.payload.category] = data;
@@ -49,13 +65,15 @@ const appReducer = (state = initialState, action) => {
 
                 return {
                     ...state,
-                    selected: { ...oldData },
+                    services: { ...oldData },
                     stats: stats,
                     top_5: top_5,
                 };
             }
         }
 
+        // Booking A TEst
+        // ====================================================================================================================
         case "bookTest": {
             const test = state.test;
             const stats = state.stats;
@@ -66,7 +84,7 @@ const appReducer = (state = initialState, action) => {
 
             // Update stat Data
             stats.test += 1;
-            stats.revenue += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+            stats.revenue += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
 
             // Define activity data
             const actData = {};
@@ -84,48 +102,48 @@ const appReducer = (state = initialState, action) => {
             const hour = parseInt(hoursInString.split(":")[0]);
 
             if (hour <= 8 && hoursInString.split(":")[1] === "am") {
-                hourly["a"][0] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][0] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 8 && hour <= 10 && hoursInString.split(":")[1] === "am") {
-                hourly["a"][1] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][1] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 10 && hour <= 12 && hoursInString.split(":")[1] === "pm") {
-                hourly["a"][2] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][2] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 0 && hour <= 2 && hoursInString.split(":")[1] === "pm") {
-                hourly["a"][3] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][3] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 2 && hour <= 4 && hoursInString.split(":")[1] === "pm") {
-                hourly["a"][4] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][4] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 4 && hour <= 6 && hoursInString.split(":")[1] === "pm") {
                 console.log("hello");
-                hourly["a"][5] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][5] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 6 && hour <= 8 && hoursInString.split(":")[1] === "pm") {
-                hourly["a"][6] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][6] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             if (hour > 8 && hour <= 10 && hoursInString.split(":")[1] === "pm") {
-                hourly["a"][7] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
-                hourly["b"] += parseInt(action.payload.selectedTest.map((cost) => cost.split(":").pop()));
+                hourly["a"][7] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
+                hourly["b"] += parseInt(action.payload.servicesTest.map((cost) => cost.split(":").pop()));
             }
 
             // update Top 5 Test
-            for (const item of action.payload.selectedTest) {
+            for (const item of action.payload.servicesTest) {
                 top_5["tests"][item.split(":")[2].trim().replaceAll(" ", "_")] += 1;
             }
 
@@ -165,6 +183,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Pending Tests
+        // ====================================================================================================================
         case "incomplete_Result": {
             // Previous Data
             const test = state.test;
@@ -186,6 +206,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Completed Tests
+        // ====================================================================================================================
         case "complete_Result": {
             // test Previous Data
             const test = state.test;
@@ -218,6 +240,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Add New User
+        // ====================================================================================================================
         case "addUser": {
             // Previous Data
             const oldData = state.users;
@@ -232,6 +256,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Add New Kit
+        // ====================================================================================================================
         case "addKit": {
             // kit Previous Data
             const oldData = state.testKits;
@@ -255,6 +281,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Add Company
+        // ====================================================================================================================
         case "company": {
             // Profile Previous Data
             const oldData = state.profile;
@@ -267,6 +295,8 @@ const appReducer = (state = initialState, action) => {
             };
         }
 
+        // Default
+        // ====================================================================================================================
         default: {
             return state;
         }

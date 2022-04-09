@@ -8,7 +8,7 @@ import Stats from "./component/stats";
 import Recent from "./component/recent";
 import Triple from "./component/triple";
 import Base from "./component/base";
-import { date, day, month, year } from "../../../Helpers/helper";
+import { date, day, month, year } from "../../../helpers/helper";
 
 // App
 const Dashboard = () => {

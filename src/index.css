@@ -1,7 +1,8 @@
 html,
-body {
-    overflow-x: hidden;
-    height: auto;
+body,
+body > div {
+    overflow-x: hidden !important;
+    height: 100% !important;
 }
 
 body::-webkit-scrollbar,
@@ -42,6 +43,7 @@ select::-webkit-scrollbar-track {
 * {
     font-family: Cerebri book;
     letter-spacing: 0.03rem;
+    transition: 0.4s;
     /* color: #525f7f; */
 }
 
@@ -320,6 +322,12 @@ textarea {
     box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
+.bg-1 {
+    background: #2c3e50; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4ca1af, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 #pfg {
     height: 115px;
 }
@@ -346,6 +354,12 @@ textarea {
 .payment .list-group-item {
     border: 1px dashed rgba(0, 0, 0, 0.125) !important;
     border-radius: 0.5rem;
+}
+
+.home .list-group-item {
+    border-width: 0 0 1px 0;
+    border-color: #e3ebf6;
+    border-radius: 0;
 }
 
 .dashboard .list-group-item {
@@ -391,4 +405,31 @@ textarea {
 
 #base > canvas {
     height: 300px;
+}
+
+#login {
+    width: 420px;
+    background-color: #ffffff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    margin: 120px auto auto;
+}
+
+.form-text {
+    font-size: 0.8em !important;
+}
+
+#SignUP {
+    width: 70%;
+    background-color: #ffffff;
+    margin: auto;
+}
+
+#spin {
+    width: 200px;
+    background-color: #ffffff;
+}
+
+.bbs {
+    border-bottom: 0.1rem solid #e3ebf6;
 }

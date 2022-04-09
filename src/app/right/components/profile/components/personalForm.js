@@ -1,6 +1,6 @@
 //  Import dependencies
 import React from "react";
-import { RF_days, months, CalenderYear, sex, states } from "../../../../Helpers/helper";
+import { RF_days, months, CalenderYear, sex, states } from "../../../../helpers/helper";
 
 // Component
 const UpdatePersonal = (props) => {

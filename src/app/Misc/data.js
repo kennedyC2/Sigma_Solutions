@@ -1,5 +1,7 @@
 // Initial State
 const initialState = {
+    auth: {},
+
     Database: {
         Clinical_Chemistry: {
             name: "chempath",
@@ -63,7 +65,7 @@ const initialState = {
         },
     },
 
-    selected: {},
+    services: {},
 
     test: {
         unsettled: {},

@@ -6,7 +6,7 @@
 import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import RenderResults from "./components/renderResult_1";
-import { RF_days, months, CalenderYear, date, month, year } from "../../../Helpers/helper";
+import { RF_days, months, CalenderYear, date, month, year } from "../../../helpers/helper";
 
 // App
 const Database = () => {

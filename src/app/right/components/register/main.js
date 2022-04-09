@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FormTop from "./components/top";
 import FormBottom from "./components/bottom";
-import { year, months, monthNum, date, month, hours } from "../../../Helpers/helper";
+import { year, months, monthNum, date, month, hours } from "../../../helpers/helper";
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
 
 // App
