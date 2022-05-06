@@ -26,10 +26,6 @@ const Personal = (props) => {
                 <div>{personalData["email"].charAt(0).toUpperCase() + personalData["email"].replace(personalData["email"][0], "")}</div>
             </li>
             <li className="list-group-item">
-                <div className="me-3">Address:</div>
-                <div className="text-capitalize">{personalData["address"]}</div>
-            </li>
-            <li className="list-group-item">
                 <div className="me-3">State:</div>
                 <div className="text-capitalize">{personalData["state"]}</div>
             </li>

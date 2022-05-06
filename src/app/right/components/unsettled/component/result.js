@@ -3,13 +3,10 @@ import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 
 // Component
-let result = {};
-
 const ResultEntry = (props) => {
-    const testParams = useSelector((state) => state.Database);
-    const { data, date, position } = props;
+    const testParams = useSelector((state) => state.database);
+    const { data, position } = props;
     const [formData, setFormData] = useState({});
-    console.log(position);
 
     const renderOptions = (x, y) => {
         let options = "";
@@ -25,33 +22,13 @@ const ResultEntry = (props) => {
     // Add New Layer Of Input
     const addNewLayer = (e) => {
         e.preventDefault();
-
-        // Define Data
-        const d = formData["formData"] || formData;
         const testIndex = e.target.dataset.index;
         const category = e.target.dataset.cat;
-        const test = data[testIndex].split(":")[2].replaceAll(" ", "_");
-        d["date"] = date;
-        d["index"] = position;
-        d["testData"] = d["testData"] ? d["testData"] : {};
-        d["testData"][test] ? (d["testData"][test][e.target[0].value] = `${e.target[1].value}${e.target[2].value}`) : (d["testData"][test] = { [e.target[0].value]: `${e.target[1].value}${e.target[2].value}` });
-
-        // update State
-        setFormData({ formData: d });
-        result = d;
-        console.log(result);
-
-        // Create Form
-        const form = document.createElement("form");
-        form.setAttribute("action", "#");
-        form.setAttribute("method", "post");
-        form.setAttribute("data-cat", category);
-        form.setAttribute("data-index", testIndex);
-        form.onsubmit = addNewLayer;
 
         // Create Div
         const div = document.createElement("div");
-        div.setAttribute("class", "input-group mb-2");
+        div.setAttribute("class", `input-group mb-2 ${"fvk" + position}`);
+        div.setAttribute("data-selected", data[testIndex]);
         div.style.fontSize = "13px";
 
         // Create Select_One
@@ -77,6 +54,9 @@ const ResultEntry = (props) => {
         const button_One = document.createElement("button");
         button_One.setAttribute("type", "submit");
         button_One.setAttribute("class", "btn btn-sm add");
+        button_One.setAttribute("data-cat", category);
+        button_One.setAttribute("data-index", testIndex);
+        button_One.onclick = addNewLayer;
         button_One.innerText = "+";
 
         // Create Button_Two
@@ -87,21 +67,19 @@ const ResultEntry = (props) => {
         button_Two.onclick = removeNode;
         button_Two.innerText = "-";
 
-        // Append Form
+        // Append Layers
         div.insertAdjacentElement("beforeend", select_One);
         div.insertAdjacentElement("beforeend", input);
         div.insertAdjacentElement("beforeend", select_Two);
         div.insertAdjacentElement("beforeend", button_One);
         div.insertAdjacentElement("beforeend", button_Two);
-        form.append(div);
-        e.target.parentElement.append(form);
+
+        // Append(div);
+        e.target.parentElement.parentElement.append(div);
 
         // Modify Input Layer
-        e.target[0].setAttribute("disabled", "true");
-        e.target[1].setAttribute("disabled", "true");
-        e.target[2].setAttribute("disabled", "true");
-        e.target[3].classList.add("hide");
-        e.target[4].classList.remove("hide");
+        e.target.classList.add("hide");
+        e.target.nextSibling.classList.remove("hide");
     };
 
     const removeNode = (e) => {
@@ -129,7 +107,7 @@ const ResultEntry = (props) => {
                 <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "30%" }}>
                     {data.map((key, index) => (
                         <div key={index} className={`nav-link  btn-sm ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${key.split(":")[1]}-services`} type="button" role="tab" aria-controls={`v-pills-${key.split(":")[1]}-services`} aria-selected="true">
-                            {key.split(":")[2]}
+                            {key.split(":")[2].replaceAll("_", " ")}
                         </div>
                     ))}
                 </div>
@@ -137,41 +115,37 @@ const ResultEntry = (props) => {
                 <div className="tab-content ps-2" id="v-pills-tabContent" style={{ borderLeft: "1px solid rgba(149, 170, 201, .3)", width: "70%", height: "350px", overflow: "hidden auto" }}>
                     {data.map((key, index) => (
                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services`} role="tabpanel" aria-labelledby={`v-pills-${key.split(":")[1]}-services-tab`}>
-                            <form action="#" method="post" onSubmit={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}>
-                                <div className="input-group mb-2" style={{ fontSize: "13px" }}>
-                                    <select name="" id="" className="form-select form-select-sm" style={{ width: "40%" }}>
-                                        {testParams[key.split(":")[0]]["parameter"].map((key, index) => (
-                                            <option key={index} value={key.split(":")[0]}>
-                                                {key.split(":")[0].replaceAll("_", " ")}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <input type="text" className="form-control form-control-sm" name="" id="" style={{ width: "15%" }} placeholder="value" autoComplete="0" required />
-                                    <select name="" id="" className="form-select form-select-sm">
-                                        {testParams[key.split(":")[0]]["unit"].sort().map((key, index) => (
-                                            <option key={index} value={key.split(":")[0]}>
-                                                {key.split(":")[0]}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button type="submit" className={`btn btn-sm add ${"fvk" + position}`}>
-                                        +
-                                    </button>
-                                    <button type="button" className="btn btn-sm rmv hide" data-cat={key.split(":")[0]} data-index={index} onClick={(e) => removeNode(e)}>
-                                        -
-                                    </button>
-                                </div>
-                            </form>
+                            {/* <form action="#" method="post" onSubmit={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}> */}
+                            <div className={`input-group mb-2 ${"fvk" + position}`} style={{ fontSize: "13px" }} data-cat={key.split(":")[0]} data-selected={data[index]}>
+                                <select name="" id="" className="form-select form-select-sm" style={{ width: "40%" }}>
+                                    {testParams[key.split(":")[0]]["parameter"].map((key, index) => (
+                                        <option key={index} value={key.split(":")[0]}>
+                                            {key.split(":")[0].replaceAll("_", " ")}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input type="text" className="form-control form-control-sm" name="" id="" style={{ width: "15%" }} placeholder="value" autoComplete="0" required />
+                                <select name="" id="" className="form-select form-select-sm">
+                                    {testParams[key.split(":")[0]]["unit"].sort().map((key, index) => (
+                                        <option key={index} value={key.split(":")[0]}>
+                                            {key.split(":")[0]}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button type="button" className={`btn btn-sm add ${"fvk" + position}`} onClick={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}>
+                                    +
+                                </button>
+                                <button type="button" className="btn btn-sm rmv hide" data-cat={key.split(":")[0]} data-index={index} onClick={(e) => removeNode(e)}>
+                                    -
+                                </button>
+                            </div>
+                            {/* </form> */}
                         </div>
                     ))}
                 </div>
             </div>
         </Fragment>
     );
-};
-
-export const retrieve_Result = () => {
-    return result;
 };
 
 export default ResultEntry;

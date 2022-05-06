@@ -13,6 +13,7 @@
         "glutamyltransferase",
         "histo",
         "Hydroxybutyrate",
+        "keyval",
         "labelledby",
         "lastname",
         "listkits",
@@ -30,6 +31,8 @@
         "testkits",
         "transaminase",
         "umol",
-        "Unsettledkey"
+        "Unsettledkey",
+        "valuenow",
+        "zoomable"
     ]
 }

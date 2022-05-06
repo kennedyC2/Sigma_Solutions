@@ -15,7 +15,7 @@ const AddForm = (props) => {
                     <input type="text" className="form-control form-control-sm" name="title" id="title" placeholder="Liver Function Test" required />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="sex" className="form-label">
+                    <label htmlFor="category" className="form-label">
                         Category:
                     </label>
                     <select className="form-select form-select-sm" name="category" required>

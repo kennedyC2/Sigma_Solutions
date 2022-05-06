@@ -1,6 +1,6 @@
 //  Import dependencies
 import React from "react";
-import { states } from "../../../../helpers/helper";
+import { states } from "../../../../Misc/helper";
 
 // Component
 const CompanyForm = (props) => {

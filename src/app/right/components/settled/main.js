@@ -6,11 +6,25 @@
 import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import RenderResults from "./components/renderResult_1";
-import { RF_days, months, CalenderYear, date, month, year } from "../../../helpers/helper";
+import { RF_days, months, CalenderYear, date, month, year } from "../../../Misc/helper";
+import { Navigate } from "react-router-dom";
 
 // App
 const Database = () => {
-    const { this_Month } = useSelector((state) => state.test);
+    const { settled } = useSelector((state) => state.tests);
+
+    // Confirm log In status
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                token: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
 
     const [sortData, setSortData] = useState({
         day: date,
@@ -20,17 +34,17 @@ const Database = () => {
 
     const fetchData = () => {
         if (parseInt(sortData.year) === parseInt(year)) {
-            return this_Month[`${sortData["month"]} ${sortData["day"]}`] || [];
+            return settled[`${sortData["month"]} ${sortData["day"]}`] || [];
         } else {
             const empty = [];
             return empty;
         }
     };
 
-    return (
+    return status.loggedIn === true ? (
         <Fragment>
             <div className="settled" style={{ height: "auto" }}>
-                <div className="text-end rg_f d-flex justify-content-end">
+                <div className="text-end rg_f d-flex justify-content-end py-2">
                     <div className="py-1 px-3" style={{ fontSize: "14px" }}>
                         Sort By Date:
                     </div>
@@ -64,7 +78,7 @@ const Database = () => {
                     {fetchData().length > 0 ? (
                         <div className="d-flex align-items-start justify-content-between mt-3">
                             {/* tab 1 */}
-                            <div className="rg_f py-4" style={{ width: "54%", height: "calc(623px - 68px - 1rem)" }}>
+                            <div className="rg_f py-4" style={{ width: "54%", height: "calc(623px - 68px)" }}>
                                 <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
                                     {fetchData().map((key, index) => (
                                         <div key={index} className={`nav-link  btn-sm ${index === 0 ? "active" : ""} d-flex justify-content-between`} id={`v-pills-${"res" + index}${index + 5}-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${"res" + index}${index + 5}`} type="button" role="tab" aria-controls={`v-pills-${"res" + index}${index + 5}`} aria-selected="true">
@@ -75,7 +89,7 @@ const Database = () => {
                                 </div>
                             </div>
                             {/* tab 2 */}
-                            <div className="rg_f py-4" style={{ width: "44%", height: "calc(623px - 68px - 1rem)" }}>
+                            <div className="rg_f py-4" style={{ width: "44%", height: "calc(623px - 68px)" }}>
                                 <div className="tab-content p-2" id="v-pills-tabContent" style={{ width: "100%", height: "100%", overflowY: "auto" }}>
                                     {fetchData().map((item, index) => (
                                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${"res" + index}${index + 5}`} role="tabpanel" aria-labelledby={`v-pills-${"res" + index}${index + 5}-tab`}>
@@ -119,7 +133,7 @@ const Database = () => {
                                                     <ol className="list-group mb-3 list-group-numbered" style={{ width: "98%" }}>
                                                         {item["selectedTest"].map((key, index) => (
                                                             <li key={index} className="list-group-item">
-                                                                &nbsp; {key.split(":")[2]}
+                                                                &nbsp; {key.split(":")[2].replaceAll("_", " ")}
                                                             </li>
                                                         ))}
                                                     </ol>
@@ -132,7 +146,7 @@ const Database = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="rg_f mt-3" style={{ height: "calc(623px - 68px - 1rem)" }}>
+                        <div className="rg_f mt-3" style={{ height: "calc(623px - 68px)" }}>
                             <div style={{ textAlign: "left", padding: "200px 0", width: "70%", margin: "auto", fontSize: "13px" }}>
                                 <p>No Laboratory Services Has Been Added</p>
                                 <p>
@@ -144,6 +158,8 @@ const Database = () => {
                 </div>
             </div>
         </Fragment>
+    ) : (
+        <Navigate to="/login" replace={true} />
     );
 };
 

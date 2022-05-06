@@ -27,7 +27,11 @@ select::-webkit-scrollbar-track {
 
 .body {
     padding: 0 1.23rem;
-    min-height: calc(100vh - 25vh);
+    min-height: 100vh;
+    background-color: #f5f9fc !important;
+}
+
+.ext {
     background-color: #f5f9fc !important;
 }
 
@@ -43,7 +47,6 @@ select::-webkit-scrollbar-track {
 * {
     font-family: Cerebri book;
     letter-spacing: 0.03rem;
-    transition: 0.4s;
     /* color: #525f7f; */
 }
 
@@ -212,12 +215,22 @@ header input {
 .unsettled,
 .settled,
 .users,
-.profile {
+.profile,
+.payment {
     width: 100%;
     min-height: 623px;
     padding: 1.23rem 0;
     height: auto;
     border-radius: 0.4rem;
+    transition: 1s !important;
+}
+
+.users .list-group-numbered > li::before {
+    margin-top: 0.4rem !important;
+}
+
+.users .list-group-numbered > li > div {
+    width: calc(100% - 16px);
 }
 
 .lvl_1 > div {
@@ -324,8 +337,8 @@ textarea {
 
 .bg-1 {
     background: #2c3e50; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #4ca1af, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50);
+    background: linear-gradient(to right, #4ca1af, #2c3e50);
 }
 
 #pfg {
@@ -412,7 +425,9 @@ textarea {
     background-color: #ffffff;
     border: 0.1rem solid #e3ebf6;
     border-radius: 0.75rem;
-    margin: 120px auto auto;
+    margin: auto;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+    transition: 1s !important;
 }
 
 .form-text {
@@ -423,13 +438,61 @@ textarea {
     width: 70%;
     background-color: #ffffff;
     margin: auto;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+    transition: 1s !important;
 }
 
 #spin {
     width: 200px;
-    background-color: #ffffff;
 }
 
 .bbs {
+    background-color: #ffffff;
     border-bottom: 0.1rem solid #e3ebf6;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
+}
+
+.point li {
+    cursor: pointer;
+}
+
+.point li:hover {
+    color: white;
+    background-color: #0d6efd;
+    transition: 0.4s !important;
+}
+
+.chn {
+    position: absolute;
+    left: 0.35rem;
+    background-color: #ffffffa3;
+    height: 150px;
+    width: 150px;
+    top: -3.9rem;
+    opacity: 0;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
+    transition: 0.2s;
+}
+
+.chn:hover {
+    opacity: 1;
+}
+
+.display {
+    width: 500px;
+    height: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.preview {
+    overflow: hidden;
+    width: 300px !important;
+    height: 300px !important;
 }

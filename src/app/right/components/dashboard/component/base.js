@@ -127,8 +127,8 @@ const Base = () => {
                         </p>
                     </div>
                     <div style={{ height: "320px", paddingTop: "5px" }}>
-                        <canvas id="base" style={{ display: revenue.days.length > 0 ? "block" : "none" }}></canvas>
-                        <div className="mx-3 text-center" style={{ padding: "137px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: revenue.days.length > 0 ? "none" : "block" }}>
+                        <canvas id="base" style={{ display: revenue.total > 0 ? "block" : "none" }}></canvas>
+                        <div className="mx-3 text-center" style={{ padding: "137px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: revenue.total > 0 ? "none" : "block" }}>
                             No Recent Activity
                         </div>
                     </div>

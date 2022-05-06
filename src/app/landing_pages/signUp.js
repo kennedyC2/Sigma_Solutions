@@ -65,173 +65,152 @@ const SignUP = () => {
         }
     };
 
-    return (
-        <Fragment>
-            {spin === 0 ? (
-                <div className="w-100">
-                    <div className="bbs" style={{ width: "100%" }}>
-                        <div className="m-auto py-1" style={{ width: "85%" }}>
-                            <nav className="navbar navbar-expand-lg navbar-light">
-                                <div className="container-fluid px-2">
-                                    <Link className="navbar-brand" to="/">
-                                        WELCOME
-                                    </Link>
-                                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                                        <span className="navbar-toggler-icon"></span>
-                                    </button>
-                                    <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                                        <div className=" d-flex justify-content-end"></div>
-                                    </div>
-                                </div>
-                            </nav>
+    return spin === 0 ? (
+        <div className="w-100">
+            <form action="account/signUp" method="POST" className="px-4 py-0" id="SignUP" onSubmit={(e) => submitForm(e)}>
+                <div className="text-center my-3">
+                    <div id="box-1" className="p-1 text-center, m-auto" style={{ minHeight: "30px", transition: ".5s", width: "40%" }}>
+                        <p className="alert-success m-0"></p>
+                    </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                    <div className="pe-3 ps-2" style={{ width: "48%" }}>
+                        <div className="mb-3">
+                            <label htmlFor="firstname" className="form-label">
+                                Firstname: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="text" className="form-control form-control-sm" name="firstname" id="firstname" placeholder="Amadi" required />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="lastname" className="form-label">
+                                Lastname: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="text" className="form-control form-control-sm" name="lastname" id="lastname" placeholder="Precious" required />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="other" className="form-label">
+                                Other (names): <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="text" className="form-control form-control-sm" name="other" id="other" placeholder="Chioma" required />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="sex" className="form-label">
+                                Sex: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <select className="form-select form-select-sm" name="sex" aria-label="Default select" required>
+                                <option value="" disabled>
+                                    select
+                                </option>
+                                {sex.map((key, index) => (
+                                    <option key={index} value={key}>
+                                        {key}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="phone" className="form-label">
+                                Phone: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
                         </div>
                     </div>
-                    <form action="account/signUp" method="POST" className="px-4 py-0" id="SignUP" onSubmit={(e) => submitForm(e)}>
-                        <div className="text-center my-3">
-                            <div id="box-1" className="p-1 text-center, m-auto" style={{ minHeight: "30px", transition: ".5s", width: "40%" }}>
-                                <p className="alert-success m-0"></p>
+                    <div className="ps-3 pe-2" style={{ width: "48%" }}>
+                        <div className="mb-3">
+                            <label htmlFor="email" className="form-label">
+                                Email: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="email" className="form-control form-control-sm" name="email" id="email" placeholder="someone@email.com" required />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="age" className="form-label">
+                                Date of Birth: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <div className="input-group">
+                                <select className="form-select form-select-sm" name="day" defaultValue={"Default"} aria-label="Default select" required>
+                                    <option value="Default" disabled>
+                                        Day
+                                    </option>
+                                    {RF_days.map((key, index) => (
+                                        <option key={index} value={key}>
+                                            {key}
+                                        </option>
+                                    ))}
+                                </select>
+                                <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={"Default"} style={{ width: "90px" }} required>
+                                    <option value="Default" disabled>
+                                        Month
+                                    </option>
+                                    {months.map((key, index) => (
+                                        <option key={index} value={key}>
+                                            {key}
+                                        </option>
+                                    ))}
+                                </select>
+                                <select className="form-select form-select-sm" name="year" aria-label="Default select" defaultValue={"Default"} required>
+                                    <option value="Default" disabled>
+                                        Year
+                                    </option>
+                                    {CalenderYear().map((key, index) => (
+                                        <option key={index} value={key}>
+                                            {key}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
-                        <div className="d-flex justify-content-between">
-                            <div className="pe-3 ps-2" style={{ width: "48%" }}>
-                                <div className="mb-3">
-                                    <label htmlFor="firstname" className="form-label">
-                                        Firstname: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="text" className="form-control form-control-sm" name="firstname" id="firstname" placeholder="Amadi" required />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="lastname" className="form-label">
-                                        Lastname: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="text" className="form-control form-control-sm" name="lastname" id="lastname" placeholder="Precious" required />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="other" className="form-label">
-                                        Other (names): <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="text" className="form-control form-control-sm" name="other" id="other" placeholder="Chioma" required />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="sex" className="form-label">
-                                        Sex: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <select className="form-select form-select-sm" name="sex" aria-label="Default select" required>
-                                        <option value="" disabled>
-                                            select
-                                        </option>
-                                        {sex.map((key, index) => (
-                                            <option key={index} value={key}>
-                                                {key}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="phone" className="form-label">
-                                        Phone: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
-                                </div>
-                            </div>
-                            <div className="ps-3 pe-2" style={{ width: "48%" }}>
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">
-                                        Email: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="email" className="form-control form-control-sm" name="email" id="email" placeholder="someone@email.com" required />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="age" className="form-label">
-                                        Date of Birth: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <div className="input-group">
-                                        <select className="form-select form-select-sm" name="day" defaultValue={"Default"} aria-label="Default select" required>
-                                            <option value="Default" disabled>
-                                                Day
-                                            </option>
-                                            {RF_days.map((key, index) => (
-                                                <option key={index} value={key}>
-                                                    {key}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={"Default"} style={{ width: "90px" }} required>
-                                            <option value="Default" disabled>
-                                                Month
-                                            </option>
-                                            {months.map((key, index) => (
-                                                <option key={index} value={key}>
-                                                    {key}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        <select className="form-select form-select-sm" name="year" aria-label="Default select" defaultValue={"Default"} required>
-                                            <option value="Default" disabled>
-                                                Year
-                                            </option>
-                                            {CalenderYear().map((key, index) => (
-                                                <option key={index} value={key}>
-                                                    {key}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="state" className="form-label">
-                                        State: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <select className="form-select form-select-sm" name="state" id="state" required>
-                                        <option value="" disabled>
-                                            select
-                                        </option>
-                                        {states.map((key, index) => (
-                                            <option key={index} value={key}>
-                                                {key.split(" ")[0]}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="country" className="form-label">
-                                        Country: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <select className="form-select form-select-sm" name="country" id="country" required>
-                                        <option value="" disabled>
-                                            select
-                                        </option>
-                                        <option value="Nigeria">Nigeria</option>
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="password" className="form-label">
-                                        Password: <span className="text-danger fs-5">*</span>
-                                    </label>
-                                    <input type="password" className="form-control form-control-sm" name="password" id="password" placeholder="***************" required />
-                                    <div id="password" className="form-text text-danger ps-1">
-                                        Must be 8-20 characters long.
-                                    </div>
-                                </div>
+                        <div className="mb-3">
+                            <label htmlFor="state" className="form-label">
+                                State: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <select className="form-select form-select-sm" name="state" id="state" required>
+                                <option value="" disabled>
+                                    select
+                                </option>
+                                {states.map((key, index) => (
+                                    <option key={index} value={key}>
+                                        {key.split(" ")[0]}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="country" className="form-label">
+                                Country: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <select className="form-select form-select-sm" name="country" id="country" required>
+                                <option value="" disabled>
+                                    select
+                                </option>
+                                <option value="Nigeria">Nigeria</option>
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="password" className="form-label">
+                                Password: <span className="text-danger fs-5">*</span>
+                            </label>
+                            <input type="password" className="form-control form-control-sm" name="password" id="password" placeholder="***************" required />
+                            <div id="password" className="form-text text-danger ps-1">
+                                Must be 8-20 characters long.
                             </div>
                         </div>
-                        <div className="my-3 text-end d-flex justify-content-end">
-                            <div className="d-inline-flex pt-1" style={{ fontSize: "13px" }}>
-                                <p className="mb-0 me-2">Already have an account?</p>
-                                <Link to="/login" className="d-inline-flex text-decoration-underline me-3">
-                                    Login
-                                </Link>
-                            </div>
-                            <button type="submit" className="btn btn-primary btn-sm px-3">
-                                Register
-                            </button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            ) : (
-                <Spinner id="signUP" />
-            )}
-        </Fragment>
+                <div className="mt-3 mb-4 text-end d-flex justify-content-end">
+                    <div className="d-inline-flex pt-1" style={{ fontSize: "13px" }}>
+                        <p className="mb-0 me-2">Already have an account?</p>
+                        <Link to="/login" className="d-inline-flex text-decoration-underline me-3">
+                            Login
+                        </Link>
+                    </div>
+                    <button type="submit" className="btn btn-primary btn-sm px-3">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    ) : (
+        <Spinner id="signUP" />
     );
 };
 

@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 const Index = () => {
     return (
         <Fragment>
-            <div>
-                <div className="bg-1" style={{ width: "100%", height: "73%" }}>
+            <div className="h-100 w-100">
+                <div className="bg-1" style={{ width: "100%", height: "75%" }}>
                     <div className="m-auto py-1" style={{ width: "85%" }}>
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <div className="container-fluid px-2">
@@ -31,15 +31,15 @@ const Index = () => {
                         </nav>
                     </div>
                 </div>
-                <div style={{ width: "100%", height: "27%" }}>
-                    <div className="d-flex justify-content-between m-auto" style={{ width: "85%", textAlign: "justify" }}>
-                        <div className="py-3 px-2" style={{ width: "30%", fontSize: "14px" }}>
+                <div style={{ width: "100%", height: "25%" }}>
+                    <div className="d-flex justify-content-between m-auto pt-2" style={{ width: "85%", textAlign: "justify" }}>
+                        <div className="pt-2 pe-3" style={{ width: "30%", fontSize: "14px" }}>
                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt quidem, quae veniam modi voluptates eos et dolorem unde aliquam? Harum consectetur necessitatibus eligendi ipsam sed cupiditate rem ratione tempore in!
                         </div>
-                        <div className="py-3 px-2" style={{ width: "30%", fontSize: "14px" }}>
+                        <div className="pt-2 px-3" style={{ width: "30%", fontSize: "14px" }}>
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex vitae officiis beatae inventore dicta at molestiae magnam sunt asperiores ab optio pariatur magni temporibus, repudiandae rerum porro suscipit adipisci nostrum!
                         </div>
-                        <div className="py-3 px-2" style={{ width: "30%", fontSize: "14px" }}>
+                        <div className="pt-2 ps-3" style={{ width: "30%", fontSize: "14px" }}>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam quam deleniti doloribus quas in libero aut perferendis placeat asperiores laudantium numquam, minus amet laborum quis tenetur dolorum est obcaecati earum?
                         </div>
                     </div>

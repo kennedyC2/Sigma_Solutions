@@ -35,7 +35,7 @@ const Stats = () => {
                     </div>
                     <div className="mx-3 my-4">
                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
-                            <path fill="#95aac9" fill-rule="evenodd" d="M1.5 1.75a.75.75 0 0 0-1.5 0v12.5c0 .414.336.75.75.75h14.5a.75.75 0 0 0 0-1.5H1.5V1.75zm14.28 2.53a.75.75 0 0 0-1.06-1.06L10 7.94L7.53 5.47a.75.75 0 0 0-1.06 0L3.22 8.72a.75.75 0 0 0 1.06 1.06L7 7.06l2.47 2.47a.75.75 0 0 0 1.06 0l5.25-5.25z" />
+                            <path fill="#95aac9" fillRule="evenodd" d="M1.5 1.75a.75.75 0 0 0-1.5 0v12.5c0 .414.336.75.75.75h14.5a.75.75 0 0 0 0-1.5H1.5V1.75zm14.28 2.53a.75.75 0 0 0-1.06-1.06L10 7.94L7.53 5.47a.75.75 0 0 0-1.06 0L3.22 8.72a.75.75 0 0 0 1.06 1.06L7 7.06l2.47 2.47a.75.75 0 0 0 1.06 0l5.25-5.25z" />
                         </svg>
                     </div>
                 </div>
@@ -61,8 +61,8 @@ const Stats = () => {
                             EMPLOYEES
                         </p>
                         <p className="ps-2 pt-1" style={{ fontSize: "1.2rem" }}>
-                            {new Intl.NumberFormat("en-US", {}).format(data.employees.online)}
-                            <span style={{ fontSize: ".9rem" }}>/{new Intl.NumberFormat("en-US", {}).format(data.employees.total)}</span> <span style={{ fontSize: ".7rem" }}> Online</span>
+                            {new Intl.NumberFormat("en-US", {}).format(data.employees)}
+                            {/* <span style={{ fontSize: ".9rem" }}>/{new Intl.NumberFormat("en-US", {}).format(data.employees.total)}</span> <span style={{ fontSize: ".7rem" }}> Online</span> */}
                         </p>
                     </div>
                     <div className="mx-3 my-4">

@@ -3,35 +3,75 @@
 // ========================================================================
 
 // Import libraries
-import React from "react";
+import React, { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddForm from "./components/form";
 import SelectedTests from "./components/selectedTest";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { set } from "idb-keyval";
+import { store } from "../../../Misc/cacheStorage";
 
 // App
 const Services = () => {
     // fetch Data From Storage
-    const testData = useSelector((state) => state.Database);
-    console.log(testData);
-
-    const services = useSelector((state) => state.selected);
-
-    useSelector((state) => console.log(state));
-
+    const testData = useSelector((state) => state.database);
+    const services = useSelector((state) => state.services);
     const Dispatch = useDispatch();
 
+    // Confirm log In status
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                key: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
+
     // Save Selected Services
-    const saveServices = (e) => {
+    const saveServices = async (e) => {
         e.preventDefault();
-        console.log(e);
         const data = {};
-        data["title"] = e.target[0].value;
-        data["category"] = e.target[1].value;
+        data["title"] = e.target[0].value.replaceAll(" ", "_");
+        data["category"] = e.target[1].value.replaceAll(" ", "_");
         data["cost"] = e.target[2].value;
         data["description"] = e.target[3].value;
         data["name"] = testData[e.target[1].value]["name"];
-        Dispatch({ type: "addServices", payload: data });
-        document.getElementById(e.target.id).reset();
+
+        //  Send
+        try {
+            const response = await axios({
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                url: "http://localhost:5000/laboratory/update/services",
+                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+            });
+
+            const result = response.data;
+            console.log(result);
+
+            // Update Services
+            await set("services", result.services, store);
+
+            // Update stats
+            await set("stats", result.stats, store);
+
+            // Update top_5
+            await set("top_5", result.top_5, store);
+
+            // Update State
+            Dispatch({ type: "addServices", payload: data });
+            document.getElementById(e.target.id).reset();
+        } catch (error) {
+            const response = error.response;
+            console.log(response);
+        }
     };
 
     // Click the submit button
@@ -39,14 +79,14 @@ const Services = () => {
         e.target.parentNode.parentNode.childNodes[0].childNodes[0][4].click();
     };
 
-    return (
-        <React.Fragment>
+    return status.loggedIn === true ? (
+        <Fragment>
             <div className="services">
                 {/* <nav> */}
-                <div className="text-end rg_f">
+                <div className="text-end rg_f py-2">
                     <div className="text-end">
                         {/* Button trigger modal */}
-                        <button type="button" className="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Add Services
                         </button>
                     </div>
@@ -74,7 +114,9 @@ const Services = () => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </Fragment>
+    ) : (
+        <Navigate to="/login" replace={true} />
     );
 };
 

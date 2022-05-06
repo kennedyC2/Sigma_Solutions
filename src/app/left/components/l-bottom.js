@@ -10,7 +10,7 @@ const LeftBottom = () => {
         <div className="l-bottom">
             <div className="accordion" id="lft">
                 <div className="accordion-item my-2">
-                    <Link to="/" className="accordion-header" id="Dashboard">
+                    <Link to="/app/laboratory/" className="accordion-header" id="Dashboard">
                         <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentOne" aria-expanded="true" aria-controls="contentOne">
                             <i className="bi bi-house-door"></i> <span>Dashboard</span>
                         </button>
@@ -29,13 +29,13 @@ const LeftBottom = () => {
                         <div className="accordion-body">
                             <ul>
                                 <li>
-                                    <Link to="/register">Register</Link>
+                                    <Link to="/app/laboratory/register">Register</Link>
                                 </li>
                                 <li>
-                                    <Link to="/unsettled">Unsettled</Link>
+                                    <Link to="/app/laboratory/unsettled">Unsettled</Link>
                                 </li>
                                 <li>
-                                    <Link to="/settled">Settled</Link>
+                                    <Link to="/app/laboratory/settled">Settled</Link>
                                 </li>
                             </ul>
                         </div>
@@ -51,13 +51,13 @@ const LeftBottom = () => {
                         <div className="accordion-body">
                             <ul>
                                 <li>
-                                    <Link to="/laboratory_Users">Users</Link>
+                                    <Link to="/app/laboratory/users">Users</Link>
                                 </li>
                                 <li>
-                                    <Link to="/laboratory_Testkits">Test Kits</Link>
+                                    <Link to="/app/laboratory/testkits">Test Kits</Link>
                                 </li>
                                 <li>
-                                    <Link to="/laboratory_Services">Services</Link>
+                                    <Link to="/app/laboratory/services">Services</Link>
                                 </li>
                             </ul>
                         </div>
@@ -73,10 +73,10 @@ const LeftBottom = () => {
                         <div className="accordion-body">
                             <ul>
                                 <li>
-                                    <Link to="/profile">Profile</Link>
+                                    <Link to="/app/laboratory/profile">Profile</Link>
                                 </li>
                                 <li>
-                                    <Link to="/payment">Payment</Link>
+                                    <Link to="/app/laboratory/payment">Payment</Link>
                                 </li>
                             </ul>
                         </div>

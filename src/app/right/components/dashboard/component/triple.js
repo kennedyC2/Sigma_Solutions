@@ -8,7 +8,6 @@ const Triple = () => {
     const employees = useSelector((state) => state.users);
     const top_5 = useSelector((state) => state.top_5);
     const storage = useSelector((state) => state.storage);
-    useSelector((state) => console.log(state));
 
     const list = (a) => {
         let file = [];
@@ -189,6 +188,35 @@ const Triple = () => {
             <div className="triple d-flex justify-content-between py-2">
                 <div>
                     <div className="d-flex justify-content-between px-3 py-3">
+                        <p className="m-0">Top 5 Tests Booked</p>
+                        <p className="m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
+                                <path fill="#95aac9" fillRule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z" />
+                            </svg>
+                        </p>
+                    </div>
+                    <canvas id="doughnut" style={{ display: top_5["sorted"] === true ? "block" : "none" }}></canvas>
+                    <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: top_5["sorted"] === 1 ? "none" : "block" }}>
+                        -- no data --
+                    </div>
+                </div>
+                <div>
+                    <div className="d-flex justify-content-between px-3 py-3">
+                        <p className="m-0">Storage</p>
+                        <p className="m-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="26" height="26" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                <path fill="#95aac9" d="m17 9l-.351.015A5.967 5.967 0 0 0 11 5c-3.309 0-6 2.691-6 6l.001.126A4.007 4.007 0 0 0 2 15c0 2.206 1.794 4 4 4h5v-4.586l-1.293 1.293a.997.997 0 0 1-1.414 0a.999.999 0 0 1 0-1.414l2.999-2.999a1 1 0 0 1 1.416 0l2.999 2.999a.999.999 0 1 1-1.414 1.414L13 14.414V19h4c2.757 0 5-2.243 5-5s-2.243-5-5-5z" />
+                            </svg>
+                        </p>
+                    </div>
+
+                    <canvas id="pie" style={{ display: storage.completed > 0 && storage.pending > 0 && storage.kits > 0 ? "block" : "none" }}></canvas>
+                    <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: storage.completed > 0 && storage.pending > 0 && storage.kits > 0 ? "none" : "block" }}>
+                        -- no data --
+                    </div>
+                </div>
+                <div>
+                    <div className="d-flex justify-content-between px-3 py-3">
                         <p className="m-0">Employees</p>
                         <p className="m-0">
                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="22" height="22" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -225,35 +253,6 @@ const Triple = () => {
                             </div>
                         )}
                     </ul>
-                </div>
-                <div>
-                    <div className="d-flex justify-content-between px-3 py-3">
-                        <p className="m-0">Top 5 Tests Booked</p>
-                        <p className="m-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="19" height="19" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16">
-                                <path fill="#95aac9" fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z" />
-                            </svg>
-                        </p>
-                    </div>
-                    <canvas id="doughnut" style={{ display: top_5["sorted"] === 1 ? "block" : "none" }}></canvas>
-                    <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: top_5["sorted"] === 1 ? "none" : "block" }}>
-                        -- no data --
-                    </div>
-                </div>
-                <div>
-                    <div className="d-flex justify-content-between px-3 py-3">
-                        <p className="m-0">Storage</p>
-                        <p className="m-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="26" height="26" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                                <path fill="#95aac9" d="m17 9l-.351.015A5.967 5.967 0 0 0 11 5c-3.309 0-6 2.691-6 6l.001.126A4.007 4.007 0 0 0 2 15c0 2.206 1.794 4 4 4h5v-4.586l-1.293 1.293a.997.997 0 0 1-1.414 0a.999.999 0 0 1 0-1.414l2.999-2.999a1 1 0 0 1 1.416 0l2.999 2.999a.999.999 0 1 1-1.414 1.414L13 14.414V19h4c2.757 0 5-2.243 5-5s-2.243-5-5-5z" />
-                            </svg>
-                        </p>
-                    </div>
-
-                    <canvas id="pie" style={{ display: storage.completed > 0 && storage.pending > 0 && storage.kits > 0 ? "block" : "none" }}></canvas>
-                    <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: storage.completed > 0 && storage.pending > 0 && storage.kits > 0 ? "none" : "block" }}>
-                        -- no data --
-                    </div>
                 </div>
             </div>
         </Fragment>

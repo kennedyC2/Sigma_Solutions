@@ -1,30 +1,74 @@
 // Import Dependencies
-import React, { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, useLocation, Navigate } from "react-router-dom";
-import { states } from "./../Misc/helper";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import { states, hours } from "./../Misc/helper";
+import { get_data_2 } from "../Misc/cacheStorage";
+import { Auth } from "../Misc/initialState";
+import Spinner from "../Misc/spinner";
 import axios from "axios";
 
 // Component
 const Home = () => {
-    const location = useLocation() || { loggedIn: false };
-    const personal = useSelector((state) => state.personal);
+    const Dispatch = useDispatch();
+    const navigate = useNavigate();
+    const personal = useSelector((state) => state.personal || Auth(Dispatch));
 
     // Confirm log In status
-    const [status] = useState(() => {
-        const data = JSON.parse(localStorage.getItem("status")) || { loggedIn: false };
-        return data.loggedIn || false;
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                token: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
+
+    useEffect(() => {
+        const company = document.querySelectorAll(".point li");
+
+        // Add EventListener
+        company.forEach((each) => {
+            each.addEventListener("click", async () => {
+                // New status
+                const data = status;
+                // Get Variables
+                const path = {
+                    tokenID: status.key,
+                    type: each.dataset.typ,
+                    companyID: each.dataset.cid,
+                };
+
+                data["path"] = path;
+
+                // Update Storage
+                localStorage.setItem("status", JSON.stringify(data));
+
+                // Update Cache On EVERY RENDER && RE-RENDER
+                try {
+                    await get_data_2(status.path.type, status.path.companyID, status.key, false);
+                } catch (error) {
+                    console.log(error);
+                }
+
+                navigate("/app/laboratory", { replace: true });
+            });
+        });
     });
 
     const saveCompanyData = async (e) => {
         e.preventDefault();
 
         // Get Token ID
-        const tokenID = JSON.parse(localStorage.getItem("status")).token.key;
+        const tokenID = JSON.parse(localStorage.getItem("status")).key;
 
         // Define Data
         const data = {};
         data["name"] = e.target[0].value;
+        data["account"] = e.target[1].value;
         data["type"] = e.target[1].value;
         data["phone"] = e.target[2].value;
         data["email"] = e.target[3].value;
@@ -34,60 +78,38 @@ const Home = () => {
         data["country"] = e.target[7].value;
         data["tokenID"] = tokenID;
 
+        // time
+        const now = new Date(Date.now());
+        data["time"] = `${hours[now.getHours()].split(":")[0]}:${now.getMinutes() < 10 ? "0" + now.getMinutes().toString() : now.getMinutes().toString()} ${hours[now.getHours()].split(":")[1]}`;
+        data["date"] = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+
         try {
             const response = await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/company/create",
+                url: "http://localhost:5000/laboratory/create",
                 data: data,
             });
 
-            console.log(response);
+            const userDetails = response["data"];
 
-            // const p = document.createElement("p");
-            // p.setAttribute("class", "alert-success m-0");
-            // p.innerText = response["data"]["Message"];
-
-            // // Save to Local Storage
-            // localStorage.setItem("status", JSON.stringify(response["data"]["auth"]));
-
-            // // Store Data
-            // const payload = {
-            //     auth: response["data"]["auth"],
-            //     personal: response["data"]["data"],
-            // };
-
-            // Dispatch({ type: "personalDetails", payload: payload });
-
-            // setTimeout(() => {
-            //     document.getElementById("box-2").replaceChild(p, document.getElementById("box-2").childNodes[0]);
-            //     setTimeout(() => {
-            //         setSpin(1);
-            //         setTimeout(() => {
-            //             navigate("/app", { replace: true, state: response["data"]["auth"] });
-            //         }, 5000);
-            //     }, 2000);
-            // }, 2000);
+            setTimeout(() => {
+                e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
+                Dispatch({ type: "profile", payload: userDetails });
+            }, 2000);
         } catch (error) {
             const response = error.response;
             console.log(response);
-            // const p = document.createElement("p");
-            // p.setAttribute("class", "alert-danger m-0");
-            // p.innerText = response["data"]["Error"];
-            // setTimeout(() => {
-            //     document.getElementById("box-2").replaceChild(p, document.getElementById("box-2").childNodes[0]);
-            // }, 2000);
         }
-        // Dispatch({ type: "company", payload: data });
     };
 
     const submitCompanyForm = (e) => {
         e.target.parentNode.parentNode.childNodes[0].childNodes[0][8].click();
     };
 
-    return (
+    return status.loggedIn === true ? (
         <Fragment>
-            {location.state.loggedIn === true && status === true ? (
-                <div className="home w-100">
+            {personal.company !== undefined ? (
+                <div className="home w-100 h-100" style={{ backgroundColor: "#ffffff" }}>
                     <div className="bbs px-5 w-100">
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <div className="container-fluid px-2">
@@ -106,7 +128,7 @@ const Home = () => {
                                         </div>
                                         <div className="d-flex">
                                             <div style={{ marginRight: "10px" }}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="37" height="37" fill="#5e5e5e" className="bi bi-person-circle" viewBox="0 0 16 16">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#5e5e5e" className="bi bi-person-circle" viewBox="0 0 16 16">
                                                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                                                     <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                                                 </svg>
@@ -125,113 +147,119 @@ const Home = () => {
                             </div>
                         </nav>
                     </div>
-                    <div className="m-auto mt-5" style={{ width: "30%" }}>
-                        <div style={{ height: "calc(100vh - 200px)", border: ".1rem solid #e3ebf6", borderRadius: "0.75rem" }}>
-                            {personal.company.length > 0 ? (
-                                <ol className="list-group">
-                                    {personal.company.map((item, index) => (
-                                        <li key={index} className="list-group-item d-flex justify-content-between align-items-start">
-                                            <div className="ms-0 me-auto">
-                                                <div className="fw-bold">Subheading</div>
-                                                {item.name}
-                                            </div>
-                                            <span className="badge bg-primary rounded-pill">14</span>
-                                        </li>
-                                    ))}
-                                </ol>
-                            ) : (
-                                <div className="d-flex align-items-center justify-content-center h-100">
-                                    <h6 style={{ color: "rgba(149, 170, 201, .8)" }}>Nothing Here Yet</h6>
-                                </div>
-                            )}
-                        </div>
-                        {/* <!-- Button trigger modal --> */}
-                        <button type="button" className="btn btn-secondary mt-2 w-100" data-bs-toggle="modal" data-bs-target="#homeDrop">
-                            +
-                        </button>
-
-                        {/* <!-- Modal --> */}
-                        <div className="modal fade" id="homeDrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="homeDropLabel" aria-hidden="true">
-                            <div className="modal-dialog modal-dialog-centered modal-lg" style={{ width: "800px" }}>
-                                <div className="modal-content">
-                                    <div className="modal-body">
-                                        <form action="#" method="POST" className="pt-3 d-flex justify-content-between" id="formPr" onSubmit={(e) => saveCompanyData(e)}>
-                                            <div className="pe-3 ps-2" style={{ width: "50%" }}>
-                                                <div className="mb-3">
-                                                    <label htmlFor="name" className="form-label">
-                                                        Name:
-                                                    </label>
-                                                    <input type="text" className="form-control form-control-sm" name="name" id="name" placeholder="Phantom Solutions" required />
+                    <div className="m-auto mt-5 d-flex align-items-center justify-content-center rounded" style={{ width: "30%", height: "78%" }}>
+                        <div className="w-100">
+                            <div style={{ height: "calc(100vh - 200px)", border: ".1rem solid #e3ebf6" }}>
+                                {personal.company.length > 0 ? (
+                                    <ol className="list-group point">
+                                        {personal.company.map((item, index) => (
+                                            <li key={index} className="list-group-item" data-cid={item.companyID} data-typ={item.type}>
+                                                <div className="ms-0 me-auto">
+                                                    <div className="fw-bold text-capitalize mb-1">{item.name}</div>
+                                                    <div className="d-flex justify-content-between" style={{ width: "370px", fontSize: "13px" }}>
+                                                        <p className="mb-0" data-cid={item.companyID}>
+                                                            Created: {item.date}
+                                                        </p>
+                                                        <p className="mb-0">{item.time}</p>
+                                                    </div>
                                                 </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="type" className="form-label">
-                                                        Type:
-                                                    </label>
-                                                    <select className="form-select form-select-sm" name="account" defaultValue="laboratory" id="account">
-                                                        <option value="Laboratory">Laboratory</option>
-                                                    </select>
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="phone" className="form-label">
-                                                        Phone:
-                                                    </label>
-                                                    <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="email" className="form-label">
-                                                        Email:
-                                                    </label>
-                                                    <input type="email" className="form-control form-control-sm" name="email" id="email" placeholder="Someone@email.com" required />
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="reg_no" className="form-label">
-                                                        Registration Number:
-                                                    </label>
-                                                    <input type="text" className="form-control form-control-sm" name="reg_no" id="reg_no" placeholder="RS56-7483-929" required />
-                                                </div>
-                                            </div>
-                                            <div className="ps-3 pe-2" style={{ width: "50%" }}>
-                                                <div className="mb-3">
-                                                    <label htmlFor="address" className="form-label">
-                                                        Address:
-                                                    </label>
-                                                    <textarea className="form-control" name="address" id="address" placeholder="Imo state Teaching Hospital, Orlu." rows="5" required />
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="state" className="form-label">
-                                                        State:
-                                                    </label>
-                                                    <select className="form-select form-select-sm" name="state" id="state" required>
-                                                        {states.map((key, index) => (
-                                                            <option key={index} value={key}>
-                                                                {key.split(" ")[0]}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label htmlFor="country" className="form-label">
-                                                        Country:
-                                                    </label>
-                                                    <select className="form-select form-select-sm" name="country" id="country" defaultValue="Nigeria" required>
-                                                        <option value="Nigeria">Nigeria</option>
-                                                    </select>
-                                                </div>
-                                                <div className="mb-3 text-end">
-                                                    <button type="submit" className="hide">
-                                                        Add
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                ) : (
+                                    <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                                        <h6 style={{ color: "rgba(149, 170, 201, .8)" }}>Nothing Here Yet</h6>
                                     </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="button" className="btn btn-primary btn-sm" onClick={(e) => submitCompanyForm(e)}>
-                                            Submit
-                                        </button>
+                                )}
+                            </div>
+                            {/* <!-- Button trigger modal --> */}
+                            <button type="button" className="btn btn-primary mt-2 w-100" data-bs-toggle="modal" data-bs-target="#homeDrop">
+                                +
+                            </button>
+
+                            {/* <!-- Modal --> */}
+                            <div className="modal fade" id="homeDrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="homeDropLabel" aria-hidden="true">
+                                <div className="modal-dialog modal-dialog-centered modal-lg" style={{ width: "800px" }}>
+                                    <div className="modal-content">
+                                        <div className="modal-body">
+                                            <form action="#" method="POST" className="pt-3 d-flex justify-content-between" id="formPr" onSubmit={(e) => saveCompanyData(e)}>
+                                                <div className="pe-3 ps-2" style={{ width: "50%" }}>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="name" className="form-label">
+                                                            Name:
+                                                        </label>
+                                                        <input type="text" className="form-control form-control-sm" name="name" id="name" placeholder="Phantom Solutions" required />
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="type" className="form-label">
+                                                            Type:
+                                                        </label>
+                                                        <select className="form-select form-select-sm" name="account" defaultValue="laboratory" id="account">
+                                                            <option value="Laboratory">Laboratory</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="phone" className="form-label">
+                                                            Phone:
+                                                        </label>
+                                                        <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="email" className="form-label">
+                                                            Email:
+                                                        </label>
+                                                        <input type="email" className="form-control form-control-sm" name="email" id="email" placeholder="Someone@email.com" required />
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="reg_no" className="form-label">
+                                                            Registration Number:
+                                                        </label>
+                                                        <input type="text" className="form-control form-control-sm" name="reg_no" id="reg_no" placeholder="RS56-7483-929" required />
+                                                    </div>
+                                                </div>
+                                                <div className="ps-3 pe-2" style={{ width: "50%" }}>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="address" className="form-label">
+                                                            Address:
+                                                        </label>
+                                                        <textarea className="form-control" name="address" id="address" placeholder="Imo state Teaching Hospital, Orlu." rows="5" required />
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="state" className="form-label">
+                                                            State:
+                                                        </label>
+                                                        <select className="form-select form-select-sm" name="state" id="state" required>
+                                                            {states.map((key, index) => (
+                                                                <option key={index} value={key}>
+                                                                    {key.split(" ")[0]}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                    <div className="mb-3">
+                                                        <label htmlFor="country" className="form-label">
+                                                            Country:
+                                                        </label>
+                                                        <select className="form-select form-select-sm" name="country" id="country" defaultValue="Nigeria" required>
+                                                            <option value="Nigeria">Nigeria</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="mb-3 text-end">
+                                                        <button type="submit" className="hide">
+                                                            Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="button" className="btn btn-primary btn-sm" onClick={(e) => submitCompanyForm(e)}>
+                                                Submit
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -239,9 +267,11 @@ const Home = () => {
                     </div>
                 </div>
             ) : (
-                <Navigate to="/login" replace={true} />
+                <Spinner />
             )}
         </Fragment>
+    ) : (
+        <Navigate to="/login" replace={true} />
     );
 };
 

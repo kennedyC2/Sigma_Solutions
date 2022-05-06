@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 // Component
 const Company = () => {
-    const companyData = useSelector((state) => state.profile.company);
+    const companyData = useSelector((state) => state.company);
 
     return (
         <Fragment>
@@ -14,7 +14,7 @@ const Company = () => {
             </li>
             <li className="list-group-item">
                 <div className="me-3">Type:</div>
-                <div className="text-capitalize">{companyData["type"]}</div>
+                <div className="text-capitalize">{companyData["account"]}</div>
             </li>
             <li className="list-group-item">
                 <div className="me-3">Registration no:</div>

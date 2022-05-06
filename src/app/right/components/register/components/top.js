@@ -1,6 +1,6 @@
 // Import Libraries
 import React from "react";
-import { CalenderYear, RF_days, months, specimen, religion, tribe, sex, date, month, year } from "../../../../helpers/helper";
+import { CalenderYear, RF_days, months, specimen, religion, tribe, sex, date, month, year } from "../../../../Misc/helper";
 
 // Components
 const FormTop = (props) => {

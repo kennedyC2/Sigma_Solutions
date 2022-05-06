@@ -29,20 +29,20 @@ const FormBottom = (props) => {
                                     .sort()
                                     .map((key, index) => (
                                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${testData[key]["name"]}`} role="tabpanel" aria-labelledby={`v-pills-${testData[key]["name"]}-tab`}>
-                                            {testData[key]["testList"].map((test, index) => (
+                                            {Object.keys(testData[key].testList).map((test, index) => (
                                                 <div key={index} className="form-check" data-bs-toggle="tooltip" data-bs-placement="bottom" title={test["description"]}>
-                                                    <input className="form-check-input me-2" type="checkbox" id={test["title"].split(" ")[0] + "_" + index} value={`${key}:${testData[key]["name"]}:${test["title"].trim()}:${test["cost"]}`} onChange={selectedTestHandler} />
+                                                    <input className="form-check-input me-2" type="checkbox" id={test.split(" ")[0] + "_" + index} value={`${key}:${testData[key]["name"]}:${test.trim().replaceAll(" ", "_")}:${testData[key]["testList"][test]["cost"]}`} onChange={selectedTestHandler} />
                                                     <label
                                                         className="form-check-label d-flex justify-content-between"
-                                                        htmlFor={test["title"].split(" ")[0] + "_" + index}
+                                                        htmlFor={test.split(" ")[0] + "_" + index}
                                                         style={{
                                                             textTransform: "capitalize",
                                                             paddingTop: "2px",
                                                         }}
                                                     >
-                                                        <div>{test["title"]}</div>
+                                                        <div>{test}</div>
                                                         <div>
-                                                            <span>&#8358;</span> {test["cost"]}
+                                                            <span>&#8358;</span> {testData[key]["testList"][test]["cost"]}
                                                         </div>
                                                     </label>
                                                 </div>

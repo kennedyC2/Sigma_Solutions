@@ -3,25 +3,43 @@
 // ========================================================================
 
 // Import libraries
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FormTop from "./components/top";
 import FormBottom from "./components/bottom";
-import { year, months, monthNum, date, month, hours } from "../../../helpers/helper";
+import { year, months, monthNum, date, month, hours } from "../../../Misc/helper";
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
+import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { get, set } from "idb-keyval";
+import { store } from "../../../Misc/cacheStorage";
 
 // App
 const Register = () => {
-    const services = useSelector((state) => state.selected);
     const Dispatch = useDispatch();
+    const services = useSelector((state) => state.services);
+    const personal = useSelector((state) => state.personal);
+
+    // Confirm log In status
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                token: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
 
     const [formData, updateFormData] = useState({
         firstname: "",
         lastname: "",
         other: "",
-        day: date,
-        month: month,
-        year: year,
+        day: date.toString(),
+        month: month.toString(),
+        year: year.toString(),
         date: "",
         time: "",
         age: "",
@@ -33,6 +51,7 @@ const Register = () => {
         diagnosis: "",
         specimen: [],
         selectedTest: [],
+        account: status.ff,
         result: {},
     });
 
@@ -74,7 +93,7 @@ const Register = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const form = document.getElementById(e.target.id);
         const data = formData;
@@ -112,13 +131,54 @@ const Register = () => {
         data["time"] = `${hours[now.getHours()].split(":")[0]}:${now.getMinutes() < 10 ? "0" + now.getMinutes().toString() : now.getMinutes().toString()} ${hours[now.getHours()].split(":")[1]}`;
         data["date"] = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
 
-        console.log(data);
-        Dispatch({ type: "bookTest", payload: data });
+        // Source Account
+        data["source"] = `${personal.lastname}`;
+
+        //  Send
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "http://localhost:5000/laboratory/tests/booking",
+                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+            });
+
+            const result = response.data;
+
+            // Update Admin
+            await set("admin", result.admin, store);
+
+            // Update stats
+            await set("stats", result.stats, store);
+
+            // Update top_5
+            await set("top_5", result.top_5, store);
+
+            // Update hourly
+            await set("hourly", result.hourly, store);
+
+            // Update lab_activities
+            await set("lab_activities", result.lab_activities, store);
+
+            // Update storage
+            await set("storage", result.storage, store);
+
+            // Update unsettled
+            const tests = await get("tests", store);
+            tests.unsettled = result.unsettled;
+            await set("tests", tests, store);
+
+            // State
+            Dispatch({ type: "bookTest", payload: data });
+        } catch (error) {
+            const response = error.response;
+            console.log(response);
+            console.log(error);
+        }
         form.reset();
     };
 
-    return (
-        <React.Fragment>
+    return status.loggedIn === true ? (
+        <Fragment>
             <div className="register" style={{ height: "auto" }}>
                 <div className="" id="pyl" style={{ backgroundImage: `url(${bg})` }}></div>
                 <div className="px-4 mt-4">
@@ -130,7 +190,9 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </Fragment>
+    ) : (
+        <Navigate to="/login" replace={true} />
     );
 };
 

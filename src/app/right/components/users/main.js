@@ -3,8 +3,12 @@
 // ========================================================================
 
 // Import libraries
-import React from "react";
+import axios from "axios";
+import { get, set } from "idb-keyval";
+import React, { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { store } from "../../../Misc/cacheStorage";
 import AddUser from "./components/addUser";
 import ListUsers from "./components/listUsers";
 
@@ -12,11 +16,24 @@ import ListUsers from "./components/listUsers";
 const Users = () => {
     // fetch Data From Storage
     const users = useSelector((state) => state.users);
-
+    const personal = useSelector((state) => state.personal);
     const Dispatch = useDispatch();
 
+    // Confirm log In status
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                key: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
+
     // Save Selected Services
-    const saveUsers = (e) => {
+    const saveUsers = async (e) => {
         e.preventDefault();
         const data = {};
         data["firstname"] = e.target[0].value;
@@ -30,9 +47,38 @@ const Users = () => {
         data["year"] = e.target[8].value;
         data["account_type"] = e.target[9].value;
         data["password"] = e.target[10].value;
-        data["activity"] = [];
-        Dispatch({ type: "addUser", payload: data });
-        document.getElementById(e.target.id).reset();
+        data["admin"] = personal.email;
+
+        //  Send
+        try {
+            const response = await axios({
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                url: "http://localhost:5000/laboratory/users/create",
+                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+            });
+
+            const result = response.data;
+            console.log(result);
+
+            // Update Users
+            const users = await get("users", store);
+            users[result.user.details.email.split("@")[0]] = result.user;
+            await set("users", users, store);
+
+            // Update Stats
+            await set("stats", result.stats, store);
+
+            // Update State
+            Dispatch({ type: "addUser", payload: result });
+            document.getElementById(e.target.id).reset();
+        } catch (error) {
+            const response = error.response;
+            console.log(response);
+            console.log(error);
+        }
     };
 
     // Click the submit button
@@ -40,15 +86,15 @@ const Users = () => {
         e.target.parentNode.parentNode.childNodes[0].childNodes[0][11].click();
     };
 
-    return (
-        <React.Fragment>
+    return status.loggedIn === true ? (
+        <Fragment>
             <div className="users">
                 {/* <nav> */}
-                <div className="text-end rg_f">
+                <div className="text-end rg_f py-2">
                     <div className="text-end">
                         {/* Button trigger modal */}
-                        <button type="button" className="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            New User
+                        <button type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            NEW USER
                         </button>
                     </div>
                 </div>
@@ -75,7 +121,9 @@ const Users = () => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </Fragment>
+    ) : (
+        <Navigate to="/login" replace={true} />
     );
 };
 

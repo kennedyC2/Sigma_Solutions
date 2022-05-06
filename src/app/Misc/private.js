@@ -1,14 +1,23 @@
-import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 // Component
 const Private = () => {
     // Authentication status
-    const location = useLocation();
-    const auth = location.state || { loggedIn: false };
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                token: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
 
     // Return
-    return auth.loggedIn === true ? <Outlet /> : <Navigate to="/login" />;
+    return status.loggedIn === true ? <Outlet /> : <Navigate to="/login" replace={true} />;
 };
 
 // Export

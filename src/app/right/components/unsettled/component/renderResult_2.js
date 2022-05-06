@@ -34,7 +34,7 @@ const renderResults = (props) => {
                             {Render()[key].map((items, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{items.split(":")[0]}</td>
+                                    <td>{items.split(":")[0].replaceAll("_", " ")}</td>
                                     <td>{items.split(":")[1]}</td>
                                 </tr>
                             ))}
