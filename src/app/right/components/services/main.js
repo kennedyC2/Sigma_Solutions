@@ -11,6 +11,7 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { set } from "idb-keyval";
 import { store } from "../../../Misc/cacheStorage";
+import { Notification_A } from "../../../Misc/notification";
 
 // App
 const Services = () => {
@@ -53,30 +54,32 @@ const Services = () => {
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 
-            const result = response.data;
-            console.log(result);
-
             // Update Services
-            await set("services", result.services, store);
+            await set("services", response.data.services, store);
 
             // Update stats
-            await set("stats", result.stats, store);
+            await set("stats", response.data.stats, store);
 
             // Update top_5
-            await set("top_5", result.top_5, store);
+            await set("top_5", response.data.top_5, store);
+
+            // Close
+            e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
 
             // Update State
-            Dispatch({ type: "addServices", payload: data });
+            Dispatch({ type: "addServices", payload: response.data });
+
+            // Reset Form
             document.getElementById(e.target.id).reset();
         } catch (error) {
-            const response = error.response;
-            console.log(response);
+            // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     // Click the submit button
     const submitForm = (e) => {
-        e.target.parentNode.parentNode.childNodes[0].childNodes[0][4].click();
+        e.target.parentNode.parentNode.childNodes[0].childNodes[1][3].click();
     };
 
     return status.loggedIn === true ? (
@@ -99,6 +102,7 @@ const Services = () => {
                         <div className="modal-dialog modal-dialog-centered" style={{ width: "430px" }}>
                             <div className="modal-content">
                                 <div className="modal-body">
+                                    <div className="notify text-center mt-2"></div>
                                     <AddForm testData={testData} saveServices={saveServices} />
                                 </div>
                                 <div className="modal-footer">

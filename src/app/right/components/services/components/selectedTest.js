@@ -10,19 +10,21 @@ const SelectedTests = (props) => {
                 <div className="d-flex align-items-start mt-3 justify-content-between">
                     {/* tab 1 */}
                     <div className="rg_f py-4" style={{ width: "40%", height: "calc(623px - 68px)" }}>
-                        <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
-                            {Object.keys(data)
-                                .sort()
-                                .map((key, index) => (
-                                    <div key={index} className={`nav-link  btn-sm ${index === 0 ? "active" : ""}`} id={`v-pills-${data[key]["name"]}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${data[key]["name"]}-services`} type="button" role="tab" aria-controls={`v-pills-${data[key]["name"]}-services`} aria-selected="true">
-                                        {key.replaceAll("_", " ")}
-                                    </div>
-                                ))}
+                        <div style={{ width: "100%", overflowY: "auto", height: "95%" }}>
+                            <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                {Object.keys(data)
+                                    .sort()
+                                    .map((key, index) => (
+                                        <div key={index} className={`nav-link  btn-sm ${index === 0 ? "active" : ""}`} id={`v-pills-${data[key]["name"]}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${data[key]["name"]}-services`} type="button" role="tab" aria-controls={`v-pills-${data[key]["name"]}-services`} aria-selected="true">
+                                            {key.replaceAll("_", " ")}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                     </div>
                     {/* tab 2 */}
                     <div className="rg_f py-4" style={{ width: "58%", height: "calc(623px - 68px)" }}>
-                        <div className="tab-content p-2" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
+                        <div className="tab-content" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
                             {Object.keys(data)
                                 .sort()
                                 .map((key, index) => (
@@ -32,13 +34,10 @@ const SelectedTests = (props) => {
                                                 {Object.keys(data[key].testList).map((test, index) => (
                                                     <tr key={index} data-bs-toggle="tooltip" data-bs-placement="bottom" title={data[key]["testList"][test]["description"]}>
                                                         <td className="align-middle ps-3">{index + 1 + "."}</td>
-                                                        <td className="align-middle text-capitalize" style={{ width: "450px" }}>
-                                                            {test}
+                                                        <td className="align-middle text-capitalize" style={{ width: "442px" }}>
+                                                            {test.replaceAll("_", " ")}
                                                         </td>
-                                                        <td className="align-middle">
-                                                            <span>&#8358;</span>
-                                                            {data[key]["testList"][test]["cost"]}
-                                                        </td>
+                                                        <td className="align-middle me-5"> ₦{new Intl.NumberFormat("en-US", {}).format(data[key]["testList"][test]["cost"])}</td>
                                                         <td className="text-end align-middle">
                                                             <button className="btn text-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
@@ -57,11 +56,11 @@ const SelectedTests = (props) => {
                     </div>
                 </div>
             ) : (
-                <div className="rg_f mt-3" style={{ height: "calc(623px - 68px)" }}>
-                    <div style={{ textAlign: "left", paddingTop: "200px", width: "65%", margin: "auto", fontSize: "14px" }}>
-                        <p>No Laboratory Services Has Been Selected</p>
+                <div className="rg_f mt-3 d-flex align-items-center justify-content-center" style={{ height: "calc(623px - 68px)" }}>
+                    <div style={{ textAlign: "left", width: "60%", margin: "auto", fontSize: "16px" }}>
+                        <p className="mb-1">Nothing Here Yet !!!</p>
                         <p>
-                            Please click the <span style={{ color: "rgb(44, 123, 229)" }}>Add Services</span> button and select all services currently rendered by your laboratory
+                            Please click the <span style={{ color: "rgb(44, 123, 229)" }}>ADD SERVICES</span> button above to add Services.
                         </p>
                     </div>
                 </div>

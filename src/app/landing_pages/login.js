@@ -1,11 +1,12 @@
 // Import Dependencies
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Misc/spinner";
-import { get_data_1 } from "../Misc/cacheStorage";
+import { get_data_1, get_data_2 } from "../Misc/cacheStorage";
 import { useDispatch } from "react-redux";
 import { Auth } from "../Misc/initialState";
+import { Notification_A } from "../Misc/notification";
 
 // Component
 const Login = () => {
@@ -17,15 +18,12 @@ const Login = () => {
     // Submit Form
     const submitForm = async (e) => {
         e.preventDefault();
-        console.log(e);
 
         // Define Data
         const data = {};
         data["email"] = e.target[0].value;
         data["password"] = e.target[1].value;
         data["account"] = e.target[2].checked === true ? "admin" : "user";
-
-        console.log(data);
 
         try {
             const response = await axios({
@@ -34,55 +32,46 @@ const Login = () => {
                 data: data,
             });
 
-            const p = document.createElement("p");
-            p.setAttribute("class", "alert-success m-0");
-            p.innerText = response["data"]["Message"];
-
             // Save to Local Storage
             localStorage.setItem("status", JSON.stringify(response.data.auth));
 
-            setTimeout(() => {
-                document.getElementById("box-2").replaceChild(p, document.getElementById("box-2").childNodes[0]);
+            setTimeout(async () => {
+                // Spinner
+                setSpin(1);
+
+                // GEt Cache
+                Auth(Dispatch);
+
                 setTimeout(async () => {
-                    // Spinner
-                    setSpin(1);
-
-                    // GEt Cache
-                    Auth(Dispatch);
-
-                    setTimeout(async () => {
-                        if (response.data.auth.ff === "admin") {
-                            // Cache Details
-                            await get_data_1(response.data.auth.key);
-                            navigate("/app", { replace: true });
-                        } else {
-                            navigate("/app/laboratory", { replace: true });
-                        }
-                    }, 5000);
-                }, 2000);
-            }, 1000);
+                    if (response.data.auth.ff === "admin") {
+                        // Cache Details
+                        await get_data_1(response.data.auth.key);
+                        navigate("/app", { replace: true });
+                    } else {
+                        // Cache Details
+                        await get_data_2(response.data.auth.path.type, response.data.auth.path.companyID, response.data.auth.key, response.data.auth.ff);
+                        navigate("/app/laboratory", { replace: true });
+                    }
+                }, 3000);
+            }, 3000);
         } catch (error) {
-            const response = error.response;
-            const p = document.createElement("p");
-            p.setAttribute("class", "alert-danger m-0");
-            p.innerText = response["data"]["Error"];
-            setTimeout(() => {
-                document.getElementById("box-2").replaceChild(p, document.getElementById("box-2").childNodes[0]);
-            }, 2000);
+            // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     return spin === 0 ? (
-        <div className="w-100">
-            <form className="px-4 py-3" method="POST" action="account/login" id="login" onSubmit={(e) => submitForm(e)}>
-                <div className="text-center pb-3">
-                    <div id="box-2" className="p-1 text-center, m-auto" style={{ minHeight: "30px", transition: ".5s", width: "60%" }}>
-                        <p className="alert-success m-0"></p>
-                    </div>
-                </div>
+        <div className="w-100" style={{ backgroundColor: "#ffffff", border: "0.1rem solid #e3ebf6" }}>
+            <div className="text-center mt-4 mb-1">
+                <Link to="/" className="d-inline-flex text-decoration-none text-reset mt-3">
+                    <h4>SIGMA</h4>
+                </Link>
+            </div>
+            <div className="notify text-center mb-2"></div>
+            <form className="px-4 py-1 mb-4" method="POST" action="account/login" id="login" onSubmit={(e) => submitForm(e)}>
                 <div className="mb-3">
                     <label htmlFor="emailLogin" className="form-label ps-1">
-                        Email address: <span className="text-danger fs-5">*</span>
+                        Email address:
                     </label>
                     <input type="email" className="form-control form-control-sm" placeholder="someone@email.com" id="emailLogin" required />
                 </div>
@@ -95,15 +84,17 @@ const Login = () => {
                         Must be 8-20 characters long.
                     </div>
                 </div>
-                <div className="form-check mb-3">
+                <div className="form-check mb-3 pt-2">
                     <input className="form-check-input" type="checkbox" value="admin" id="adminCheck" />
-                    <label className="form-check-label ps-1" htmlFor="adminCheck">
+                    <label className="form-check-label ps-1" htmlFor="adminCheck" style={{ fontSize: "13px" }}>
                         Administrator
                     </label>
                 </div>
-                <div className="text-end pb-4 d-flex justify-content-end">
+                <div className="text-end pt-3 d-flex justify-content-end">
                     <div className="d-inline-flex pt-1" style={{ fontSize: "13px" }}>
-                        <p className="mb-0 me-2">Don't have an account?</p>
+                        <p className="mb-0 me-2" style={{ fontSize: "11px", marginTop: "2px" }}>
+                            Don't have an account?
+                        </p>
                         <Link to="/register" className="d-inline-flex text-decoration-underline me-3">
                             Register
                         </Link>

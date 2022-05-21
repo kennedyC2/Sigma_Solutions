@@ -1,12 +1,11 @@
 // Import Dependencies
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 
 // Component
 const ResultEntry = (props) => {
     const testParams = useSelector((state) => state.database);
     const { data, position } = props;
-    const [formData, setFormData] = useState({});
 
     const renderOptions = (x, y) => {
         let options = "";
@@ -33,27 +32,27 @@ const ResultEntry = (props) => {
 
         // Create Select_One
         const select_One = document.createElement("select");
-        select_One.setAttribute("class", "form-select form-select-sm");
+        select_One.setAttribute("class", "form-select form-select-sm me-1");
         select_One.style.width = "40%";
         select_One.innerHTML = `${renderOptions(category, "parameter")}`;
 
         // Create Input
         const input = document.createElement("input");
         input.setAttribute("type", "text");
-        input.setAttribute("class", "form-control form-control-sm");
+        input.setAttribute("class", "form-control form-control-sm me-1");
         input.setAttribute("placeholder", "value");
         input.required = true;
         input.style.width = "15%";
 
         // Create Select_Two
         const select_Two = document.createElement("select");
-        select_Two.setAttribute("class", "form-select form-select-sm");
+        select_Two.setAttribute("class", "form-select form-select-sm me-1 text-lowercase");
         select_Two.innerHTML = `${renderOptions(category, "unit")}`;
 
         // Create Button_One
         const button_One = document.createElement("button");
         button_One.setAttribute("type", "submit");
-        button_One.setAttribute("class", "btn btn-sm add");
+        button_One.setAttribute("class", "btn btn-sm btn-primary add");
         button_One.setAttribute("data-cat", category);
         button_One.setAttribute("data-index", testIndex);
         button_One.onclick = addNewLayer;
@@ -62,7 +61,7 @@ const ResultEntry = (props) => {
         // Create Button_Two
         const button_Two = document.createElement("button");
         button_Two.setAttribute("type", "submit");
-        button_Two.setAttribute("class", "btn btn-sm rmv hide");
+        button_Two.setAttribute("class", "btn btn-sm btn-danger rmv hide");
         button_Two.setAttribute("data-index", testIndex);
         button_Two.onclick = removeNode;
         button_Two.innerText = "-";
@@ -84,29 +83,18 @@ const ResultEntry = (props) => {
 
     const removeNode = (e) => {
         e.preventDefault();
-        console.log(e);
-
-        // Define Data
-        const a = formData["formData"];
-        const testIndex = e.target.dataset.index;
-        const test = data[testIndex].split(":")[2].replaceAll(" ", "_");
-        const target = e.target.parentElement.childNodes[0].value;
-        delete a["testData"][test][target];
-
-        // update State
-        setFormData({ formData: a });
 
         // Remove Node
-        e.target.parentNode.parentNode.remove();
+        e.target.parentNode.remove();
     };
 
     return (
         <Fragment>
             <div className="d-flex align-items-start justify-content-between">
                 {/* tab 1 */}
-                <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "30%" }}>
+                <div className="nav flex-column nav-pills me-2" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "30%" }}>
                     {data.map((key, index) => (
-                        <div key={index} className={`nav-link  btn-sm ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${key.split(":")[1]}-services`} type="button" role="tab" aria-controls={`v-pills-${key.split(":")[1]}-services`} aria-selected="true">
+                        <div key={index} className={`nav-link  btn-sm text-capitalize ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-tab-#${position}-${index}`} data-bs-toggle="tab" data-bs-target={`#v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} type="button" role="tab" aria-controls={`v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} aria-selected="true">
                             {key.split(":")[2].replaceAll("_", " ")}
                         </div>
                     ))}
@@ -114,32 +102,30 @@ const ResultEntry = (props) => {
                 {/* tab 2 */}
                 <div className="tab-content ps-2" id="v-pills-tabContent" style={{ borderLeft: "1px solid rgba(149, 170, 201, .3)", width: "70%", height: "350px", overflow: "hidden auto" }}>
                     {data.map((key, index) => (
-                        <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services`} role="tabpanel" aria-labelledby={`v-pills-${key.split(":")[1]}-services-tab`}>
-                            {/* <form action="#" method="post" onSubmit={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}> */}
+                        <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} role="tabpanel" aria-labelledby={`v-pills-${key.split(":")[1]}-services-tab-#${position}-${index}`}>
                             <div className={`input-group mb-2 ${"fvk" + position}`} style={{ fontSize: "13px" }} data-cat={key.split(":")[0]} data-selected={data[index]}>
-                                <select name="" id="" className="form-select form-select-sm" style={{ width: "40%" }}>
+                                <select name="" id="" className="form-select form-select-sm me-1" style={{ width: "40%" }}>
                                     {testParams[key.split(":")[0]]["parameter"].map((key, index) => (
                                         <option key={index} value={key.split(":")[0]}>
                                             {key.split(":")[0].replaceAll("_", " ")}
                                         </option>
                                     ))}
                                 </select>
-                                <input type="text" className="form-control form-control-sm" name="" id="" style={{ width: "15%" }} placeholder="value" autoComplete="0" required />
-                                <select name="" id="" className="form-select form-select-sm">
+                                <input type="text" className="form-control form-control-sm me-1" name="" id="" style={{ width: "15%" }} placeholder="value" autoComplete="0" required />
+                                <select name="" id="" className="form-select form-select-sm me-1 text-lowercase">
                                     {testParams[key.split(":")[0]]["unit"].sort().map((key, index) => (
                                         <option key={index} value={key.split(":")[0]}>
                                             {key.split(":")[0]}
                                         </option>
                                     ))}
                                 </select>
-                                <button type="button" className={`btn btn-sm add ${"fvk" + position}`} onClick={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}>
+                                <button type="button" className={`btn btn-sm btn-primary add ${"fvk" + position}`} onClick={(e) => addNewLayer(e)} data-cat={key.split(":")[0]} data-index={index}>
                                     +
                                 </button>
-                                <button type="button" className="btn btn-sm rmv hide" data-cat={key.split(":")[0]} data-index={index} onClick={(e) => removeNode(e)}>
+                                <button type="button" className="btn btn-sm btn-danger rmv hide" data-cat={key.split(":")[0]} data-index={index} onClick={(e) => removeNode(e)}>
                                     -
                                 </button>
                             </div>
-                            {/* </form> */}
                         </div>
                     ))}
                 </div>

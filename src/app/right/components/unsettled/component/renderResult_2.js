@@ -25,14 +25,14 @@ const renderResults = (props) => {
 
     return (
         <Fragment>
-            <div className="my-4">{Object.keys(result).length < 1 ? "" : <h6 className="text-decoration-underline text-center my-4">Result</h6>}</div>
+            <div className="my-4">{Object.keys(result).length < 1 ? "" : <h6 className="text-decoration-underline text-center text-uppercase mt-5">Result</h6>}</div>
             {Object.keys(Render()).map((key, index) => (
                 <div key={index}>
-                    <p>{key.replaceAll("_", " ")}:</p>
-                    <table key={index} className="table table-bordered" style={{ width: "98%" }}>
+                    <p style={{ marginBottom: ".8rem" }}>{key.replaceAll("_", " ")}:</p>
+                    <table key={index} className="table table-bordered" style={{ width: "90%" }}>
                         <tbody>
                             {Render()[key].map((items, index) => (
-                                <tr key={index}>
+                                <tr key={index} style={{ fontSize: "13px" }}>
                                     <td>{index + 1}</td>
                                     <td>{items.split(":")[0].replaceAll("_", " ")}</td>
                                     <td>{items.split(":")[1]}</td>

@@ -7,12 +7,16 @@ import { get_data_2 } from "../Misc/cacheStorage";
 import { Auth } from "../Misc/initialState";
 import Spinner from "../Misc/spinner";
 import axios from "axios";
+import { set } from "idb-keyval";
+import { store } from "../Misc/cacheStorage";
+import { Notification_A, Notification_B } from "../Misc/notification";
 
 // Component
 const Home = () => {
     const Dispatch = useDispatch();
     const navigate = useNavigate();
     const personal = useSelector((state) => state.personal || Auth(Dispatch));
+    const image = "http://localhost:5000/image/" + personal.display;
 
     // Confirm log In status
     const [status] = useState(
@@ -49,12 +53,12 @@ const Home = () => {
 
                 // Update Cache On EVERY RENDER && RE-RENDER
                 try {
-                    await get_data_2(status.path.type, status.path.companyID, status.key, false);
+                    await get_data_2(status.path.type, status.path.companyID, status.key, status.ff);
+                    navigate("/app/laboratory", { replace: true });
                 } catch (error) {
-                    console.log(error);
+                    // Notify
+                    Notification_B("Something Went Wrong, Please Try Again Later", false);
                 }
-
-                navigate("/app/laboratory", { replace: true });
             });
         });
     });
@@ -86,24 +90,26 @@ const Home = () => {
         try {
             const response = await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/laboratory/create",
+                url: "http://localhost:5000/" + data.type.toLowerCase() + "/create",
                 data: data,
             });
 
-            const userDetails = response["data"];
+            // Update
+            set("personal", response.data.details, store);
 
             setTimeout(() => {
                 e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
-                Dispatch({ type: "profile", payload: userDetails });
+                Dispatch({ type: "profile", payload: response.data.details });
+                document.getElementById(e.target.id).reset();
             }, 2000);
         } catch (error) {
-            const response = error.response;
-            console.log(response);
+            // // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     const submitCompanyForm = (e) => {
-        e.target.parentNode.parentNode.childNodes[0].childNodes[0][8].click();
+        e.target.parentNode.parentNode.childNodes[0].childNodes[1][8].click();
     };
 
     return status.loggedIn === true ? (
@@ -114,49 +120,29 @@ const Home = () => {
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <div className="container-fluid px-2">
                                 <Link className="navbar-brand" to="#">
-                                    WELCOME
+                                    SIGMA
                                 </Link>
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                                     <span className="navbar-toggler-icon"></span>
                                 </button>
                                 <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-                                    <div className=" d-flex justify-content-end">
-                                        <div className="me-4 pt-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="#5e5e5e" className="bi bi-bell" viewBox="0 0 16 16">
-                                                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
-                                            </svg>
-                                        </div>
-                                        <div className="d-flex">
-                                            <div style={{ marginRight: "10px" }}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#5e5e5e" className="bi bi-person-circle" viewBox="0 0 16 16">
-                                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                                    <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                                                </svg>
-                                            </div>
-                                            <div className="text-start">
-                                                <p className="text-capitalize" style={{ fontSize: "12px", margin: "0" }}>
-                                                    {personal.firstname} {personal.lastname} {personal.other}
-                                                </p>
-                                                <p className="text-capitalize" style={{ fontSize: "12px", margin: "0" }}>
-                                                    {personal.account}
-                                                </p>
-                                            </div>
-                                        </div>
+                                    <div>
+                                        <img src={image} alt="Profile_Picture" className="rounded-circle" width="40" height="40" />
                                     </div>
                                 </div>
                             </div>
                         </nav>
                     </div>
-                    <div className="m-auto mt-5 d-flex align-items-center justify-content-center rounded" style={{ width: "30%", height: "78%" }}>
+                    <div className="m-auto mt-5 d-flex align-items-center justify-content-center rounded" style={{ width: "33%", height: "78%" }}>
                         <div className="w-100">
-                            <div style={{ height: "calc(100vh - 200px)", border: ".1rem solid #e3ebf6" }}>
+                            <div style={{ height: "calc(100vh - 190px)" }}>
                                 {personal.company.length > 0 ? (
                                     <ol className="list-group point">
                                         {personal.company.map((item, index) => (
-                                            <li key={index} className="list-group-item" data-cid={item.companyID} data-typ={item.type}>
+                                            <li key={index} className="list-group-item rounded mb-1" data-cid={item.companyID} data-typ={item.type}>
                                                 <div className="ms-0 me-auto">
                                                     <div className="fw-bold text-capitalize mb-1">{item.name}</div>
-                                                    <div className="d-flex justify-content-between" style={{ width: "370px", fontSize: "13px" }}>
+                                                    <div className="d-flex justify-content-between" style={{ fontSize: "13px" }}>
                                                         <p className="mb-0" data-cid={item.companyID}>
                                                             Created: {item.date}
                                                         </p>
@@ -167,14 +153,19 @@ const Home = () => {
                                         ))}
                                     </ol>
                                 ) : (
-                                    <div className="d-flex align-items-center justify-content-center h-100 w-100">
+                                    <div
+                                        className="d-flex align-items-center justify-content-center h-100 w-100"
+                                        style={{
+                                            border: "0.1rem solid #e3ebf6",
+                                        }}
+                                    >
                                         <h6 style={{ color: "rgba(149, 170, 201, .8)" }}>Nothing Here Yet</h6>
                                     </div>
                                 )}
                             </div>
                             {/* <!-- Button trigger modal --> */}
-                            <button type="button" className="btn btn-primary mt-2 w-100" data-bs-toggle="modal" data-bs-target="#homeDrop">
-                                +
+                            <button type="button" className="btn btn-secondary mt-2 w-100" data-bs-toggle="modal" data-bs-target="#homeDrop">
+                                Add
                             </button>
 
                             {/* <!-- Modal --> */}
@@ -182,6 +173,7 @@ const Home = () => {
                                 <div className="modal-dialog modal-dialog-centered modal-lg" style={{ width: "800px" }}>
                                     <div className="modal-content">
                                         <div className="modal-body">
+                                            <div className="notify text-center mt-2"></div>
                                             <form action="#" method="POST" className="pt-3 d-flex justify-content-between" id="formPr" onSubmit={(e) => saveCompanyData(e)}>
                                                 <div className="pe-3 ps-2" style={{ width: "50%" }}>
                                                     <div className="mb-3">

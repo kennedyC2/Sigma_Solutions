@@ -1,5 +1,6 @@
 // Import Libraries
 import React from "react";
+import { Link } from "react-router-dom";
 
 // Component
 const FormBottom = (props) => {
@@ -30,7 +31,7 @@ const FormBottom = (props) => {
                                     .map((key, index) => (
                                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${testData[key]["name"]}`} role="tabpanel" aria-labelledby={`v-pills-${testData[key]["name"]}-tab`}>
                                             {Object.keys(testData[key].testList).map((test, index) => (
-                                                <div key={index} className="form-check" data-bs-toggle="tooltip" data-bs-placement="bottom" title={test["description"]}>
+                                                <div key={index} className="form-check mb-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title={test["description"]}>
                                                     <input className="form-check-input me-2" type="checkbox" id={test.split(" ")[0] + "_" + index} value={`${key}:${testData[key]["name"]}:${test.trim().replaceAll(" ", "_")}:${testData[key]["testList"][test]["cost"]}`} onChange={selectedTestHandler} />
                                                     <label
                                                         className="form-check-label d-flex justify-content-between"
@@ -38,12 +39,11 @@ const FormBottom = (props) => {
                                                         style={{
                                                             textTransform: "capitalize",
                                                             paddingTop: "2px",
+                                                            fontSize: "14px",
                                                         }}
                                                     >
-                                                        <div>{test}</div>
-                                                        <div>
-                                                            <span>&#8358;</span> {testData[key]["testList"][test]["cost"]}
-                                                        </div>
+                                                        <div>{test.replaceAll("_", "  ")}</div>
+                                                        <div>₦{new Intl.NumberFormat("en-US", {}).format(testData[key]["testList"][test]["cost"])}</div>
                                                     </label>
                                                 </div>
                                             ))}
@@ -53,23 +53,27 @@ const FormBottom = (props) => {
                         </div>
                     </div>
 
-                    <div className="rg_f mt-3">
+                    <div className="rg_f mt-3 py-2">
                         <div className="text-end">
-                            <button type="reset" className="btn btn-sm me-5 btn-primary">
+                            <button type="reset" className="btn btn-sm me-4 px-3 btn-outline-primary">
                                 Reset form
                             </button>
-                            <button type="submit" className="btn btn-sm btn-primary">
+                            <button type="submit" className="btn btn-sm px-3 btn-outline-primary">
                                 Book test
                             </button>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="rg_f mt-4">
-                    <div style={{ textAlign: "left", padding: "100px 0 150px", width: "70%", margin: "auto", fontSize: "13px" }}>
-                        <p>No Laboratory Services Has Been Added</p>
+                <div className="rg_f mt-4 d-flex align-items-center justify-content-center" style={{ height: "calc(623px - 230px - 24px)" }}>
+                    <div style={{ textAlign: "left", width: "75%", margin: "auto", fontSize: "16px" }}>
+                        <p className="mb-1">Nothing Here Yet !!!</p>
                         <p>
-                            Please click the <span style={{ color: "rgb(44, 123, 229)" }}>SERVICES</span> tab and add all services currently rendered by your laboratory
+                            Please click the{" "}
+                            <span style={{ color: "rgb(44, 123, 229)" }}>
+                                <Link to="/app/laboratory/services">Services</Link>
+                            </span>{" "}
+                            tab and add all services currently offered in your laboratory.
                         </p>
                     </div>
                 </div>

@@ -2,23 +2,12 @@
 import React, { Fragment, useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useSelector } from "react-redux";
+import { two_layer } from "../../../../Misc/list";
 
 // Components
 const Recent = () => {
     const activity = useSelector((state) => state.lab_activities);
     const hourly = useSelector((state) => state.hourly);
-
-    const list = () => {
-        let file = [];
-        for (var i = 0; i < activity.length; i++) {
-            if (i < 4) {
-                file.push(activity[i]);
-            } else {
-                break;
-            }
-        }
-        return file;
-    };
 
     useEffect(() => {
         // Get Container
@@ -127,8 +116,8 @@ const Recent = () => {
                         </p>
                     </div>
                     <ul className="list-group list-group-flush px-2">
-                        {activity.length > 0 ? (
-                            list().map((item, index) => (
+                        {Object.keys(activity).length > 0 ? (
+                            two_layer(activity).map((item, index) => (
                                 <li key={index} className="list-group-item d-flex pt-1 pb-3 px-2">
                                     <div className="pt-1">
                                         <div className="extend rounded-circle">
@@ -143,7 +132,7 @@ const Recent = () => {
                                         </div>
                                     </div>
                                     <div style={{ width: "calc(100% - 40px)" }}>
-                                        <p className="mb-0 my-1 ms-3">
+                                        <p className="mb-0 my-1 ms-3 text-capitalize">
                                             {item.firstname}&nbsp;{item.lastname}&nbsp;{item.other}
                                         </p>
                                         <div className="mb-0 ms-3 d-flex justify-content-between" style={{ color: "rgba(107, 123, 147, .5)" }}>

@@ -29,13 +29,13 @@ const LeftBottom = () => {
                         <div className="accordion-body">
                             <ul>
                                 <li>
-                                    <Link to="/app/laboratory/register">Register</Link>
+                                    <Link to="/app/laboratory/register">Book A Test</Link>
                                 </li>
                                 <li>
-                                    <Link to="/app/laboratory/unsettled">Unsettled</Link>
+                                    <Link to="/app/laboratory/unsettled">Pending Tests</Link>
                                 </li>
                                 <li>
-                                    <Link to="/app/laboratory/settled">Settled</Link>
+                                    <Link to="/app/laboratory/settled">Completed Tests</Link>
                                 </li>
                             </ul>
                         </div>

@@ -5,6 +5,8 @@ body > div {
     height: 100% !important;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800;900&display=swap");
+
 body::-webkit-scrollbar,
 div::-webkit-scrollbar,
 select::-webkit-scrollbar {
@@ -25,10 +27,29 @@ select::-webkit-scrollbar-track {
     border-radius: 20px;
 }
 
+body.notif .modal-backdrop.show {
+    opacity: 0;
+}
+
+div#notificationPane .modal-body {
+    font-size: 13px;
+    padding: 0.3rem !important;
+    text-align: center;
+    box-shadow: 1px 8px 5px -1px rgb(10 22 70 / 10%), 0px 0px 1px 0 rgb(10 22 70 / 6%);
+}
+
+#notificationPane .modal-dialog {
+    width: 360px;
+}
+
 .body {
     padding: 0 1.23rem;
     min-height: 100vh;
     background-color: #f5f9fc !important;
+}
+
+.bi {
+    font-size: 16px;
 }
 
 .ext {
@@ -39,15 +60,14 @@ select::-webkit-scrollbar-track {
     display: none;
 }
 
-@font-face {
-    font-family: Cerebri book;
-    src: url(./assets/fonts/Cerebri/Cerebri\ Sans\ Book.ttf);
+.show {
+    display: block;
 }
 
 * {
-    font-family: Cerebri book;
-    letter-spacing: 0.03rem;
-    /* color: #525f7f; */
+    font-family: "Inter", sans-serif !important;
+    letter-spacing: 0.04rem;
+    font-weight: 500 !important;
 }
 
 *:focus,
@@ -69,6 +89,10 @@ select::-webkit-scrollbar-track {
 .l-bottom {
     height: 65%;
 }
+
+/* .btn {
+    box-shadow: 4px 5px 8px -1px rgb(10 25 84 / 20%), 0px 0px 1px 0 rgb(10 22 70 / 6%) !important;
+} */
 
 .dp {
     width: 120px;
@@ -104,7 +128,7 @@ select::-webkit-scrollbar-track {
 }
 
 .l-bottom span {
-    margin-left: 10px;
+    margin-left: 12px;
 }
 
 .l-bottom ul {
@@ -117,8 +141,11 @@ select::-webkit-scrollbar-track {
     padding: 5px 0;
 }
 
-.l-bottom a {
+a {
     text-decoration: none;
+}
+
+.l-bottom a {
     color: unset;
 }
 
@@ -258,7 +285,7 @@ header input {
 }
 
 div.nav-link {
-    padding: 0.5rem;
+    padding: 0.4rem 0.5rem;
     color: unset;
 }
 
@@ -271,46 +298,19 @@ div.nav-link {
 
 .services table button {
     padding: 1px 5px;
-    font-size: 0.8rem;
+    font-size: 0.8rem !;
 }
-
-label {
-    font-size: 14px;
-    text-transform: capitalize;
-}
-
-textarea {
-    font-size: 14px !important;
-    text-transform: capitalize;
-}
-
-.tooltip-inner {
-    /* background-color: rgba(128, 128, 128, 0.3); */
-    /* color: #000; */
-    width: 100%;
-    border-radius: 10px;
-    text-align: left;
-    font-size: 11px;
-    /* box-shadow: 2px 3px 3px 3px rgba(128, 128, 128, 0.379); */
-}
-
-/* 
-.tooltip .tooltip-arrow::before {
-    border-top-color: rgba(128, 128, 128, 0.3) !important;
-    border-bottom-color: rgba(128, 128, 128, 0.3) !important;
-    box-shadow: -2px -3px -3px 3px rgba(128, 128, 128, 0.379);
-} */
 
 .add {
     padding: 0 0.5rem;
     font-size: 20px;
-    color: #0d6efd;
+    border-radius: 0.5rem !important;
 }
 
 .rmv {
-    padding: 0 0.5rem;
+    padding: 0 0.65rem;
     font-size: 20px;
-    color: red;
+    border-radius: 0.5rem !important;
 }
 
 #pfl {
@@ -364,19 +364,41 @@ textarea {
     font-size: 14px;
 }
 
+.unsettled .list-group-item,
+.settled .list-group-item {
+    border-width: 1px !important;
+}
+
 .payment .list-group-item {
     border: 1px dashed rgba(0, 0, 0, 0.125) !important;
     border-radius: 0.5rem;
 }
 
 .home .list-group-item {
-    border-width: 0 0 1px 0;
+    border-width: 1px !important;
     border-color: #e3ebf6;
-    border-radius: 0;
+    transition: 0.2s;
 }
 
-.dashboard .list-group-item {
+.home .list-group-item:hover {
+    background-color: transparent;
+    color: unset;
+    transform: translate(0px, -2px);
+    box-shadow: 1px 8px 5px -1px rgb(10 22 70 / 10%), 0px 0px 1px 0 rgb(10 22 70 / 6%);
+}
+
+.dashboard .list-group-item,
+.profile .list-group-item,
+.users .list-group-item {
     border: 0 !important;
+}
+
+.dashboard h5 {
+    font-family: Nunito !important;
+}
+
+.dd {
+    font-weight: bold !important;
 }
 
 #pf_left > div,
@@ -390,12 +412,13 @@ textarea {
     box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
-.progress {
-    height: 0.5rem !important;
+#pf_right > div {
+    padding: 0;
+    height: 347px;
 }
 
-.menu > div > div:last-child {
-    margin-bottom: 32px;
+.progress {
+    height: 0.5rem !important;
 }
 
 .extend {
@@ -408,7 +431,7 @@ textarea {
     padding: 0;
     margin: 0;
     position: absolute;
-    bottom: -6px;
+    bottom: -2px;
     left: 23px;
     width: 2px;
     height: 23px;
@@ -421,27 +444,55 @@ textarea {
 }
 
 #login {
-    width: 420px;
-    background-color: #ffffff;
-    border: 0.1rem solid #e3ebf6;
-    border-radius: 0.75rem;
+    width: 500px;
     margin: auto;
-    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
-    transition: 1s !important;
+}
+
+.notify,
+.notifyA,
+.notifyB {
+    font-size: 13px;
+    max-width: 500px;
+    margin: auto;
 }
 
 .form-text {
-    font-size: 0.8em !important;
+    font-size: 0.75em !important;
+}
+
+.form-select,
+.form-control {
+    border-radius: 0.5rem !important;
+    font-weight: 400 !important;
+    text-transform: capitalize;
+}
+
+.form-check-input {
+    width: 1.1em !important;
+    height: 1.1em !important;
+}
+
+input[type="email"] {
+    text-transform: lowercase;
+}
+
+label {
+    font-size: 13px;
+    text-transform: capitalize;
+}
+
+textarea {
+    font-size: 14px !important;
+    text-transform: capitalize;
+}
+
+.modal-content {
+    border: 0.1rem solid #e3ebf6 !important;
 }
 
 #SignUP {
     width: 70%;
-    background-color: #ffffff;
     margin: auto;
-    border: 0.1rem solid #e3ebf6;
-    border-radius: 0.75rem;
-    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
-    transition: 1s !important;
 }
 
 #spin {
@@ -451,7 +502,6 @@ textarea {
 .bbs {
     background-color: #ffffff;
     border-bottom: 0.1rem solid #e3ebf6;
-    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }
 
 .point li {
@@ -495,4 +545,68 @@ textarea {
     overflow: hidden;
     width: 300px !important;
     height: 300px !important;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.content {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+
+.header {
+    position: absolute;
+    top: 5px;
+    left: calc(15% / 2);
+    z-index: 100;
+}
+
+.mid {
+    position: absolute;
+    top: 0;
+    left: calc(15% / 2);
+    z-index: 5;
+}
+
+.mid h2 {
+    font-size: 33px;
+    font-weight: 800 !important;
+}
+
+.mid h3 {
+    font-size: 23px;
+    font-weight: 800 !important;
+}
+
+.mid p {
+    max-width: 500px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    background-color: #949cf7d1;
+    mix-blend-mode: multiply;
+}
+
+.verify {
+    background-color: #ffffff;
+    border: 0.1rem solid #e3ebf6;
+    border-radius: 0.75rem;
+    box-shadow: 0 3px 3px -1px rgb(10 22 70 / 10%), 0 0 1px 0 rgb(10 22 70 / 6%);
 }

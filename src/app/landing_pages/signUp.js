@@ -1,9 +1,10 @@
 // Import Dependencies
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { sex, RF_days, months, hours, CalenderYear, states } from "../Misc/helper";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Misc/spinner";
+import { Notification_A } from "../Misc/notification";
 
 // Component
 const SignUP = () => {
@@ -42,39 +43,31 @@ const SignUP = () => {
                 data: data,
             });
 
-            const p = document.createElement("p");
-            p.setAttribute("class", "alert-success m-0");
-            p.innerText = response["data"]["Message"];
             setTimeout(() => {
-                document.getElementById("box-1").replaceChild(p, document.getElementById("box-1").childNodes[0]);
+                setSpin(1);
+                localStorage.setItem("pending", JSON.stringify({ email: data.email }));
+
                 setTimeout(() => {
-                    setSpin(1);
-                    setTimeout(() => {
-                        navigate("/login", { replace: true });
-                    }, 5000);
-                }, 2000);
+                    navigate("/account/verification", { replace: true });
+                }, 5000);
             }, 2000);
         } catch (error) {
-            const response = error.response;
-            const p = document.createElement("p");
-            p.setAttribute("class", "alert-danger m-0");
-            p.innerText = response["data"]["Error"];
-            setTimeout(() => {
-                document.getElementById("box-1").replaceChild(p, document.getElementById("box-1").childNodes[0]);
-            }, 2000);
+            // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     return spin === 0 ? (
-        <div className="w-100">
-            <form action="account/signUp" method="POST" className="px-4 py-0" id="SignUP" onSubmit={(e) => submitForm(e)}>
-                <div className="text-center my-3">
-                    <div id="box-1" className="p-1 text-center, m-auto" style={{ minHeight: "30px", transition: ".5s", width: "40%" }}>
-                        <p className="alert-success m-0"></p>
-                    </div>
-                </div>
+        <div className="w-100" style={{ backgroundColor: "#ffffff", border: "0.1rem solid #e3ebf6" }}>
+            <div className="text-center mt-4 mb-1">
+                <Link to="/" className="d-inline-flex text-decoration-none text-reset mt-3">
+                    <h4>SIGMA</h4>
+                </Link>
+            </div>
+            <div className="notify text-center mb-2"></div>
+            <form action="account/signUp" method="POST" className="px-4 py-1" id="SignUP" onSubmit={(e) => submitForm(e)}>
                 <div className="d-flex justify-content-between">
-                    <div className="pe-3 ps-2" style={{ width: "48%" }}>
+                    <div className="pe-3 ps-2" style={{ width: "49%" }}>
                         <div className="mb-3">
                             <label htmlFor="firstname" className="form-label">
                                 Firstname: <span className="text-danger fs-5">*</span>
@@ -115,7 +108,7 @@ const SignUP = () => {
                             <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
                         </div>
                     </div>
-                    <div className="ps-3 pe-2" style={{ width: "48%" }}>
+                    <div className="ps-3 pe-2" style={{ width: "49%" }}>
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">
                                 Email: <span className="text-danger fs-5">*</span>
@@ -127,7 +120,7 @@ const SignUP = () => {
                                 Date of Birth: <span className="text-danger fs-5">*</span>
                             </label>
                             <div className="input-group">
-                                <select className="form-select form-select-sm" name="day" defaultValue={"Default"} aria-label="Default select" required>
+                                <select className="form-select form-select-sm me-1" name="day" defaultValue={"Default"} aria-label="Default select" required>
                                     <option value="Default" disabled>
                                         Day
                                     </option>
@@ -137,7 +130,7 @@ const SignUP = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={"Default"} style={{ width: "90px" }} required>
+                                <select className="form-select form-select-sm me-1" name="month" aria-label="Default select" defaultValue={"Default"} style={{ width: "90px" }} required>
                                     <option value="Default" disabled>
                                         Month
                                     </option>
@@ -203,14 +196,14 @@ const SignUP = () => {
                             Login
                         </Link>
                     </div>
-                    <button type="submit" className="btn btn-primary btn-sm px-3">
+                    <button type="submit" className="btn btn-primary btn-sm px-3 mb-1">
                         Register
                     </button>
                 </div>
             </form>
         </div>
     ) : (
-        <Spinner id="signUP" />
+        <Spinner />
     );
 };
 

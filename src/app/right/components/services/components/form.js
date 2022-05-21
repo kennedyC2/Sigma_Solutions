@@ -34,12 +34,6 @@ const AddForm = (props) => {
                     </label>
                     <input type="text" className="form-control form-control-sm" name="cost" id="cost" placeholder="5000" required />
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="description" className="form-label">
-                        Description:
-                    </label>
-                    <textarea className="form-control form-control-sm" id="description" name="description" rows="5" required></textarea>
-                </div>
                 <div className="mb-3 text-end">
                     <button type="submit" className="hide">
                         Add

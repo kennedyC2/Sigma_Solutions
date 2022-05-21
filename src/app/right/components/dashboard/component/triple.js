@@ -2,24 +2,13 @@
 import React, { Fragment, useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useSelector } from "react-redux";
+import { one_layer } from "../../../../Misc/list";
 
 // Component
 const Triple = () => {
     const employees = useSelector((state) => state.users);
     const top_5 = useSelector((state) => state.top_5);
     const storage = useSelector((state) => state.storage);
-
-    const list = (a) => {
-        let file = [];
-        for (var i = 0; i < a.length; i++) {
-            if (i < 4) {
-                file.push(a[i]);
-            } else {
-                break;
-            }
-        }
-        return file;
-    };
 
     const doughnutData = (label, data) => {
         const file = [];
@@ -226,8 +215,8 @@ const Triple = () => {
                         </p>
                     </div>
                     <ul className="list-group list-group-flush px-2">
-                        {employees.length > 0 ? (
-                            list(employees).map((item, index) => (
+                        {Object.keys(employees).length > 0 ? (
+                            one_layer(employees).map((item, index) => (
                                 <li key={index} className="list-group-item d-flex pt-1 pb-3 px-2">
                                     <div className="pt-1">
                                         <div className="pt-2">
@@ -237,11 +226,11 @@ const Triple = () => {
                                         </div>
                                     </div>
                                     <div style={{ width: "calc(100% - 40px)" }}>
-                                        <p className="mb-0 my-1 ms-3">
+                                        <p className="mb-0 my-1 ms-3 text-capitalize">
                                             {item.firstname}&nbsp;{item.lastname}&nbsp;{item.other}
                                         </p>
                                         <div className="mb-0 ms-3 d-flex justify-content-between" style={{ color: "rgba(107, 123, 147, .5)" }}>
-                                            <p className="mb-0 my-1">{item.account_type}</p>
+                                            <p className="mb-0 my-1 text-capitalize">{item.account_type}</p>
                                             <p className="mb-0 my-1">Online</p>
                                         </div>
                                     </div>

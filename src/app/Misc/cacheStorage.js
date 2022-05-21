@@ -82,7 +82,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/lab_activities",
+                url: "http://localhost:5000/" + type + "/admin_activities",
                 data: {},
             });
 
@@ -207,7 +207,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     tokenID: token,
                     companyID: ID,
                     type: type,
-                    admin: admin,
+                    admin: admin === "admin" ? true : false,
                 },
                 url: "http://localhost:5000/account/profile",
                 data: {},

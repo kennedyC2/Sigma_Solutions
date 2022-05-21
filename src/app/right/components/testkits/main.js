@@ -11,6 +11,7 @@ import { Navigate } from "react-router-dom";
 import { store } from "../../../Misc/cacheStorage";
 import AddKit from "./components/addkit";
 import ListKits from "./components/listkits";
+import { Notification_A } from "../../../Misc/notification";
 
 // App
 const TestKits = () => {
@@ -62,19 +63,21 @@ const TestKits = () => {
             // Update storage
             await set("storage", result.storage, store);
 
+            // Close
+            e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
+
             // Update State
             Dispatch({ type: "addKit", payload: result });
             document.getElementById(e.target.id).reset();
         } catch (error) {
-            const response = error.response;
-            console.log(response);
+            // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     // Click the submit button
     const submitForm = (e) => {
-        console.log(e);
-        e.target.parentNode.parentNode.childNodes[0].childNodes[0][3].click();
+        e.target.parentNode.parentNode.childNodes[0].childNodes[1][3].click();
     };
 
     return status.loggedIn === true ? (
@@ -84,8 +87,8 @@ const TestKits = () => {
                 <div className="text-end rg_f py-2">
                     <div className="text-end">
                         {/* Button trigger modal */}
-                        <button type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            New Kit
+                        <button type="button" className="btn btn-outline-primary btn-sm px-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Add Kit
                         </button>
                     </div>
                 </div>
@@ -97,6 +100,7 @@ const TestKits = () => {
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-body">
+                                    <div className="notify text-center mt-2"></div>
                                     <AddKit saveKit={saveKit} />
                                 </div>
                                 <div className="modal-footer">

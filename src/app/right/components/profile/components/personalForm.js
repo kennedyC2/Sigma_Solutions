@@ -58,14 +58,14 @@ const UpdatePersonal = (props) => {
                         Date of Birth:
                     </label>
                     <div className="input-group">
-                        <select className="form-select form-select-sm" name="day" aria-label="Default select" defaultValue={personalData["day"]} required>
+                        <select className="form-select form-select-sm me-1" name="day" aria-label="Default select" defaultValue={personalData["day"]} required>
                             {RF_days.map((key, index) => (
                                 <option key={index} value={key} style={{ display: `${key.toString() === personalData["day"] ? "none" : ""}` }}>
                                     {key}
                                 </option>
                             ))}
                         </select>
-                        <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={personalData["month"]} style={{ width: "90px" }} required>
+                        <select className="form-select form-select-sm me-1" name="month" aria-label="Default select" defaultValue={personalData["month"]} style={{ width: "90px" }} required>
                             {months.map((key, index) => (
                                 <option key={index} value={key.toLowerCase()} style={{ display: `${key.toString() === personalData["month"] ? "none" : ""}` }}>
                                     {key}

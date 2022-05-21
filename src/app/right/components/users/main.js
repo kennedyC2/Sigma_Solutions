@@ -11,6 +11,7 @@ import { Navigate } from "react-router-dom";
 import { store } from "../../../Misc/cacheStorage";
 import AddUser from "./components/addUser";
 import ListUsers from "./components/listUsers";
+import { Notification_A } from "../../../Misc/notification";
 
 // App
 const Users = () => {
@@ -35,6 +36,7 @@ const Users = () => {
     // Save Selected Services
     const saveUsers = async (e) => {
         e.preventDefault();
+
         const data = {};
         data["firstname"] = e.target[0].value;
         data["lastname"] = e.target[1].value;
@@ -61,7 +63,6 @@ const Users = () => {
             });
 
             const result = response.data;
-            console.log(result);
 
             // Update Users
             const users = await get("users", store);
@@ -71,19 +72,21 @@ const Users = () => {
             // Update Stats
             await set("stats", result.stats, store);
 
+            // Close
+            e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
+
             // Update State
             Dispatch({ type: "addUser", payload: result });
             document.getElementById(e.target.id).reset();
         } catch (error) {
-            const response = error.response;
-            console.log(response);
-            console.log(error);
+            // Notify
+            Notification_A(error.response.data.error, false);
         }
     };
 
     // Click the submit button
     const submitForm = (e) => {
-        e.target.parentNode.parentNode.childNodes[0].childNodes[0][11].click();
+        e.target.parentNode.parentNode.childNodes[0].childNodes[1][11].click();
     };
 
     return status.loggedIn === true ? (
@@ -93,8 +96,8 @@ const Users = () => {
                 <div className="text-end rg_f py-2">
                     <div className="text-end">
                         {/* Button trigger modal */}
-                        <button type="button" className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            NEW USER
+                        <button type="button" className="btn btn-outline-primary btn-sm px-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Add User
                         </button>
                     </div>
                 </div>
@@ -106,6 +109,7 @@ const Users = () => {
                         <div className="modal-dialog modal-dialog-centered modal-lg" style={{ width: "800px" }}>
                             <div className="modal-content">
                                 <div className="modal-body">
+                                    <div className="notify text-center mt-2"></div>
                                     <AddUser saveUsers={saveUsers} />
                                 </div>
                                 <div className="modal-footer">

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Left from "./left/main";
 import InitialState from "./Misc/initialState";
 import Spinner from "./Misc/spinner";
-import Right from "./right/main";
+import Right from "./right/right";
 
 // App
 const App = () => {

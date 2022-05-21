@@ -1,3 +1,5 @@
+// Import dependencies
+import { Buffer } from "buffer";
 /**
  * This function was adapted from the one in the ReadMe of https://github.com/DominicTobias/react-image-crop
  * @param {File} imageSrc - Image File url
@@ -75,4 +77,21 @@ export const generateDownload = async (imageSrc, crop) => {
         "image/jpeg",
         0.66
     );
+};
+
+// To convert dataUrl (which we get from our blob) to a a file object
+export const dataURLtoFile = (dataUrl, filename) => {
+    const arr = dataUrl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = Buffer.from(arr[1], "base64").toString("base64");
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
+
+    // To  File
+    return new File([u8arr], filename, { type: mime });
+
+    // to Blob
+    // return new Blob([u8arr], { type: mime });
 };

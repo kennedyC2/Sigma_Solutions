@@ -35,14 +35,14 @@ const FormTop = (props) => {
                             Date of Birth:
                         </label>
                         <div className="input-group">
-                            <select className="form-select form-select-sm" name="day" aria-label="Default select" defaultValue={date} onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })} required>
+                            <select className="form-select form-select-sm me-1" name="day" aria-label="Default select" defaultValue={date} onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })} required>
                                 {RF_days.map((key, index) => (
                                     <option key={index} value={key}>
                                         {key}
                                     </option>
                                 ))}
                             </select>
-                            <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={month} style={{ width: "90px" }} onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })} required>
+                            <select className="form-select form-select-sm me-1" name="month" aria-label="Default select" defaultValue={month} style={{ width: "90px" }} onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })} required>
                                 {months.map((key, index) => (
                                     <option key={index} value={key}>
                                         {key}
@@ -120,7 +120,7 @@ const FormTop = (props) => {
                     {specimen.sort().map((key, index) => (
                         <div key={index} className="form-check form-check-inline">
                             <input className="form-check-input specimen" type="checkbox" id={"inlineCheckbox" + (index + 1)} onChange={specimenHandler} value={key} />
-                            <label className="form-check-label" htmlFor={"inlineCheckbox" + (index + 1)}>
+                            <label className="form-check-label ms-1" htmlFor={"inlineCheckbox" + (index + 1)}>
                                 {key}
                             </label>
                         </div>

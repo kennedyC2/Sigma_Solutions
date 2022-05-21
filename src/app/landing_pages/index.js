@@ -1,49 +1,53 @@
 // Import Dependencies
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
+import hero from "./../../assets/videos/hero.webm";
 
 // Component
 const Index = () => {
     return (
         <Fragment>
             <div className="h-100 w-100">
-                <div className="bg-1" style={{ width: "100%", height: "75%" }}>
-                    <div className="m-auto py-1" style={{ width: "85%" }}>
+                <video src={hero} preload="true" muted loop autoPlay></video>
+                <div className="content d-flex flex-column align-items-center justify-content-center">
+                    <div className="m-auto header" style={{ width: "85%", height: "auto" }}>
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <div className="container-fluid px-2">
-                                <Link className="navbar-brand" to="#">
-                                    WELCOME
+                                <Link className="navbar-brand text-white" to="#">
+                                    SIGMA
                                 </Link>
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                                     <span className="navbar-toggler-icon"></span>
                                 </button>
                                 <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
                                     <div className="navbar-nav">
-                                        <Link className="nav-link" to="/login">
-                                            <button className="btn btn-outline-light btn-sm px-3">Login</button>
+                                        <Link className="nav-link me-2" to="#">
+                                            <button className="btn btn-outline-light btn-sm px-3">Contact Us</button>
                                         </Link>
-                                        <Link className="nav-link ms-2" to="/register">
-                                            <button className="btn btn-outline-light btn-sm px-3">Register</button>
+                                        <Link className="nav-link" to="/login">
+                                            <button className="btn btn-outline-light btn-sm px-4">Login</button>
                                         </Link>
                                     </div>
                                 </div>
                             </div>
                         </nav>
                     </div>
-                </div>
-                <div style={{ width: "100%", height: "25%" }}>
-                    <div className="d-flex justify-content-between m-auto pt-2" style={{ width: "85%", textAlign: "justify" }}>
-                        <div className="pt-2 pe-3" style={{ width: "30%", fontSize: "14px" }}>
-                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nesciunt quidem, quae veniam modi voluptates eos et dolorem unde aliquam? Harum consectetur necessitatibus eligendi ipsam sed cupiditate rem ratione tempore in!
-                        </div>
-                        <div className="pt-2 px-3" style={{ width: "30%", fontSize: "14px" }}>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex vitae officiis beatae inventore dicta at molestiae magnam sunt asperiores ab optio pariatur magni temporibus, repudiandae rerum porro suscipit adipisci nostrum!
-                        </div>
-                        <div className="pt-2 ps-3" style={{ width: "30%", fontSize: "14px" }}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam quam deleniti doloribus quas in libero aut perferendis placeat asperiores laudantium numquam, minus amet laborum quis tenetur dolorum est obcaecati earum?
+
+                    <div className="d-flex flex-column justify-content-center text-white mid" style={{ width: "85%", height: "100%" }}>
+                        <h2 className="text-uppercase">Sigma Solutions</h2>
+                        <h3 className="text-uppercase mt-1">Work Smart and Efficiently</h3>
+                        <p className="mt-2">Harness the power of cloud computing and real time analytics, access and manage your data from anywhere in the world where there’s internet connectivity.</p>
+
+                        <div className="d-flex mt-2">
+                            <Link className="" to="/register">
+                                <button className="btn btn-sm px-4 py-2 fs-6" style={{ backgroundColor: "#f11414b3", border: "0", color: "#ffffff" }}>
+                                    Get Started
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
+                <div className="overlay"></div>
             </div>
         </Fragment>
     );

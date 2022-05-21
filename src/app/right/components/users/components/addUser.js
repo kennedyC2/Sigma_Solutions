@@ -58,14 +58,14 @@ const AddUser = (props) => {
                         Date of Birth:
                     </label>
                     <div className="input-group">
-                        <select className="form-select form-select-sm" name="day" aria-label="Default select" defaultValue={date} required>
+                        <select className="form-select form-select-sm me-1" name="day" aria-label="Default select" defaultValue={date} required>
                             {RF_days.map((key, index) => (
                                 <option key={index} value={key}>
                                     {key}
                                 </option>
                             ))}
                         </select>
-                        <select className="form-select form-select-sm" name="month" aria-label="Default select" defaultValue={month} style={{ width: "90px" }} required>
+                        <select className="form-select form-select-sm me-1" name="month" aria-label="Default select" defaultValue={month} style={{ width: "90px" }} required>
                             {months.map((key, index) => (
                                 <option key={index} value={key}>
                                     {key}

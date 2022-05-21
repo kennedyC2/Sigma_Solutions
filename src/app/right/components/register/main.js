@@ -3,7 +3,7 @@
 // ========================================================================
 
 // Import libraries
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FormTop from "./components/top";
 import FormBottom from "./components/bottom";
@@ -13,6 +13,7 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { get, set } from "idb-keyval";
 import { store } from "../../../Misc/cacheStorage";
+import { Notification_B } from "../../../Misc/notification";
 
 // App
 const Register = () => {
@@ -144,8 +145,14 @@ const Register = () => {
 
             const result = response.data;
 
-            // Update Admin
-            await set("admin", result.admin, store);
+            window.scrollTo(0, 0);
+
+            // Update User
+            if (status.ff === "admin") {
+                await set("admin", result.admin, store);
+            } else {
+                await set("users", result.user, store);
+            }
 
             // Update stats
             await set("stats", result.stats, store);
@@ -162,17 +169,24 @@ const Register = () => {
             // Update storage
             await set("storage", result.storage, store);
 
+            // Update revenue
+            await set("revenue", result.revenue, store);
+
             // Update unsettled
             const tests = await get("tests", store);
             tests.unsettled = result.unsettled;
             await set("tests", tests, store);
 
-            // State
-            Dispatch({ type: "bookTest", payload: data });
+            setTimeout(() => {
+                // Notify
+                Notification_B(response.data.message, true);
+
+                // State
+                Dispatch({ type: "bookTest", payload: response.data });
+            }, 500);
         } catch (error) {
-            const response = error.response;
-            console.log(response);
-            console.log(error);
+            // Notify
+            Notification_B(error.response.data.error, false);
         }
         form.reset();
     };

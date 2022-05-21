@@ -2,6 +2,7 @@
 import React, { Fragment, useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useSelector } from "react-redux";
+import { month } from "../../../../Misc/helper";
 
 // Components
 const Base = () => {
@@ -18,7 +19,7 @@ const Base = () => {
                 labels: revenue.days,
                 datasets: [
                     {
-                        label: "April",
+                        label: month,
                         data: revenue.amount,
                         backgroundColor: ["#95aac9"],
                         borderColor: ["#95aac9"],
