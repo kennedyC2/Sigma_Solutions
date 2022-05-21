@@ -38,7 +38,7 @@ const SignUP = () => {
         data["date"] = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
 
         try {
-            const response = await axios({
+            await axios({
                 method: e.target.method,
                 url: domain + "account/signUp",
                 data: data,

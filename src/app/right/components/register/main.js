@@ -3,7 +3,7 @@
 // ========================================================================
 
 // Import libraries
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FormTop from "./components/top";
 import FormBottom from "./components/bottom";
