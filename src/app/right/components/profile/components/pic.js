@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { set } from "idb-keyval";
 import { store } from "../../../../Misc/cacheStorage";
+import { domain } from "../../../../Misc/helper";
 
 // Component
 const Profile_Picture = (props) => {
@@ -34,7 +35,7 @@ const Profile_Picture = (props) => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:5000/account/picture",
+                url: domain + "account/picture",
                 data: {
                     email: email,
                     tokenID: tokenID,

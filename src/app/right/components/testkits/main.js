@@ -12,6 +12,7 @@ import { store } from "../../../Misc/cacheStorage";
 import AddKit from "./components/addkit";
 import ListKits from "./components/listkits";
 import { Notification_A } from "../../../Misc/notification";
+import { domain } from "../../../Misc/helper";
 
 // App
 const TestKits = () => {
@@ -48,7 +49,7 @@ const TestKits = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                url: "http://localhost:5000/laboratory/testKits/add",
+                url: domain + "laboratory/testKits/add",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 

@@ -2,7 +2,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, Navigate } from "react-router-dom";
-import { states, hours } from "./../Misc/helper";
+import { states, hours, domain } from "./../Misc/helper";
 import { get_data_2 } from "../Misc/cacheStorage";
 import { Auth } from "../Misc/initialState";
 import Spinner from "../Misc/spinner";
@@ -16,7 +16,7 @@ const Home = () => {
     const Dispatch = useDispatch();
     const navigate = useNavigate();
     const personal = useSelector((state) => state.personal || Auth(Dispatch));
-    const image = "http://localhost:5000/image/" + personal.display;
+    const image = domain + "image/" + personal.display;
 
     // Confirm log In status
     const [status] = useState(
@@ -90,7 +90,7 @@ const Home = () => {
         try {
             const response = await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/" + data.type.toLowerCase() + "/create",
+                url: domain + data.type.toLowerCase() + "/create",
                 data: data,
             });
 

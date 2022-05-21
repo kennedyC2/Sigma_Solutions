@@ -12,6 +12,7 @@ import axios from "axios";
 import { set } from "idb-keyval";
 import { store } from "../../../Misc/cacheStorage";
 import { Notification_A } from "../../../Misc/notification";
+import { domain } from "../../../Misc/helper";
 
 // App
 const Services = () => {
@@ -50,7 +51,7 @@ const Services = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                url: "http://localhost:5000/laboratory/update/services",
+                url: domain + "laboratory/update/services",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 

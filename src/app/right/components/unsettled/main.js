@@ -12,7 +12,7 @@ import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { get, set } from "idb-keyval";
 import { store } from "../../../Misc/cacheStorage";
-import { RF_days, months, CalenderYear, date, month, year } from "../../../Misc/helper";
+import { RF_days, months, CalenderYear, date, month, year, domain } from "../../../Misc/helper";
 import { Notification_B } from "../../../Misc/notification";
 
 // App
@@ -69,7 +69,7 @@ const Unsettled = () => {
         try {
             const response = await axios({
                 method: "PUT",
-                url: "http://localhost:5000/laboratory/tests/pending",
+                url: domain + "laboratory/tests/pending",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 
@@ -99,7 +99,7 @@ const Unsettled = () => {
         try {
             const response = await axios({
                 method: "PUT",
-                url: "http://localhost:5000/laboratory/tests/completed",
+                url: domain + "laboratory/tests/completed",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import Spinner from "../Misc/spinner";
 import { useNavigate } from "react-router-dom";
 import { Notification_A } from "../Misc/notification";
+import { domain } from "../Misc/helper";
 
 // Component
 const Verify = () => {
@@ -20,7 +21,7 @@ const Verify = () => {
         try {
             await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/account/verification",
+                url: domain + "account/verification",
                 data: {
                     code: code.toString(),
                     email: email,
@@ -47,7 +48,7 @@ const Verify = () => {
         try {
             await axios({
                 method: "POST",
-                url: "http://localhost:5000/account/verification/resend_code",
+                url: domain + "account/verification/resend_code",
                 data: {
                     email: email,
                 },

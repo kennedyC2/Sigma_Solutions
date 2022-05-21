@@ -9,7 +9,7 @@ import Stats from "./component/stats";
 import Recent from "./component/recent";
 import Triple from "./component/triple";
 import Base from "./component/base";
-import { date, day, month, year } from "../../../Misc/helper";
+import { date, day, month, year, domain } from "../../../Misc/helper";
 import { useSelector } from "react-redux";
 
 // App
@@ -28,7 +28,7 @@ const Dashboard = () => {
     );
 
     const personalData = useSelector((state) => state.personal);
-    const image = "http://localhost:5000/image/" + personalData.display;
+    const image = domain + "image/" + personalData.display;
 
     return (
         <Fragment>

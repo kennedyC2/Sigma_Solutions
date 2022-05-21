@@ -12,6 +12,7 @@ import { store } from "../../../Misc/cacheStorage";
 import AddUser from "./components/addUser";
 import ListUsers from "./components/listUsers";
 import { Notification_A } from "../../../Misc/notification";
+import { domain } from "../../../Misc/helper";
 
 // App
 const Users = () => {
@@ -58,7 +59,7 @@ const Users = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                url: "http://localhost:5000/laboratory/users/create",
+                url: domain + "laboratory/users/create",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 

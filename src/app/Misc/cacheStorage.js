@@ -2,6 +2,7 @@
 // =======================================================================================
 
 // Dependencies
+import { domain } from "./helper";
 import { set, createStore } from "idb-keyval";
 import axios from "axios";
 
@@ -18,7 +19,7 @@ export const get_data_1 = async (token) => {
                 params: {
                     tokenID: token,
                 },
-                url: "http://localhost:5000/account/profile",
+                url: domain + "account/profile",
                 data: {},
             });
 
@@ -40,7 +41,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/profile",
+                url: domain + type + "/profile",
                 data: {},
             });
 
@@ -54,7 +55,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/hourly",
+                url: domain + type + "/hourly",
                 data: {},
             });
 
@@ -68,7 +69,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/lab_activities",
+                url: domain + type + "/lab_activities",
                 data: {},
             });
 
@@ -82,7 +83,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/admin_activities",
+                url: domain + type + "/admin_activities",
                 data: {},
             });
 
@@ -96,7 +97,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/revenue",
+                url: domain + type + "/revenue",
                 data: {},
             });
 
@@ -110,7 +111,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/services",
+                url: domain + type + "/services",
                 data: {},
             });
 
@@ -124,7 +125,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/stats",
+                url: domain + type + "/stats",
                 data: {},
             });
 
@@ -138,7 +139,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/storage",
+                url: domain + type + "/storage",
                 data: {},
             });
 
@@ -152,7 +153,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/testKits",
+                url: domain + type + "/testKits",
                 data: {},
             });
 
@@ -166,7 +167,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/tests",
+                url: domain + type + "/tests",
                 data: {},
             });
 
@@ -180,7 +181,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/top_5",
+                url: domain + type + "/top_5",
                 data: {},
             });
 
@@ -194,7 +195,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     companyID: ID,
                     type: type,
                 },
-                url: "http://localhost:5000/" + type + "/users",
+                url: domain + type + "/users",
                 data: {},
             });
 
@@ -209,7 +210,7 @@ export const get_data_2 = async (type, ID, token, admin) => {
                     type: type,
                     admin: admin === "admin" ? true : false,
                 },
-                url: "http://localhost:5000/account/profile",
+                url: domain + "account/profile",
                 data: {},
             });
 

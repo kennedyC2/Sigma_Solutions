@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Misc/spinner";
 import { Notification_A } from "../Misc/notification";
+import { domain } from "../Misc/helper";
 
 // Component
 const SignUP = () => {
@@ -39,7 +40,7 @@ const SignUP = () => {
         try {
             const response = await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/account/signUp",
+                url: domain + "account/signUp",
                 data: data,
             });
 

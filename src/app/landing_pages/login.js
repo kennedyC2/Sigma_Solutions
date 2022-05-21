@@ -7,6 +7,7 @@ import { get_data_1, get_data_2 } from "../Misc/cacheStorage";
 import { useDispatch } from "react-redux";
 import { Auth } from "../Misc/initialState";
 import { Notification_A } from "../Misc/notification";
+import { domain } from "../Misc/helper";
 
 // Component
 const Login = () => {
@@ -28,7 +29,7 @@ const Login = () => {
         try {
             const response = await axios({
                 method: e.target.method,
-                url: "http://localhost:5000/account/login",
+                url: domain + "account/login",
                 data: data,
             });
 

@@ -7,7 +7,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import FormTop from "./components/top";
 import FormBottom from "./components/bottom";
-import { year, months, monthNum, date, month, hours } from "../../../Misc/helper";
+import { year, months, monthNum, date, month, hours, domain } from "../../../Misc/helper";
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
@@ -139,7 +139,7 @@ const Register = () => {
         try {
             const response = await axios({
                 method: "POST",
-                url: "http://localhost:5000/laboratory/tests/booking",
+                url: domain + "laboratory/tests/booking",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 

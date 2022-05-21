@@ -16,7 +16,7 @@ import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5
 import ProfileTop from "./components/pic";
 import { Navigate } from "react-router-dom";
 import { one_layer, two_layer } from "../../../Misc/list";
-import { month, date } from "../../../Misc/helper";
+import { month, date, domain } from "../../../Misc/helper";
 import { Notification_A } from "../../../Misc/notification";
 
 // App
@@ -26,7 +26,7 @@ const Profile = () => {
     const users = useSelector((state) => state.users);
     const admin = useSelector((state) => state.admin);
     const Dispatch = useDispatch();
-    const image = "http://localhost:5000/image/" + personalData.display;
+    const image = domain + "image/" + personalData.display;
 
     // Confirm log In status
     const [status] = useState(
@@ -85,7 +85,7 @@ const Profile = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                url: "http://localhost:5000/account/update",
+                url: domain + "account/update",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 
@@ -129,7 +129,7 @@ const Profile = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                url: "http://localhost:5000/laboratory/update",
+                url: domain + "laboratory/update",
                 data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
             });
 
