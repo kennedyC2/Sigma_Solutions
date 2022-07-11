@@ -174,7 +174,7 @@ const Triple = () => {
 
     return (
         <Fragment>
-            <div className="triple d-flex justify-content-between py-2">
+            <div className="triple d-flex justify-content-between">
                 <div>
                     <div className="d-flex justify-content-between px-3 py-3">
                         <p className="m-0">Top 5 Tests Booked</p>

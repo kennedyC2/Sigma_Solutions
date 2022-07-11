@@ -8,7 +8,7 @@ const Stats = () => {
 
     return (
         <Fragment>
-            <div className="stats d-flex justify-content-between py-2">
+            <div className="stats d-flex justify-content-between">
                 <div className="stat d-flex justify-content-between">
                     <div className="m-3">
                         <p className="mt-1 mb-0" style={{ fontSize: ".85rem", color: "#95aac9" }}>

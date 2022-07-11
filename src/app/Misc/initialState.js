@@ -44,13 +44,11 @@ const InitialState = async (callback) => {
 
     data["users"] = await get("users", store);
 
+    data["fetched"] = await get("fetched", store);
+
     data["database"] = testData;
 
-    data["fetch"] = true;
-
-    setTimeout(async () => {
-        callback({ type: "Full_State", payload: await data });
-    }, 3000);
+    callback({ type: "Full_State", payload: data });
 };
 
 export default InitialState;

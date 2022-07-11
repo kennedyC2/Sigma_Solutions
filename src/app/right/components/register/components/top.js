@@ -8,7 +8,7 @@ const FormTop = (props) => {
 
     return (
         <React.Fragment>
-            <div className="rg_f">
+            <div className="top rg_f p-1">
                 <div className="lvl_1 d-flex p-2 justify-content-between">
                     <div className="mb-3">
                         <label htmlFor="firstname" className="form-label">
@@ -115,16 +115,20 @@ const FormTop = (props) => {
                         <input type="text" className="form-control form-control-sm" name="diagnosis" id="diagnosis" placeholder="Malaria" onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })} required />
                     </div>
                 </div>
-                <div className="lvl_4 d-flex p-2 justify-content-between">
-                    <p style={{ fontSize: "14px" }}>Specimen:</p>
-                    {specimen.sort().map((key, index) => (
-                        <div key={index} className="form-check form-check-inline">
-                            <input className="form-check-input specimen" type="checkbox" id={"inlineCheckbox" + (index + 1)} onChange={specimenHandler} value={key} />
-                            <label className="form-check-label ms-1" htmlFor={"inlineCheckbox" + (index + 1)}>
-                                {key}
-                            </label>
-                        </div>
-                    ))}
+                <div>
+                    <p className="m-0 ps-2" style={{ fontSize: ".8rem" }}>
+                        Specimen:
+                    </p>
+                    <div className="lvl_4 d-flex p-2 justify-content-between">
+                        {specimen.sort().map((key, index) => (
+                            <div key={index} className="form-check form-check-inline">
+                                <input className="form-check-input specimen" type="checkbox" id={"inlineCheckbox" + (index + 1)} onChange={specimenHandler} value={key} />
+                                <label className="form-check-label ms-2" htmlFor={"inlineCheckbox" + (index + 1)}>
+                                    {key}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </React.Fragment>

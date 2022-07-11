@@ -116,7 +116,7 @@ const Base = () => {
 
     return (
         <Fragment>
-            <div className="bdt pt-3">
+            <div className="bdt">
                 <div>
                     <div className="d-flex justify-content-between px-3 py-3">
                         <p className="m-0">Monthly Revenue</p>

@@ -4,16 +4,21 @@ import { Link } from "react-router-dom";
 
 // Component
 const FormBottom = (props) => {
-    const { testData, selectedTestHandler } = props;
+    const { data, testData, setData, selectedTestHandler } = props;
+
+    const updateBalance = (e) => {
+        setData({ ...data, paid: e.target.value });
+        document.getElementById("balance").innerHTML = `${e.target.value > 0 ? "₦" : ""}${e.target.value > 0 ? new Intl.NumberFormat("en-US", {}).format(data.total - e.target.value) : "0.00"}`;
+    };
 
     return (
         <React.Fragment>
             {Object.keys(testData).length > 0 ? (
                 <div className="mt-3">
-                    <div className="d-flex align-items-start mt-4 justify-content-between">
+                    <div className="d-flex s_sed align-items-start mt-3 justify-content-between">
                         {/* tab 1 */}
-                        <div className="rg_f py-4" style={{ width: "40%", height: "calc(623px - 64px - 1rem)" }}>
-                            <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
+                        <div className="rg_f py-4">
+                            <div className="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
                                 {Object.keys(testData)
                                     .sort()
                                     .map((key, index) => (
@@ -24,7 +29,7 @@ const FormBottom = (props) => {
                             </div>
                         </div>
                         {/* tab 2 */}
-                        <div className="rg_f py-4" style={{ width: "58%", height: "calc(623px - 64px - 1rem)" }}>
+                        <div className="rg_f py-4">
                             <div className="tab-content p-2" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%" }}>
                                 {Object.keys(testData)
                                     .sort()
@@ -39,7 +44,6 @@ const FormBottom = (props) => {
                                                         style={{
                                                             textTransform: "capitalize",
                                                             paddingTop: "2px",
-                                                            fontSize: "14px",
                                                         }}
                                                     >
                                                         <div>{test.replaceAll("_", "  ")}</div>
@@ -53,8 +57,36 @@ const FormBottom = (props) => {
                         </div>
                     </div>
 
-                    <div className="rg_f mt-3 py-2">
-                        <div className="text-end">
+                    <div className="rg_f mt-3 py-2 px-2">
+                        <div className="d-flex det ps-2 w-100 justify-content-between">
+                            <div className="d-flex">
+                                <p className="me-3 mb-0 pt-1">Total:</p>
+                                <div id="total" className="pt-1">
+                                    0.00
+                                </div>
+                            </div>
+                            <div className="d-flex">
+                                <label htmlFor="paid" className="form-label me-3 mb-0 pt-1" style={{ fontSize: "unset" }}>
+                                    Paid:
+                                </label>
+                                <input type="number" className="form-control form-control-sm bg-transparent" id="paid" placeholder="0.00" style={{ width: "80%" }} onChange={(e) => updateBalance(e)} disabled={data.total < 1 ? true : false} max={data.total > 0 ? data.total : ""} />
+                            </div>
+                            <div className="d-flex">
+                                <p className="me-3 mb-0 pt-1">Balance:</p>
+                                <div id="balance" className="pt-1">
+                                    0.00
+                                </div>
+                            </div>
+                            <div className="d-flex">
+                                <p className="me-3 mb-0 pt-1">ID:</p>
+                                <div id="identity" className="pt-1">
+                                    --------------
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="rg_f mt-3 py-2 px-2 d-flex justify-content-end">
+                        <div className="">
                             <button type="reset" className="btn btn-sm me-4 px-3 btn-outline-primary">
                                 Reset form
                             </button>

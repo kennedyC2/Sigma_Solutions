@@ -9,6 +9,7 @@ import { domain } from "../Misc/helper";
 // Component
 const Verify = () => {
     const [spin, setSpin] = useState(0);
+    const [hide, setHide] = useState(0);
     const navigate = useNavigate();
 
     // Submit Form
@@ -17,6 +18,9 @@ const Verify = () => {
 
         const code = e.target[0].value;
         const email = JSON.parse(localStorage.getItem("pending")).email;
+
+        // hide
+        setHide(2);
 
         try {
             await axios({
@@ -32,11 +36,18 @@ const Verify = () => {
                 // Spinner
                 setSpin(1);
 
+                // Delete Pending
+                localStorage.removeItem("pending");
+
                 setTimeout(() => {
                     navigate("/login", { replace: true });
                 }, 2000);
             }, 2000);
         } catch (error) {
+            // hide
+            setHide(0);
+
+            // Notify
             Notification_A(error.response.data.error, false);
         }
     };
@@ -44,6 +55,9 @@ const Verify = () => {
     // Submit Form
     const resendCode = async (e) => {
         const email = JSON.parse(localStorage.getItem("pending")).email;
+
+        // hide
+        setHide(1);
 
         try {
             await axios({
@@ -57,10 +71,12 @@ const Verify = () => {
             // Notify
             Notification_A("Verification Code Sent", true);
 
-            setTimeout(() => {
-                return;
-            }, 2000);
+            // hide
+            setHide(0);
         } catch (error) {
+            // hide
+            setHide(0);
+
             // Notify
             Notification_A(error.response.data.error, false);
         }
@@ -68,7 +84,7 @@ const Verify = () => {
 
     return spin === 0 ? (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
-            <div className="verify p-4" style={{ width: "35%" }}>
+            <div className="verify p-4">
                 <div className="notify text-center mb-2"></div>
                 <form action="#" method="POST" onSubmit={(e) => submitForm(e)}>
                     <div className="mb-3">
@@ -78,16 +94,16 @@ const Verify = () => {
                         <input type="text" className="form-control form-control-sm" id="verification" required />
                     </div>
 
-                    <p className="mt-4 text-danger" style={{ fontSize: "11.5px" }}>
-                        <strong> *** Check Spam Folder.</strong>
-                    </p>
-
-                    <div className="text-end">
-                        <button type="button" className="btn btn-sm btn-primary me-3 px-3" onClick={(e) => resendCode(e)}>
-                            Resend
+                    <div className="text-end pt-2">
+                        <button type="button" className="btn btn-sm btn-primary me-3 px-3" onClick={(e) => resendCode(e)} style={{ display: `${hide === 1 ? "none" : ""}` }}>
+                            Resend Code
                         </button>
-                        <button type="submit" className="btn btn-sm btn-primary px-4">
-                            Send
+                        <button className="btn bg-primary btn-sm px-4 me-3" type="button" style={{ display: `${hide === 1 || hide === 2 ? "" : "none"}` }}>
+                            <span className="spinner-border spinner-border-sm text-light mx-2" role="status" aria-hidden="true"></span>
+                            <span className="visually-hidden">Loading...</span>
+                        </button>
+                        <button type="submit" className="btn btn-sm btn-primary px-4" style={{ display: `${hide === 2 ? "none" : ""}` }}>
+                            Verify
                         </button>
                     </div>
                 </form>

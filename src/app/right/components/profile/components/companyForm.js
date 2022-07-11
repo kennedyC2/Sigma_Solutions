@@ -7,8 +7,8 @@ const CompanyForm = (props) => {
     const { saveData, companyData } = props;
 
     return (
-        <form action="#" method="POST" className="pt-3 d-flex justify-content-between" id="formPr" onSubmit={saveData}>
-            <div className="pe-3 ps-2" style={{ width: "50%" }}>
+        <form action="#" method="POST" className="pt-3 d-lg-flex justify-content-between" id="formPr" onSubmit={saveData}>
+            <div className="inn">
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                         Name:
@@ -40,7 +40,7 @@ const CompanyForm = (props) => {
                     <input type="text" className="form-control form-control-sm" name="reg_no" id="reg_no" placeholder="Laboratory" defaultValue={companyData["reg_no"]} required />
                 </div>
             </div>
-            <div className="ps-3 pe-2" style={{ width: "50%" }}>
+            <div className="inn">
                 <div className="mb-3">
                     <label htmlFor="address" className="form-label">
                         Address:

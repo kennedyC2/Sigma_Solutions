@@ -4,6 +4,15 @@ import thunk from "redux-thunk";
 
 const appReducer = (state = {}, action) => {
     switch (action.type) {
+        // Toggle Fetched
+        // ====================================================================================================================
+        case "toggle": {
+            return {
+                ...state,
+                fetch: false,
+            };
+        }
+
         // Personal Profile
         // ====================================================================================================================
         case "personal": {
@@ -116,12 +125,14 @@ const appReducer = (state = {}, action) => {
             // test Previous Data
             const test = action.payload.tests;
             const storage = action.payload.storage;
+            const stats = action.payload.stats;
 
             // Upload
             return {
                 ...state,
                 tests: { ...test },
                 storage: { ...storage },
+                stats: { ...stats },
             };
         }
 

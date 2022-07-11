@@ -42,10 +42,10 @@ export const CalenderYear = () => {
 export const RF_days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 
 // Specimen
-export const specimen = ["Blood", "Urine", "Sputum", "Faeces", "Saliva", "Swab", "Tissue", "CSF", "Semen"];
+export const specimen = ["Blood", "Urine", "Sputum", "Faeces", "Saliva", "Swab", "Tissue", "CSF", "Semen", "Plasma", "Serum"];
 
 // Religion
-export const religion = ["Christian (Catholic)", "Christian (Pentecostal)", "Christian (Jehovah Witness)", "Muslim", "Judaism", "Hindi", "Traditional", "other"];
+export const religion = ["Christian", "Muslim", "Judaism", "Hindi", "Traditional", "other"];
 
 // Sex
 export const sex = ["Male", "Female"];
@@ -57,4 +57,5 @@ export const tribe = ["Igbo", "Yoruba", "Hausa", "Tiv", "Efik", "Fulani"];
 export const states = ["Abia State", "Adamawa State", "Akwa Ibom State", "Anambra State", "Bauchi State", "Bayelsa State", "Benue State", "Borno State", "Cross River State", "Delta State", "Ebonyi State", "Edo State", "Ekiti State", "Enugu State", "Gombe State", "Imo State", "Jigawa State", "Kaduna State", "Kano State", "Katsina State", "Kebbi State", "Kogi State", "Kwara State", "Lagos State", "Nasarawa State", "Niger State", "Ogun State", "Ondo State", "Osun State", "Oyo State", "Plateau State", "Rivers State", "Sokoto State", "Taraba State", "Yobe State", "Zamfara State"];
 
 // Domain
-export const domain = "http://82.180.173.211/";
+// export const domain = "https://medsoph.xyz/";
+export const domain = "http://localhost:5000/";

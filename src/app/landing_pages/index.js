@@ -14,9 +14,9 @@ const Index = () => {
                         <nav className="navbar navbar-expand-lg navbar-light">
                             <div className="container-fluid px-2">
                                 <Link className="navbar-brand text-white" to="#">
-                                    SIGMA
+                                    <div className="home_logo"></div>
                                 </Link>
-                                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                                <button className="navbar-toggler d-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                                     <span className="navbar-toggler-icon"></span>
                                 </button>
                                 <div className="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -29,14 +29,23 @@ const Index = () => {
                                         </Link>
                                     </div>
                                 </div>
+                                <Link className="nav-link d-lg-none lol" to="/login">
+                                    <button className="btn btn-outline-light btn-sm px-4">Login</button>
+                                </Link>
                             </div>
                         </nav>
                     </div>
 
-                    <div className="d-flex flex-column justify-content-center text-white mid" style={{ width: "85%", height: "100%" }}>
-                        <h2 className="text-uppercase">Sigma Solutions</h2>
-                        <h3 className="text-uppercase mt-1">Work Smart and Efficiently</h3>
-                        <p className="mt-2">Harness the power of cloud computing and real time analytics, access and manage your data from anywhere in the world where there’s internet connectivity.</p>
+                    <div className="d-flex flex-column justify-content-center mid" style={{ color: "#ffffff" }}>
+                        <h2 className="text-uppercase" style={{ color: "#ffffff" }}>
+                            Medsoph Solutions
+                        </h2>
+                        <h3 className="text-uppercase mt-1" style={{ color: "#ffffff" }}>
+                            Work Smart and Efficiently
+                        </h3>
+                        <p className="mt-2" style={{ color: "#ffffff" }}>
+                            Harness the power of cloud computing and real time analytics, access and manage your data from anywhere in the world where there’s internet connectivity.
+                        </p>
 
                         <div className="d-flex mt-2">
                             <Link className="" to="/register">

@@ -3,92 +3,136 @@
 // ========================================================================
 
 // Import libraries
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const LeftBottom = () => {
+const LeftBottom = (props) => {
+    const { tag, setSpin } = props;
+    const Navigate = useNavigate();
+
+    // Confirm log In status
+    const [status] = useState(
+        () =>
+            JSON.parse(localStorage.getItem("status")) || {
+                loggedIn: false,
+                token: false,
+                path: {
+                    type: false,
+                    companyID: false,
+                },
+            }
+    );
+
+    const logout = (e, type) => {
+        e.preventDefault();
+
+        // Spinner
+        setSpin(1);
+
+        setTimeout(() => {
+            if (type === "admin") {
+                // Navigate
+                Navigate("/app", { replace: true });
+            } else {
+                // Update Storage
+                localStorage.removeItem("status");
+
+                // Navigate
+                Navigate("/login", { replace: true });
+            }
+        }, 1000);
+    };
+
     return (
         <div className="l-bottom">
-            <div className="accordion" id="lft">
+            <div className="accordion" id={tag}>
                 <div className="accordion-item my-2">
-                    <Link to="/app/laboratory/" className="accordion-header" id="Dashboard">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentOne" aria-expanded="true" aria-controls="contentOne">
+                    <Link to="/app/laboratory/" replace className="accordion-header" id={`dashboard${tag}`}>
+                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#${tag}One`} aria-expanded="true" aria-controls={`${tag}One`}>
                             <i className="bi bi-house-door"></i> <span>Dashboard</span>
                         </button>
                     </Link>
-                    <div id="contentOne" className="accordion-collapse collapse" aria-labelledby="Dashboard" data-bs-parent="#lft" style={{ display: "none" }}>
+                    <div id={`${tag}One`} className="accordion-collapse collapse" aria-labelledby={`dashboard${tag}`} data-bs-parent={`#${tag}`} style={{ display: "none" }}>
                         <div className="accordion-body"></div>
                     </div>
                 </div>
                 <div className="accordion-item my-2">
-                    <div className="accordion-header" id="test">
-                        <button className="accordion-button" data-bs-toggle="collapse" data-bs-target="#contentTwo" aria-expanded="false" aria-controls="contentTwo">
+                    <div className="accordion-header" id={`test${tag}`}>
+                        <button className="accordion-button" data-bs-toggle="collapse" data-bs-target={`#${tag}Two`} aria-expanded="false" aria-controls={`${tag}Two`}>
                             <i className="bi bi-file-medical"></i> <span>Test</span>
                         </button>
                     </div>
-                    <div id="contentTwo" className="accordion-collapse collapse show" aria-labelledby="test" data-bs-parent="#lft">
+                    <div id={`${tag}Two`} className="accordion-collapse collapse show" aria-labelledby={`test${tag}`} data-bs-parent={`#${tag}`}>
                         <div className="accordion-body">
                             <ul>
-                                <li>
-                                    <Link to="/app/laboratory/register">Book A Test</Link>
-                                </li>
-                                <li>
-                                    <Link to="/app/laboratory/unsettled">Pending Tests</Link>
-                                </li>
-                                <li>
-                                    <Link to="/app/laboratory/settled">Completed Tests</Link>
-                                </li>
+                                <Link to="/app/laboratory/register" replace>
+                                    <li>Book A Test</li>
+                                </Link>
+                                <Link to="/app/laboratory/unsettled" replace>
+                                    <li>Pending Tests</li>
+                                </Link>
+                                <Link to="/app/laboratory/settled" replace>
+                                    <li>Completed Tests</li>
+                                </Link>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="accordion-item my-2">
-                    <div className="accordion-header" id="lab">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentFour" aria-expanded="false" aria-controls="contentFour">
+                    <div className="accordion-header" id={`lab${tag}`}>
+                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#${tag}Three`} aria-expanded="false" aria-controls={`${tag}Three`}>
                             <i className="bi bi-award"></i> <span>Laboratory</span>
                         </button>
                     </div>
-                    <div id="contentFour" className="accordion-collapse collapse" aria-labelledby="lab" data-bs-parent="#lft">
+                    <div id={`${tag}Three`} className="accordion-collapse collapse" aria-labelledby={`lab${tag}`} data-bs-parent={`#${tag}`}>
                         <div className="accordion-body">
                             <ul>
-                                <li>
-                                    <Link to="/app/laboratory/users">Users</Link>
-                                </li>
-                                <li>
-                                    <Link to="/app/laboratory/testkits">Test Kits</Link>
-                                </li>
-                                <li>
-                                    <Link to="/app/laboratory/services">Services</Link>
-                                </li>
+                                <Link to="/app/laboratory/users" replace>
+                                    <li>Users</li>
+                                </Link>
+                                <Link to="/app/laboratory/testkits" replace>
+                                    <li>Test Kits</li>
+                                </Link>
+                                <Link to="/app/laboratory/services" replace>
+                                    <li>Services</li>
+                                </Link>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="accordion-item my-2">
-                    <div className="accordion-header" id="setting">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentFive" aria-expanded="false" aria-controls="contentFive">
+                    <div className="accordion-header" id={`setting${tag}`}>
+                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#${tag}Four`} aria-expanded="false" aria-controls={`${tag}Four`}>
                             <i className="bi bi-gear"></i> <span>Settings</span>
                         </button>
                     </div>
-                    <div id="contentFive" className="accordion-collapse collapse" aria-labelledby="setting" data-bs-parent="#lft">
+                    <div id={`${tag}Four`} className="accordion-collapse collapse" aria-labelledby={`setting${tag}`} data-bs-parent={`#${tag}`}>
                         <div className="accordion-body">
                             <ul>
-                                <li>
-                                    <Link to="/app/laboratory/profile">Profile</Link>
-                                </li>
-                                <li>
-                                    <Link to="/app/laboratory/payment">Payment</Link>
-                                </li>
+                                <Link to="/app/laboratory/profile" replace>
+                                    <li>Profile</li>
+                                </Link>
+                                <Link to="/app/laboratory/payment" replace>
+                                    <li>Payment</li>
+                                </Link>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="accordion-item my-2">
-                    <div className="accordion-header" id="logout">
-                        <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#contentSix" aria-expanded="true" aria-controls="contentSix">
-                            <i className="bi bi-box-arrow-right"></i> <span>Log Out</span>
-                        </button>
+                    <div className="accordion-header" id={`logout${tag}`}>
+                        <div className="accordion-header" id={`dashboard${tag}`} style={{ display: `${status.ff === "admin" ? "block" : "none"}` }}>
+                            <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#${tag}Five`} aria-expanded="true" aria-controls={`${tag}Five`} onClick={(e) => logout(e, "admin")}>
+                                <i className="bi bi-box-arrow-right"></i> <span>Quit</span>
+                            </button>
+                        </div>
+                        <div className="accordion-header" id={`dashboard${tag}`} style={{ display: `${status.ff === "admin" ? "none" : "block"}` }}>
+                            <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={`#${tag}Five`} aria-expanded="true" aria-controls={`${tag}Five`} onClick={(e) => logout(e, "user")}>
+                                <i className="bi bi-box-arrow-right"></i> <span>Logout</span>
+                            </button>
+                        </div>
                     </div>
-                    <div id="contentSix" className="accordion-collapse collapse" aria-labelledby="logout" data-bs-parent="#lft" style={{ display: "none" }}>
+                    <div id={`${tag}Five`} className="accordion-collapse collapse" aria-labelledby={`logout${tag}`} data-bs-parent={`#${tag}`} style={{ display: "none" }}>
                         <div className="accordion-body"></div>
                     </div>
                 </div>

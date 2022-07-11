@@ -104,7 +104,7 @@ const Recent = () => {
 
     return (
         <Fragment>
-            <div className="recent d-flex justify-content-between py-3">
+            <div className="recent d-flex justify-content-between">
                 <div className="recent_1">
                     <div className="d-flex justify-content-between px-3 py-3">
                         <p className="m-0">Recent Activities</p>

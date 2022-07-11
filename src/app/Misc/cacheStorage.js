@@ -32,6 +32,7 @@ export const get_data_1 = async (token) => {
 
 export const get_data_2 = async (type, ID, token, admin) => {
     if (type && ID && token) {
+        // Populate
         try {
             // Company Profile
             const company = await axios({
@@ -215,6 +216,9 @@ export const get_data_2 = async (type, ID, token, admin) => {
             });
 
             set("personal", personal.data, store);
+
+            // Set Fetched
+            set("fetched", { status: true, id: ID }, store);
         } catch (error) {
             console.warn();
         }

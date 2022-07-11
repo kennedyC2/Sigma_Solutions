@@ -1,5 +1,5 @@
 // Import Dependencies
-import { month, date } from "./helper";
+// import { month, date } from "./helper";
 
 // One Layer Nesting
 // ========================================================
@@ -22,11 +22,12 @@ export const one_layer = (obj) => {
 export const two_layer = (obj, add) => {
     let count = 0;
     let file = [];
+    const data = Object.keys(obj).pop();
 
     if (add) {
-        for (const prop in obj[`${month} ${date}`]) {
+        for (const prop in obj[data]) {
             if (count < 5) {
-                file.push(obj[`${month} ${date}`][prop]);
+                file.push(obj[data][prop]);
             }
 
             count++;
@@ -35,9 +36,9 @@ export const two_layer = (obj, add) => {
         return file;
     }
 
-    for (const prop in obj[`${month} ${date}`]) {
+    for (const prop in obj[data]) {
         if (count < 4) {
-            file.push(obj[`${month} ${date}`][prop]);
+            file.push(obj[data][prop]);
         }
 
         count++;

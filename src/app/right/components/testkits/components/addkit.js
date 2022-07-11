@@ -28,18 +28,18 @@ const AddKit = (props) => {
                     </label>
                     {Object.keys(services).length > 0 ? (
                         <Fragment>
-                            {Object.keys(services).map((key, index) => (
-                                <select key={index} name="test" className="form-select form-select-sm" defaultValue={`${Object.keys(services)[0]}:${Object.keys(services[key]["testList"])[0].replaceAll(" ", "_")}`}>
-                                    {Object.keys(services[key]["testList"]).map((item, index) => (
+                            <select name="test" className="form-select form-select-sm" defaultValue={`${Object.keys(services)[0]}:${Object.keys(services)[0]["testList"]}`}>
+                                {Object.keys(services).map((key) =>
+                                    Object.keys(services[key]["testList"]).map((item, index) => (
                                         <option key={index} value={`${key}:${item.replaceAll(" ", "_")}`}>
                                             {item.replaceAll("_", " ")}
                                         </option>
-                                    ))}
-                                </select>
-                            ))}
+                                    ))
+                                )}
+                            </select>
                         </Fragment>
                     ) : (
-                        <input type="text" className="form-control form-control-sm" name="test" id="test" placeholder="Liver function test" required />
+                        <input type="text" className="form-control form-control-sm" name="test" id="test" placeholder="Liver function test" disabled required />
                     )}
                 </div>
                 <div className="mb-3 text-end">

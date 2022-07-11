@@ -105,7 +105,7 @@ const ResultEntry = (props) => {
                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} role="tabpanel" aria-labelledby={`v-pills-${key.split(":")[1]}-services-tab-#${position}-${index}`}>
                             <div className={`input-group mb-2 ${"fvk" + position}`} style={{ fontSize: "13px" }} data-cat={key.split(":")[0]} data-selected={data[index]}>
                                 <select name="" id="" className="form-select form-select-sm me-1" style={{ width: "40%" }}>
-                                    {testParams[key.split(":")[0]]["parameter"].map((key, index) => (
+                                    {testParams[key.split(":")[0]]["class"][key.split(":")[2]].map((key, index) => (
                                         <option key={index} value={key.split(":")[0]}>
                                             {key.split(":")[0].replaceAll("_", " ")}
                                         </option>

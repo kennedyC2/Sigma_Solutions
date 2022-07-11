@@ -6,20 +6,23 @@ const ListUsers = (props) => {
     const { data } = props;
 
     return (
-        <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div className="tab-pane s_sel fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
             {Object.keys(data).length > 0 ? (
-                <div className="d-flex align-items-start mt-3 justify-content-between">
-                    <div className="rg_f py-4 px-2" style={{ width: "52%", height: "calc(623px - 68px)" }}>
+                <div className="d-flex s_sed align-items-start mt-3 justify-content-between">
+                    <div className="rg_f py-3 px-2">
                         <div style={{ width: "100%", overflowY: "auto", height: "95%" }}>
-                            <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <div className="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                 {Object.keys(data).map((key, index) => (
-                                    <div key={index} className={`nav-link text-capitalize mb-1 d-flex ${index === 0 ? "active" : ""}`} id={`v-pills-${index}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${index}-services`} type="button" role="tab" aria-controls={`v-pills-${index}-services`} aria-selected="true" style={{ width: "98%" }}>
-                                        <div className="me-3 ms-2">
+                                    <div key={index} className={`nav-link text-capitalize mb-1 d-flex ${index === 0 ? "active" : ""}`} id={`v-pills-${index}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${index}-services`} type="button" role="tab" aria-controls={`v-pills-${index}-services`} aria-selected="true">
+                                        <div className="me-3 ms-2 d-none d-lg-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1.15em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 448 512">
                                                 <path fill="currentColor" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" />
                                             </svg>
                                         </div>
-                                        <div style={{ paddingTop: "4px", fontSize: "15px" }}>
+                                        <div className="d-lg-none" style={{ paddingTop: "4px", fontSize: "15px" }}>
+                                            {data[key].details.firstname}
+                                        </div>
+                                        <div className="d-none d-lg-block" style={{ paddingTop: "4px", fontSize: "15px" }}>
                                             {data[key].details.firstname}&nbsp;&nbsp;{data[key].details.lastname}&nbsp;&nbsp;{data[key].details.other}
                                         </div>
                                     </div>
@@ -28,8 +31,8 @@ const ListUsers = (props) => {
                         </div>
                     </div>
                     {/* tab 2 */}
-                    <div className="rg_f py-4" style={{ width: "46%", height: "calc(623px - 68px)" }}>
-                        <div className="tab-content p-2" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%", fontSize: "13.5px" }}>
+                    <div className="rg_f py-3">
+                        <div className="tab-content py-2 px-2" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%", fontSize: "13.5px" }}>
                             {Object.keys(data).map((key, index) => (
                                 <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${index}-services`} role="tabpanel" aria-labelledby={`v-pills-${index}-services-tab`}>
                                     <p className="text-capitalize">

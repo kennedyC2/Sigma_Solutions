@@ -9,7 +9,10 @@ const Personal = (props) => {
         <Fragment>
             <li className="list-group-item">
                 <div className="me-3">Name:</div>
-                <div className="text-capitalize">
+                <div className="d-lg-none text-capitalize">
+                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"][0].toUpperCase()}.
+                </div>
+                <div className="d-none d-lg-block text-capitalize">
                     {personalData["firstname"]} {personalData["lastname"]} {personalData["other"]}
                 </div>
             </li>

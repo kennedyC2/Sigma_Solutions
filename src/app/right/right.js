@@ -15,20 +15,22 @@ import Profile from "./components/profile/main";
 import Payments from "./components/payment/main";
 
 // body
-const Right = () => {
+const Right = (props) => {
+    const { setSpin } = props;
+
     return (
-        <div className="right col-lg-10 min-vh-100 position-absolute top-0 end-0">
-            <div className="body container">
+        <div className="right col-lg-9 col-xl-10">
+            <div className="body">
                 <Routes>
-                    <Route path="/" exact element={<Dashboard />} />
-                    <Route path="/register" exact element={<Register />} />
-                    <Route path="/unsettled" exact element={<Unsettled />} />
-                    <Route path="/settled" exact element={<Database />} />
-                    <Route path="/users" exact element={<Users />} />
-                    <Route path="/testkits" exact element={<TestKits />} />
-                    <Route path="/services" exact element={<Services />} />
-                    <Route path="/profile" exact element={<Profile />} />
-                    <Route path="/payment" exact element={<Payments />} />
+                    <Route path="/" exact element={<Dashboard setSpin={setSpin} />} />
+                    <Route path="/register" exact element={<Register setSpin={setSpin} />} />
+                    <Route path="/unsettled" exact element={<Unsettled setSpin={setSpin} />} />
+                    <Route path="/settled" exact element={<Database setSpin={setSpin} />} />
+                    <Route path="/users" exact element={<Users setSpin={setSpin} />} />
+                    <Route path="/testkits" exact element={<TestKits setSpin={setSpin} />} />
+                    <Route path="/services" exact element={<Services setSpin={setSpin} />} />
+                    <Route path="/profile" exact element={<Profile setSpin={setSpin} />} />
+                    <Route path="/payment" exact element={<Payments setSpin={setSpin} />} />
                 </Routes>
             </div>
         </div>

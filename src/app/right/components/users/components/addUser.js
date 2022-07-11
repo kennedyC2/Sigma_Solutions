@@ -7,8 +7,8 @@ const AddUser = (props) => {
     const { saveUsers } = props;
 
     return (
-        <form action="#" method="POST" className="pt-3 d-flex justify-content-between" id="formL" onSubmit={saveUsers}>
-            <div className="pe-3 ps-2" style={{ width: "50%" }}>
+        <form action="#" method="POST" className="pt-3 d-lg-flex justify-content-between" id="formL" onSubmit={saveUsers}>
+            <div className="inn">
                 <div className="mb-3">
                     <label htmlFor="firstname" className="form-label">
                         Firstname:
@@ -46,7 +46,7 @@ const AddUser = (props) => {
                     <input type="text" className="form-control form-control-sm" name="phone" id="phone" placeholder="+2340000000000" required />
                 </div>
             </div>
-            <div className="ps-3 pe-2" style={{ width: "50%" }}>
+            <div className="inn">
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">
                         Email:
