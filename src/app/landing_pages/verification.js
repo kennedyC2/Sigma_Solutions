@@ -1,23 +1,34 @@
 // Import Dependencies
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Spinner from "../Misc/spinner";
 import { useNavigate } from "react-router-dom";
 import { Notification_A } from "../Misc/notification";
 import { domain } from "../Misc/helper";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../Misc/cacheStorage";
+import { set } from "idb-keyval";
 
 // Component
 const Verify = () => {
     const [spin, setSpin] = useState(0);
     const [hide, setHide] = useState(0);
+    const { personal } = useSelector(state => state)
     const navigate = useNavigate();
+    const Dispatch = useDispatch();
+
+    useEffect(() => {
+        if (personal === null || Object.keys(personal).length === 0) {
+            navigate("/login", { replace: true });
+        }
+    })
 
     // Submit Form
     const submitForm = async (e) => {
         e.preventDefault();
 
         const code = e.target[0].value;
-        const email = JSON.parse(localStorage.getItem("pending")).email;
+        const email = personal.email;
 
         // hide
         setHide(2);
@@ -36,11 +47,31 @@ const Verify = () => {
                 // Spinner
                 setSpin(1);
 
-                // Delete Pending
-                localStorage.removeItem("pending");
+                // Update verification
+                const copy1 = personal
+                copy1.verified = true
+
+                // Update
+                set("personal", copy1, store);
+
+                // Update State
+                Dispatch({ type: "verified", payload: {} });
 
                 setTimeout(() => {
-                    navigate("/login", { replace: true });
+
+                    const status = JSON.parse(localStorage.getItem("status"))
+                    console.log(typeof (status.loggedIn), status.loggedIn === true)
+
+                    if (status.loggedIn === true) {
+                        // Navigate
+                        if (personal.account === "admin") {
+                            navigate("/app", { replace: true });
+                        } else {
+                            navigate("/app/laboratory", { replace: true });
+                        }
+                    } else {
+                        navigate("/login", { replace: true });
+                    }
                 }, 2000);
             }, 2000);
         } catch (error) {

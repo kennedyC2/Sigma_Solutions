@@ -1,8 +1,28 @@
 // Import dependencies
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
+import testData from "./../Misc/testData";
 
-const appReducer = (state = {}, action) => {
+const InitialState = {
+    personal: {},
+    company: {
+        hourly: {},
+        lab_activities: {},
+        admin: {},
+        revenue: {},
+        services: {},
+        stats: {},
+        storage: {},
+        testKits: {},
+        tests: {},
+        top_5: {},
+        users: {},
+        fetched: false,
+    },
+    data: testData
+};
+
+const appReducer = (state = InitialState, action) => {
     switch (action.type) {
         // Toggle Fetched
         // ====================================================================================================================
@@ -16,26 +36,39 @@ const appReducer = (state = {}, action) => {
         // Personal Profile
         // ====================================================================================================================
         case "personal": {
-            if (state["personal"] === undefined) {
-                const data = {};
-                data["personal"] = action.payload;
+            const data = {};
+            data["personal"] = action.payload;
 
-                return {
-                    ...state,
-                    ...data,
-                };
-            }
-
-            return state;
-        }
-
-        // Full Data
-        // ====================================================================================================================
-        case "Full_State": {
-            const data = action.payload;
             return {
                 ...state,
                 ...data,
+            };
+        }
+
+        // Full Profile
+        // ====================================================================================================================
+        case "full_acct": {
+            const data = {};
+            data["personal"] = state.personal;
+            data["personal"]["company"] = action.payload.company
+
+            return {
+                ...state,
+                personal: data,
+                company: action.payload.companyD
+            };
+        }
+
+        // Verified
+        // ====================================================================================================================
+        case "verify": {
+            const data = {};
+            data["personal"] = state.personal;
+            data["personal"]["verified"] = true
+
+            return {
+                ...state,
+                personal: data,
             };
         }
 
@@ -209,3 +242,6 @@ const appReducer = (state = {}, action) => {
 const store = configureStore({ reducer: appReducer, middleware: [thunk] });
 
 export default store;
+
+
+

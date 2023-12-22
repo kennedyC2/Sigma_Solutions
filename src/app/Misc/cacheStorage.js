@@ -9,27 +9,6 @@ import axios from "axios";
 // Create Store
 export const store = createStore("SIGMA", "PHN_Dev4450J");
 
-// Component
-export const get_data_1 = async (token) => {
-    if (token) {
-        try {
-            // Personal Profile
-            const personal = await axios({
-                method: "GET",
-                params: {
-                    tokenID: token,
-                },
-                url: domain + "account/profile",
-                data: {},
-            });
-
-            set("personal", personal.data, store);
-        } catch (error) {
-            console.warn();
-        }
-    }
-};
-
 export const get_data_2 = async (type, ID, token, admin) => {
     if (type && ID && token) {
         // Populate

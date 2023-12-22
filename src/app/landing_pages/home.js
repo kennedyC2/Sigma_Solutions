@@ -3,8 +3,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { states, hours, domain } from "./../Misc/helper";
-import { get_data_2 } from "../Misc/cacheStorage";
-import InitialState, { Auth } from "../Misc/initialState";
 import Spinner from "../Misc/spinner";
 import axios from "axios";
 import { set } from "idb-keyval";
@@ -15,7 +13,7 @@ import { Notification_A, Notification_B } from "../Misc/notification";
 const Home = () => {
     const Dispatch = useDispatch();
     const navigate = useNavigate();
-    const personal = useSelector((state) => state.personal || Auth(Dispatch));
+    const { personal } = useSelector(state => state)
     const [spin, setSpin] = useState(0);
     const [hide, setHide] = useState(0);
     const image = domain + "image/" + personal.display;
@@ -25,11 +23,7 @@ const Home = () => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
@@ -45,23 +39,7 @@ const Home = () => {
                 // Spinner
                 setSpin(1);
 
-                // New status
-                const data = status;
-                // Get Variables
-                const path = {
-                    type: each.dataset.typ,
-                    companyID: each.dataset.cid,
-                };
-
-                data["path"] = path;
-
-                // Update Storage
-                localStorage.setItem("status", JSON.stringify(data));
-
-                // Update Cache On EVERY RENDER && RE-RENDER
                 try {
-                    await get_data_2(status.path.type, status.path.companyID, status.key, status.ff);
-                    await InitialState(Dispatch);
                     navigate("/app/laboratory", { replace: true });
                 } catch (error) {
                     // Notify
@@ -105,12 +83,18 @@ const Home = () => {
                 data: data,
             });
 
+            // Update company
+            const copy1 = personal
+            copy1.company = response.data.company
+
             // Update
-            set("personal", response.data.details, store);
+            set("personal", copy1, store);
+
+            // Update State
+            Dispatch({ type: "full_acct", payload: response.data });
 
             setTimeout(() => {
                 e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
-                Dispatch({ type: "profile", payload: response.data.details });
                 document.getElementById(e.target.id).reset();
             }, 2000);
         } catch (error) {
@@ -145,7 +129,7 @@ const Home = () => {
     };
 
     return status.loggedIn === true && status.session > Date.now() ? (
-        status.verified === true ? (
+        personal.verified === true ? (
             <Fragment>
                 {personal.company !== undefined && spin === 0 ? (
                     <div className="home w-100 h-100" style={{ backgroundColor: "#ffffff" }}>
@@ -204,21 +188,19 @@ const Home = () => {
                         <div className="clist m-auto mt-5 d-flex align-items-center justify-content-center rounded">
                             <div className="w-100">
                                 <div style={{ height: "calc(100vh - 190px)" }}>
-                                    {personal.company.length > 0 ? (
+                                    {Object.keys(personal.company).length > 0 ? (
                                         <ol className="list-group point">
-                                            {personal.company.map((item, index) => (
-                                                <li key={index} className="list-group-item rounded mb-1" data-cid={item.companyID} data-typ={item.type}>
-                                                    <div className="ms-0 me-auto">
-                                                        <div className="fw-bold text-capitalize mb-1">{item.name}</div>
-                                                        <div className="d-flex justify-content-between" style={{ fontSize: "13px" }}>
-                                                            <p className="mb-0" data-cid={item.companyID}>
-                                                                Created: {item.date}
-                                                            </p>
-                                                            <p className="mb-0">{item.time}</p>
-                                                        </div>
+                                            <li className="list-group-item rounded mb-1" data-cid={personal.company.cid} data-typ={personal.company.type}>
+                                                <div className="ms-0 me-auto">
+                                                    <div className="fw-bold text-capitalize mb-1">{personal.company.name}</div>
+                                                    <div className="d-flex justify-content-between" style={{ fontSize: "13px" }}>
+                                                        <p className="mb-0" data-cid={personal.company.cid}>
+                                                            Created: {personal.company.date}
+                                                        </p>
+                                                        <p className="mb-0">{personal.company.time}</p>
                                                     </div>
-                                                </li>
-                                            ))}
+                                                </div>
+                                            </li>
                                         </ol>
                                     ) : (
                                         <div className="d-flex align-items-center justify-content-center h-100 w-100">

@@ -1,54 +1,42 @@
 // Initial State Of Store
 // =============================================================
-
-// Dependencies
-import { get } from "idb-keyval";
-import { store } from "./cacheStorage";
 import testData from "./testData";
 
 // Component
-export const Auth = async (callback) => {
-    // Get Cache
-    const personal = await get("personal", store);
-    callback({ type: "personal", payload: personal });
-};
-
 const InitialState = async (callback) => {
     // Define DAta
     const data = {};
 
     // Populate
-    data["personal"] = await get("personal", store);
+    data["personal"] = {}
 
-    data["company"] = await get("company", store);
+    data["company"] = {}
 
-    data["hourly"] = await get("hourly", store);
+    data["hourly"] = {}
 
-    data["lab_activities"] = await get("lab_activities", store);
+    data["lab_activities"] = {}
 
-    data["admin"] = await get("admin", store);
+    data["admin"] = {}
 
-    data["revenue"] = await get("revenue", store);
+    data["revenue"] = {}
 
-    data["services"] = await get("services", store);
+    data["services"] = {}
 
-    data["stats"] = await get("stats", store);
+    data["stats"] = {}
 
-    data["storage"] = await get("storage", store);
+    data["storage"] = {}
 
-    data["testKits"] = await get("testKits", store);
+    data["testKits"] = {}
 
-    data["tests"] = await get("tests", store);
+    data["tests"] = {}
 
-    data["top_5"] = await get("top_5", store);
+    data["top_5"] = {}
 
-    data["users"] = await get("users", store);
+    data["users"] = {}
 
-    data["fetched"] = await get("fetched", store);
+    data["fetched"] = {}
 
     data["database"] = testData;
-
-    callback({ type: "Full_State", payload: data });
 };
 
 export default InitialState;

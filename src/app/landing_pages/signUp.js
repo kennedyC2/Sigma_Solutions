@@ -6,6 +6,9 @@ import axios from "axios";
 import Spinner from "../Misc/spinner";
 import { Notification_A } from "../Misc/notification";
 import { domain } from "../Misc/helper";
+import { set } from "idb-keyval";
+import { store } from "./../Misc/cacheStorage";
+import { useDispatch } from "react-redux";
 
 // Component
 const SignUP = () => {
@@ -13,6 +16,7 @@ const SignUP = () => {
     const [spin, setSpin] = useState(0);
     const [hide, setHide] = useState(0);
     const navigate = useNavigate();
+    const Dispatch = useDispatch();
 
     // Submit Form
     const submitForm = async (e) => {
@@ -42,7 +46,7 @@ const SignUP = () => {
         setHide(1);
 
         try {
-            await axios({
+            const response = await axios({
                 method: e.target.method,
                 url: domain + "account/signUp",
                 data: data,
@@ -51,7 +55,11 @@ const SignUP = () => {
             // Spinner
             setSpin(1);
 
-            localStorage.setItem("pending", JSON.stringify({ email: data.email }));
+            // Update User
+            set("personal", response.data, store);
+
+            // Update State
+            Dispatch({ type: "personal", payload: response.data });
 
             setTimeout(() => {
                 navigate("/account/verification", { replace: true });
@@ -63,7 +71,7 @@ const SignUP = () => {
 
                 // Notify
                 document.querySelector("div#root").scrollTo(0, 0);
-                Notification_A(error.response.data.error, false);
+                Notification_A(error.response.data.message, false);
             }, 1000);
         }
     };

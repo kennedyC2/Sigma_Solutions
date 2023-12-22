@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../Misc/spinner";
-import { get_data_1, get_data_2 } from "../Misc/cacheStorage";
+import { store } from "../Misc/cacheStorage";
 import { useDispatch } from "react-redux";
-import InitialState, { Auth } from "../Misc/initialState";
 import { Notification_A } from "../Misc/notification";
 import { domain } from "../Misc/helper";
+import { set } from "idb-keyval";
 
 // Component
 const Login = () => {
@@ -41,34 +41,35 @@ const Login = () => {
             setSpin(1);
 
             // Save to Local Storage
-            localStorage.setItem("status", JSON.stringify(response.data.auth));
+            localStorage.setItem("status", JSON.stringify({
+                loggedIn: true,
+                session: Date.now() + 1000 * 60 * 30,
+            }));
+
+            // Update User
+            set("personal", response.data, store);
+
+            // Update State
+            Dispatch({ type: "personal", payload: response.data });
 
             // Navigate
-            if (response.data.auth.ff === "admin") {
-                // Cache Details
-                await get_data_1(response.data.auth.key);
-
-                // Populate Cache
-                await Auth(Dispatch);
-
+            if (response.data.account === "admin") {
                 setTimeout(() => {
                     navigate("/app", { replace: true });
                 }, 2000);
             } else {
-                // Cache Details
-                await get_data_2(response.data.auth.path.type, response.data.auth.path.companyID, response.data.auth.key, response.data.auth.ff);
-                await InitialState(Dispatch);
                 setTimeout(() => {
                     navigate("/app/laboratory", { replace: true });
                 }, 2000);
             }
+
         } catch (error) {
             // Remove Hide
             setTimeout(() => {
                 setHide(0);
 
                 // Notify
-                Notification_A(error.response.data.error, false);
+                Notification_A(error.response.data.message, false);
             }, 1000);
         }
     };
