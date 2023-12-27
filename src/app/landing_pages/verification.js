@@ -60,7 +60,6 @@ const Verify = () => {
                 setTimeout(() => {
 
                     const status = JSON.parse(localStorage.getItem("status"))
-                    console.log(typeof (status.loggedIn), status.loggedIn === true)
 
                     if (status.loggedIn === true) {
                         // Navigate

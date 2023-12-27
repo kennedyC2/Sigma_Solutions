@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 // Component
 const Stats = () => {
-    const data = useSelector((state) => state.stats);
+    const { company } = useSelector((state) => state);
 
     return (
         <Fragment>
@@ -15,7 +15,7 @@ const Stats = () => {
                             TESTS
                         </p>
                         <p className="ps-2 pt-1" style={{ fontSize: "1.2rem" }}>
-                            {new Intl.NumberFormat("en-US", {}).format(data.test)} <span style={{ fontSize: ".7rem" }}>Today</span>
+                            {new Intl.NumberFormat("en-US", {}).format(company.stats.test)} <span style={{ fontSize: ".7rem" }}>Today</span>
                         </p>
                     </div>
                     <div className="mx-3 my-4">
@@ -30,7 +30,7 @@ const Stats = () => {
                             REVENUE
                         </p>
                         <p className="ps-2 pt-1" style={{ fontSize: "1.2rem" }}>
-                            ₦{new Intl.NumberFormat("en-US", {}).format(data.revenue)} <span style={{ fontSize: ".7rem" }}>Today</span>
+                            ₦{new Intl.NumberFormat("en-US", {}).format(company.stats.revenue)} <span style={{ fontSize: ".7rem" }}>Today</span>
                         </p>
                     </div>
                     <div className="mx-3 my-4">
@@ -45,7 +45,7 @@ const Stats = () => {
                             SERVICES
                         </p>
                         <p className="ps-2 pt-1" style={{ fontSize: "1.2rem" }}>
-                            {new Intl.NumberFormat("en-US", {}).format(data.services)} <span style={{ fontSize: ".7rem" }}>Total</span>
+                            {new Intl.NumberFormat("en-US", {}).format(company.stats.services)} <span style={{ fontSize: ".7rem" }}>Total</span>
                         </p>
                     </div>
                     <div className="mx-3 my-4">
@@ -61,8 +61,8 @@ const Stats = () => {
                             EMPLOYEES
                         </p>
                         <p className="ps-2 pt-1" style={{ fontSize: "1.2rem" }}>
-                            {new Intl.NumberFormat("en-US", {}).format(data.employees)}
-                            {/* <span style={{ fontSize: ".9rem" }}>/{new Intl.NumberFormat("en-US", {}).format(data.employees.total)}</span> <span style={{ fontSize: ".7rem" }}> Online</span> */}
+                            {new Intl.NumberFormat("en-US", {}).format(company.stats.employees)}
+                            {/* <span style={{ fontSize: ".9rem" }}>/{new Intl.NumberFormat("en-US", {}).format(company.employees.total)}</span> <span style={{ fontSize: ".7rem" }}> Online</span> */}
                         </p>
                     </div>
                     <div className="mx-3 my-4">

@@ -6,7 +6,7 @@ import { month } from "../../../../Misc/helper";
 
 // Components
 const Base = () => {
-    const revenue = useSelector((state) => state.revenue);
+    const { revenue } = useSelector((state) => state.company);
 
     useEffect(() => {
         // Get Container

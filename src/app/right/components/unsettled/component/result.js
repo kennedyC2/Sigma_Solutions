@@ -4,12 +4,12 @@ import { useSelector } from "react-redux";
 
 // Component
 const ResultEntry = (props) => {
-    const testParams = useSelector((state) => state.database);
+    const { testData } = useSelector((state) => state);
     const { data, position } = props;
 
     const renderOptions = (x, y) => {
         let options = "";
-        testParams[x][y].forEach((element) => {
+        testData[x][y].forEach((element) => {
             options += `<option value=${element.split(":")[0]}>
                             ${element.split(":")[0].replaceAll("_", " ")}
                         </option>`;
@@ -92,7 +92,7 @@ const ResultEntry = (props) => {
         <Fragment>
             <div className="d-flex align-items-start justify-content-between">
                 {/* tab 1 */}
-                <div className="nav flex-column nav-pills me-2" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "30%" }}>
+                <div className="nav flex-column nav-pills me-2" id="v-pills-tab" role="tablist" aria-orientation="vertical" style={{ width: "40%" }}>
                     {data.map((key, index) => (
                         <div key={index} className={`nav-link  btn-sm text-capitalize ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-tab-#${position}-${index}`} data-bs-toggle="tab" data-bs-target={`#v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} type="button" role="tab" aria-controls={`v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} aria-selected="true">
                             {key.split(":")[2].replaceAll("_", " ")}
@@ -100,12 +100,12 @@ const ResultEntry = (props) => {
                     ))}
                 </div>
                 {/* tab 2 */}
-                <div className="tab-content ps-2" id="v-pills-tabContent" style={{ borderLeft: "1px solid rgba(149, 170, 201, .3)", width: "70%", height: "350px", overflow: "hidden auto" }}>
+                <div className="tab-content ps-2" id="v-pills-tabContent" style={{ borderLeft: "1px solid rgba(149, 170, 201, .3)", width: "60%", height: "350px", overflow: "hidden auto" }}>
                     {data.map((key, index) => (
                         <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${key.split(":")[1]}-services-test-${position}-${index}`} role="tabpanel" aria-labelledby={`v-pills-${key.split(":")[1]}-services-tab-#${position}-${index}`}>
                             <div className={`input-group mb-2 ${"fvk" + position}`} style={{ fontSize: "13px" }} data-cat={key.split(":")[0]} data-selected={data[index]}>
                                 <select name="" id="" className="form-select form-select-sm me-1" style={{ width: "40%" }}>
-                                    {testParams[key.split(":")[0]]["class"][key.split(":")[2]].map((key, index) => (
+                                    {testData[key.split(":")[0]]["class"][key.split(":")[2]].map((key, index) => (
                                         <option key={index} value={key.split(":")[0]}>
                                             {key.split(":")[0].replaceAll("_", " ")}
                                         </option>
@@ -113,7 +113,7 @@ const ResultEntry = (props) => {
                                 </select>
                                 <input type="text" className="form-control form-control-sm me-1" name="" id="" style={{ width: "15%" }} placeholder="value" autoComplete="0" required />
                                 <select name="" id="" className="form-select form-select-sm me-1 text-lowercase">
-                                    {testParams[key.split(":")[0]]["unit"].sort().map((key, index) => (
+                                    {testData[key.split(":")[0]]["unit"].sort().map((key, index) => (
                                         <option key={index} value={key.split(":")[0]}>
                                             {key.split(":")[0]}
                                         </option>

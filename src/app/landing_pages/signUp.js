@@ -55,8 +55,11 @@ const SignUP = () => {
             // Spinner
             setSpin(1);
 
+            // fetched
+            response.data["fetched"] = true
+
             // Update User
-            set("personal", response.data, store);
+            await set("personal", response.data, store);
 
             // Update State
             Dispatch({ type: "personal", payload: response.data });

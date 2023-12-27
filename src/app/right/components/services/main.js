@@ -18,12 +18,10 @@ import LeftBottom from "../../../left/components/l-bottom";
 // App
 const Services = (props) => {
     // fetch Data From Storage
-    const testData = useSelector((state) => state.database);
-    const services = useSelector((state) => state.services);
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const { personal, company, testData } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
     const Dispatch = useDispatch();
-    const navigate = useNavigate();
+    const navigate = useNavigate;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -31,33 +29,27 @@ const Services = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                key: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
+
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -71,7 +63,6 @@ const Services = (props) => {
         let num = 0;
         const serv = {};
         const parentDivs = document.querySelectorAll("div.parent");
-        console.log(parentDivs);
         for (const prop of parentDivs) {
             const category = prop.dataset.cat;
             if (prop.childNodes[0].checked && prop.childNodes[1].childNodes[0].lastChild.value !== "") {
@@ -102,24 +93,23 @@ const Services = (props) => {
                     "Content-Type": "application/json",
                 },
                 url: domain + "laboratory/update/services",
-                data: { test: data, num: num, serv: serv, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+                data: {
+                    test: data,
+                    num: num,
+                    serv: serv,
+                    type: personal.company.type,
+                    companyID: personal.company.cid
+                },
             });
 
-            console.log(response);
             // Update Services
-            await set("services", response.data.services, store);
-
-            // Update stats
-            await set("stats", response.data.stats, store);
-
-            // Update top_5
-            await set("top_5", response.data.top_5, store);
+            await set("company", response.data, store);
 
             // Close
             e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
 
             // Update State
-            Dispatch({ type: "addServices", payload: response.data });
+            Dispatch({ type: "company", payload: response.data });
         } catch (error) {
             // Notify
             Notification_A(error.response.data.error, false);
@@ -177,10 +167,10 @@ const Services = (props) => {
                                         </div>
                                         <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["lastname"]} {personalData["other"]}
+                                                {personal["lastname"]} {personal["other"]}
                                             </p>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["account"]}
+                                                {personal["account"].replaceAll("_", " ")}
                                             </p>
                                         </div>
                                     </div>
@@ -200,7 +190,7 @@ const Services = (props) => {
                     </div>
                 </div>
                 <div className="tab-content" id="nav-tabContent">
-                    <SelectedTests data={services} />
+                    <SelectedTests data={company.services} companyID={company.cid} type={personal.company.type} />
 
                     {/* Modal */}
                     <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -208,7 +198,7 @@ const Services = (props) => {
                             <div className="modal-content">
                                 <div className="modal-body">
                                     <div className="notify text-center mt-2"></div>
-                                    <AddForm testData={testData} services={services} />
+                                    <AddForm testData={testData} services={company.services} />
                                 </div>
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">

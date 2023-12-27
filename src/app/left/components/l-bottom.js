@@ -15,11 +15,7 @@ const LeftBottom = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
@@ -71,9 +67,10 @@ const LeftBottom = (props) => {
                                 <Link to="/app/laboratory/unsettled" replace>
                                     <li>Pending Tests</li>
                                 </Link>
-                                <Link to="/app/laboratory/settled" replace>
-                                    <li>Completed Tests</li>
+                                <Link to="#" replace>
+                                    <li>Check Result</li>
                                 </Link>
+                                {/* /app/laboratory/settled */}
                             </ul>
                         </div>
                     </div>
@@ -90,9 +87,9 @@ const LeftBottom = (props) => {
                                 <Link to="/app/laboratory/users" replace>
                                     <li>Users</li>
                                 </Link>
-                                <Link to="/app/laboratory/testkits" replace>
+                                {/* <Link to="/app/laboratory/testkits" replace>
                                     <li>Test Kits</li>
-                                </Link>
+                                </Link> */}
                                 <Link to="/app/laboratory/services" replace>
                                     <li>Services</li>
                                 </Link>

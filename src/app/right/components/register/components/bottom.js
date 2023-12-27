@@ -1,15 +1,28 @@
 // Import Libraries
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Component
 const FormBottom = (props) => {
+    const { company } = useSelector((state) => state);
     const { data, testData, setData, selectedTestHandler } = props;
 
     const updateBalance = (e) => {
         setData({ ...data, paid: e.target.value });
         document.getElementById("balance").innerHTML = `${e.target.value > 0 ? "₦" : ""}${e.target.value > 0 ? new Intl.NumberFormat("en-US", {}).format(data.total - e.target.value) : "0.00"}`;
     };
+
+    const pid = () => {
+        let data = ""
+        if (parseInt(company.pid) < 1000) {
+            data = "00" + (company.pid + 1).toString()
+        } else {
+            data = (company.pid + 1).toString()
+        }
+
+        return data
+    }
 
     return (
         <React.Fragment>
@@ -80,7 +93,7 @@ const FormBottom = (props) => {
                             <div className="d-flex">
                                 <p className="me-3 mb-0 pt-1">ID:</p>
                                 <div id="identity" className="pt-1">
-                                    --------------
+                                    {"PHDN-" + pid()}
                                 </div>
                             </div>
                         </div>

@@ -85,10 +85,13 @@ const AddUser = (props) => {
                     <label htmlFor="type" className="form-label">
                         Account Type:
                     </label>
-                    <select className="form-select form-select-sm" name="type" id="type" defaultValue="General" required>
-                        <option value="General">General (Receptionist + Technician)</option>
-                        <option value="Receptionist">Receptionist</option>
-                        <option value="Technician">Technician</option>
+                    <select className="form-select form-select-sm" name="type" id="type" defaultValue="Administrator" required>
+                        <option value="Receptionist">Type 1 (Receptionist)</option>
+                        <option value="Laboratory_Scientist">Type 2 (Laboratory Scientist)</option>
+                        <option value="Radiologist">Type 3 (Radiologist)</option>
+                        <option value="Receptionist,_Laboratory Scientist">Type 4 (Receptionist + Laboratory Scientist)</option>
+                        <option value="Receptionist,_Technician">Type 5 (Receptionist + Technician)</option>
+                        <option value="Administrator">Type 6 (Administrator)</option>
                     </select>
                 </div>
                 <div className="mb-3">

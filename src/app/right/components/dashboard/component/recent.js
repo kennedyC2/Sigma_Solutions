@@ -2,12 +2,10 @@
 import React, { Fragment, useEffect } from "react";
 import Chart from "chart.js/auto";
 import { useSelector } from "react-redux";
-import { two_layer } from "../../../../Misc/list";
 
 // Components
 const Recent = () => {
-    const activity = useSelector((state) => state.lab_activities);
-    const hourly = useSelector((state) => state.hourly);
+    const { company } = useSelector((state) => state);
 
     useEffect(() => {
         // Get Container
@@ -21,7 +19,7 @@ const Recent = () => {
                 datasets: [
                     {
                         label: "2-hourly",
-                        data: hourly.amount,
+                        data: company.hourly.amount,
                         backgroundColor: ["#95aac9"],
                         borderColor: ["#95aac9"],
                         borderWidth: 2,
@@ -116,8 +114,8 @@ const Recent = () => {
                         </p>
                     </div>
                     <ul className="list-group list-group-flush px-2">
-                        {Object.keys(activity).length > 0 ? (
-                            two_layer(activity).map((item, index) => (
+                        {company.lab_activities.length > 0 ? (
+                            company.lab_activities.map((item, index) => (
                                 <li key={index} className="list-group-item d-flex pt-1 pb-3 px-2">
                                     <div className="pt-1">
                                         <div className="extend rounded-circle">
@@ -160,8 +158,8 @@ const Recent = () => {
                         </p>
                     </div>
                     <div style={{ height: "300px", paddingTop: "5px" }}>
-                        <canvas id="hourly" style={{ display: hourly.total > 0 ? "block" : "none" }}></canvas>
-                        <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: hourly.total > 0 ? "none" : "block" }}>
+                        <canvas id="hourly" style={{ display: company.hourly.total > 0 ? "block" : "none" }}></canvas>
+                        <div className="mx-3 text-center" style={{ padding: "130px 0", border: "1px solid rgba(149, 170, 201, .3)", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem", display: company.hourly.total > 0 ? "none" : "block" }}>
                             -- no data --
                         </div>
                     </div>

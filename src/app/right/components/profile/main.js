@@ -15,21 +15,17 @@ import { store } from "../../../Misc/cacheStorage";
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
 import ProfileTop from "./components/pic";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { one_layer, two_layer } from "../../../Misc/list";
-import { month, date, domain } from "../../../Misc/helper";
+import { domain } from "../../../Misc/helper";
 import LeftTop from "../../../left/components/l-top";
 import LeftBottom from "../../../left/components/l-bottom";
 import { Notification_A } from "../../../Misc/notification";
 
 // App
 const Profile = (props) => {
-    const navigate = useNavigate();
-    const personalData = useSelector((state) => state.personal);
-    const companyData = useSelector((state) => state.company);
-    const users = useSelector((state) => state.users);
-    const admin = useSelector((state) => state.admin);
+    const { personal, company } = useSelector((state) => state);
     const Dispatch = useDispatch();
-    const image = domain + "image/" + personalData.display;
+    const navigate = useNavigate;
+    const image = domain + "image/" + personal.display;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -37,33 +33,26 @@ const Profile = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -116,7 +105,7 @@ const Profile = (props) => {
                     "Content-Type": "application/json",
                 },
                 url: domain + "account/update",
-                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+                data: data,
             });
 
             const result = response.data;
@@ -125,12 +114,13 @@ const Profile = (props) => {
             e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
 
             // Update Personal
-            await set("personal", result.data, store);
+            set("personal", result, store);
 
-            Dispatch({ type: "profile", payload: result.data });
+            // Update STate
+            Dispatch({ type: "personal", payload: result });
         } catch (error) {
             // Notify
-            Notification_A(error.response.data.error, false, "notifyA");
+            Notification_A(error.response.data.message, false, "notifyA");
         }
     };
 
@@ -151,6 +141,7 @@ const Profile = (props) => {
         data["address"] = e.target[5].value;
         data["state"] = e.target[6].value;
         data["country"] = e.target[7].value;
+        data["user"] = personal.email
 
         //  Send
         try {
@@ -160,19 +151,20 @@ const Profile = (props) => {
                     "Content-Type": "application/json",
                 },
                 url: domain + "laboratory/update",
-                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+                data: data,
             });
 
             // Close
             e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
 
             // Update Personal
-            await set("company", response.data, store);
+            set("personal", response.data, store);
 
-            Dispatch({ type: "company", payload: response.data });
+            // Update STate
+            Dispatch({ type: "personal", payload: response.data });
         } catch (error) {
             // Notify
-            Notification_A(error.response.data.error, false, "notifyB");
+            Notification_A(error.response.data.message, false, "notifyB");
         }
     };
 
@@ -233,10 +225,10 @@ const Profile = (props) => {
                                             </div>
                                             <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["lastname"]} {personalData["other"]}
+                                                    {personal["lastname"]} {personal["other"]}
                                                 </p>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["account"]}
+                                                    {personal["account"].replaceAll("_", " ")}
                                                 </p>
                                             </div>
                                         </div>
@@ -264,10 +256,10 @@ const Profile = (props) => {
                             <div>
                                 <p>Administrator</p>
                                 <h5 className="d-lg-none">
-                                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"][0].toUpperCase()}.
+                                    {personal["firstname"]} {personal["lastname"]} {personal["other"][0].toUpperCase()}.
                                 </h5>
                                 <h5 className="d-none d-lg-block">
-                                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"]}
+                                    {personal["lastname"]} {personal["firstname"]} {personal["other"]}
                                 </h5>
                             </div>
                             <div></div>
@@ -281,7 +273,7 @@ const Profile = (props) => {
                                         Personal Profile
                                     </h6>
                                     <ul className="list-group">
-                                        <Personal personalData={personalData} />
+                                        <Personal personalData={personal} />
                                     </ul>
                                     <div className="text-end px-2">
                                         <button type="button" className="btn btn-sm btn-outline-danger px-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop_personal">
@@ -294,7 +286,7 @@ const Profile = (props) => {
                                             <div className="modal-content">
                                                 <div className="modal-body">
                                                     <div className="notifyA text-center mb-2"></div>
-                                                    <UpdatePersonal saveData={savePersonalData} personalData={personalData} />
+                                                    <UpdatePersonal saveData={savePersonalData} personalData={personal} />
                                                 </div>
                                                 <div className="modal-footer">
                                                     <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">
@@ -328,7 +320,7 @@ const Profile = (props) => {
                                             <div className="modal-content">
                                                 <div className="modal-body">
                                                     <div className="notifyB text-center mb-2"></div>
-                                                    <CompanyForm saveData={saveCompanyData} companyData={companyData} />
+                                                    <CompanyForm saveData={saveCompanyData} companyData={personal.company} />
                                                 </div>
                                                 <div className="modal-footer">
                                                     <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">
@@ -355,8 +347,8 @@ const Profile = (props) => {
                                         </p>
                                     </div>
                                     <ul className="list-group list-group-flush px-2">
-                                        {Object.keys(users).length > 0 ? (
-                                            one_layer(users).map((item, index) => (
+                                        {company.users.length > 0 ? (
+                                            company.users.map((item, index) => (
                                                 <li key={index} className="list-group-item d-flex pt-1 pb-3 px-2">
                                                     <div className="pt-1">
                                                         <div className="pt-2">
@@ -370,7 +362,7 @@ const Profile = (props) => {
                                                             {item.firstname}&nbsp;{item.lastname}&nbsp;{item.other}
                                                         </p>
                                                         <div className="mb-0 ms-3 d-flex justify-content-between" style={{ color: "rgba(107, 123, 147, .5)" }}>
-                                                            <p className="mb-0 my-1 text-capitalize">{item.account_type}</p>
+                                                            <p className="mb-0 my-1 text-capitalize">{item.account.replaceAll("_", " ")}</p>
                                                             <p className="mb-0 my-1">Online</p>
                                                         </div>
                                                     </div>
@@ -394,8 +386,8 @@ const Profile = (props) => {
                                         </p>
                                     </div>
                                     <ul className="list-group list-group-flush px-2">
-                                        {admin[`${month} ${date}`] !== undefined && Object.keys(admin[`${month} ${date}`]).length > 0 ? (
-                                            two_layer(admin, true).map((item, index) => (
+                                        {company.lab_activities.length > 0 ? (
+                                            company.lab_activities.map((item, index) => (
                                                 <li key={index} className="list-group-item d-flex pt-1 pb-3 px-2">
                                                     <div className="pt-1">
                                                         <div className="extend rounded-circle">
@@ -432,7 +424,7 @@ const Profile = (props) => {
                     </div>
                 </Fragment>
             ) : (
-                <ProfileTop image={myImage} email={personalData["email"]} tokenID={status.key} removeImage={setImage} />
+                <ProfileTop image={myImage} email={personal["email"]} tokenID={false} removeImage={setImage} />
             )}
         </Fragment>
     ) : (

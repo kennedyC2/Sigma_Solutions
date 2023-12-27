@@ -13,11 +13,10 @@ import Triple from "./component/triple";
 import Base from "./component/base";
 import { date, day, month, year, domain } from "../../../Misc/helper";
 import { useSelector } from "react-redux";
-// import axios from "axios";
 
 // App
 const Dashboard = (props) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -25,28 +24,35 @@ const Dashboard = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
-
     useEffect(() => {
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
             clearInterval(session);
         };
     });
+
+    const { personal } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
 
     return (
         <Fragment>
@@ -101,10 +107,10 @@ const Dashboard = (props) => {
                                             </div>
                                             <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["lastname"]} {personalData["other"]}
+                                                    {personal["lastname"]} {personal["firstname"]}
                                                 </p>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["account"]}
+                                                    {personal["account"].replaceAll("_", " ")}
                                                 </p>
                                             </div>
                                         </div>

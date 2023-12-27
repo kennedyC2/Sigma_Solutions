@@ -1,18 +1,54 @@
-// Import Dependencies
-import { month, date } from "../../../../Misc/helper";
+// Dependencies
+import { useDispatch, useSelector } from "react-redux";
+import { domain } from "../../../../Misc/helper";
+import axios from "axios";
+import { set } from "idb-keyval";
+import { store } from "../../../../Misc/cacheStorage";
+import { Notification_B } from "../../../../Misc/notification";
 
 // Component
 const ListUsers = (props) => {
     const { data } = props;
+    const { personal } = useSelector(state => state)
+    const Dispatch = useDispatch();
+
+    // Click the submit button
+    const submitForm = async (position, email) => {
+        //  Send
+        try {
+            const response = await axios({
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                url: domain + "laboratory/users/delete",
+                data: {
+                    position: position.toString(),
+                    email: email,
+                    type: personal.company.type,
+                    companyID: personal.company.cid
+                },
+            });
+
+            // Update Services
+            await set("company", response.data, store);
+
+            // Update State
+            Dispatch({ type: "company", payload: response.data });
+        } catch (error) {
+            // Notify
+            Notification_B(error.response.data.message, false);
+        }
+    };
 
     return (
         <div className="tab-pane s_sel fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-            {Object.keys(data).length > 0 ? (
+            {data.length > 0 ? (
                 <div className="d-flex s_sed align-items-start mt-3 justify-content-between">
                     <div className="rg_f py-3 px-2">
                         <div style={{ width: "100%", overflowY: "auto", height: "95%" }}>
                             <div className="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                {Object.keys(data).map((key, index) => (
+                                {data.map((key, index) => (
                                     <div key={index} className={`nav-link text-capitalize mb-1 d-flex ${index === 0 ? "active" : ""}`} id={`v-pills-${index}-services-tab`} data-bs-toggle="tab" data-bs-target={`#v-pills-${index}-services`} type="button" role="tab" aria-controls={`v-pills-${index}-services`} aria-selected="true">
                                         <div className="me-3 ms-2 d-none d-lg-block">
                                             <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1.15em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 448 512">
@@ -20,10 +56,13 @@ const ListUsers = (props) => {
                                             </svg>
                                         </div>
                                         <div className="d-lg-none" style={{ paddingTop: "4px", fontSize: "15px" }}>
-                                            {data[key].details.firstname}
+                                            {key.firstname}
                                         </div>
-                                        <div className="d-none d-lg-block" style={{ paddingTop: "4px", fontSize: "15px" }}>
-                                            {data[key].details.firstname}&nbsp;&nbsp;{data[key].details.lastname}&nbsp;&nbsp;{data[key].details.other}
+                                        <div className="d-none d-lg-block text-uppercase" style={{ paddingTop: "3px", fontSize: "15px", width: "85%" }}>
+                                            {key.lastname}&nbsp;&nbsp;{key.firstname}&nbsp;&nbsp;{key.other}
+                                        </div>
+                                        <div style={{ paddingTop: "2px", fontSize: "15px" }} onClick={(e) => submitForm(index, key.email)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /></svg>
                                         </div>
                                     </div>
                                 ))}
@@ -33,23 +72,22 @@ const ListUsers = (props) => {
                     {/* tab 2 */}
                     <div className="rg_f py-3">
                         <div className="tab-content py-2 px-2" id="v-pills-tabContent" style={{ width: "100%", overflowY: "auto", height: "100%", fontSize: "13.5px" }}>
-                            {Object.keys(data).map((key, index) => (
+                            {data.map((key, index) => (
                                 <div key={index} className={`tab-pane fade show ${index === 0 ? "active" : ""}`} id={`v-pills-${index}-services`} role="tabpanel" aria-labelledby={`v-pills-${index}-services-tab`}>
                                     <p className="text-capitalize">
-                                        Name: &nbsp;{data[key].details.firstname}&nbsp;&nbsp;{data[key].details.lastname}&nbsp;&nbsp;{data[key].details.other}
+                                        Name: &nbsp;{key.firstname}&nbsp;&nbsp;{key.lastname}&nbsp;&nbsp;{key.other}
                                     </p>
-                                    <p>Phone: &nbsp;{data[key].details.phone}</p>
-                                    <p className="text-capitalize">Sex: &nbsp;{data[key].details.sex}</p>
+                                    <p>Phone: &nbsp;{key.phone}</p>
+                                    <p className="text-capitalize">Sex: &nbsp;{key.sex}</p>
                                     <p className="text-capitalize">
-                                        Birthday: &nbsp;{data[key].details.month} {data[key].details.day}
+                                        Birthday: &nbsp;{key.month} {key.day}
                                     </p>
-                                    <p className="text-capitalize">Account Type: &nbsp;{data[key].details.account_type}</p>
-                                    <p>Access code: &nbsp;{data[key].details.access_code}</p>
+                                    <p className="text-capitalize">Account Type: &nbsp;{key.account.replaceAll("_", " ")}</p>
                                     <div>
                                         <p className="text-capitalize">Recent Activities:</p>
-                                        {Object.keys(data[key]["activities"]).length > 0 ? (
+                                        {key["recent"].length > 0 ? (
                                             <ul className="list-group list-group-flush">
-                                                {data[key]["activities"][`${month} ${date}`].map((item, index) => (
+                                                {key["recent"].map((item, index) => (
                                                     <li key={index} className="list-group-item d-flex pt-1 pb-3 px-0">
                                                         <div className="pt-1">
                                                             <div className="extend rounded-circle">
@@ -76,7 +114,7 @@ const ListUsers = (props) => {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <div className="px-3 text-center" style={{ padding: "105px 0", border: "1px solid rgba(149, 170, 201, .3)", width: "95%", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem" }}>
+                                            <div className="px-3 text-center" style={{ padding: "155px 0", border: "1px solid rgba(149, 170, 201, .3)", width: "95%", color: "rgba(149, 170, 201, .8)", borderRadius: ".5rem" }}>
                                                 No Activity Yet
                                             </div>
                                         )}

@@ -12,24 +12,33 @@ const testData = {
             Basic_Metabolic_Panel: ["Calcium", "Glucose", "Sodium", "Potassium", "Bicarbonate", "Chloride", "Blood_Urea_Nitrogen", "Serum_Creatinine"],
             Comprehensive_Metabolic_Panel: ["Calcium", "Glucose", "Sodium", "Potassium", "Bicarbonate", "Chloride", "Blood_Urea_Nitrogen", "Serum_Creatinine", "Albumin", "Total_Protein", "Alkaline_Phosphatase_(ALP)", "Alanine_Transaminase_(ALT)", "Aspartate_Aminotransferase_(AST)", "Bilirubin"],
         },
+        // class: ["Fasting_Blood_Sugar_(FBS)", "Random_Blood_Sugar_(RBS)", "Oral_Glucose_Tolerance_Test_(OGTT)", "Liver_Function_Test", "Lipid_Profile", "Renal_Function_Test", "HBA1C", "C_Peptide", "Thyroid_Function_Test"],
         unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     },
 
-    // Hematology: {
-    //     name: "heme",
-    //     parameters: {},
-    //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
-    // },
+    Hematology: {
+        name: "heme",
+        // class: ["Activated_Partial_Thromboplastin_Time_(APTT)", "Full_Blood_Count_(FBC)", "Peripheral_Blood_Film", "Erythrocyte_Sedimentation_Rate_(ESR)", "Prothrombin_Time_and_INR_(PT/INR)", "Genotype", "Blood_Group", "D_Dimer", "Hemoglobin_(HB)", "Packed_Cell_Volume_(PCV)", "COOMB'S_Test_(Direct)", "COOMB'S_Test_(Indirect)"],
+        class: {},
+        unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
+    },
+
+    Serology: {
+        name: "sero",
+        // class: ["Hepatitis_B_Antigen_(HBsAg)", "Hepatitis_C_Antigen_(antiHCV)", "HIV_Screening_(RVS)", "ASO_Titre_(Quantitative)", "ASO_Titre_(Qualitative)", "Hepatitis_B_Panel", "Hepatitis_B_Viral_Load", "Hepatitis_C_Viral_Load", "H._Pylori_(Blood)", "Packed_Cell_Volume_(PCV)", "CD4_Count", "COOMB'S_Test_(Direct)", "COOMB'S_Test_(Indirect)"],
+        class: {},
+        unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
+    },
 
     // Histology_Cytology: {
     //     name: "histo",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // Immunology: {
     //     name: "immune",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
@@ -38,49 +47,51 @@ const testData = {
         class: {
             Urine_Microscopy: ["White_Blood_Cells", "Red_Blood_Cells", "Casts", "Crystals", "Yeast_Cells", "Bacteria", "Parasite"],
         },
-        parameters: {},
+        // class: ["Urinalysis", "Urine_MCS", "Feacal_Occult_Blood_(FOBT)", "Stool_Analysis", "Stool_MCS", "H._Pylori_(Stool)", "Malaria_Parasite_(MP)"],
+        // class: {},
         unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     },
 
-    // Hormonal_Assay: {
-    //     name: "hom",
-    //     parameters: {},
-    //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
-    // },
+    Hormonal_Assay: {
+        name: "hom",
+        class: {},
+        // class: ["Follicle_Stimulating_Hormone_(FSH)", "Luteinizing_Hormone_(LH)", "Progesterone", "Prolactin", "Prostate_Specific_Antigen_(PSA)", "Thyroid_Stimulating_Hormone_(TSH)", "Testosterone", "Free_T3", "Free_T4", "Human_Chorionic_Gonadotropin_(B.HCG)", "Serum_Cortisol", "Estradiol", "Growth_Hormone_(GH)", "Parathyroid_Hormone_(PTH)", "Hormone_Profile_(Male)", "Hormone_Profile_(Female)"],
+        unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
+    },
 
     // "Digital_X-Ray": {
     //     name: "xray",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // Ultrasonography: {
     //     name: "ultra",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // "Magnetic_Resonance_Imaging_(MRI)": {
     //     name: "mri",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // "Computerized Tomography (CT)": {
     //     name: "ct",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // Cardiology: {
     //     name: "cardio",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 
     // Breast_Clinic: {
     //     name: "breast",
-    //     parameters: {},
+    //     class: {},
     //     unit: ["mmol/L", "mg/dL", "g/dL", "g/L"],
     // },
 };

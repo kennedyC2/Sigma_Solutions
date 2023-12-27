@@ -11,7 +11,7 @@ import { year, months, monthNum, date, month, hours, domain } from "../../../Mis
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { get, set } from "idb-keyval";
+import { set } from "idb-keyval";
 import { store } from "../../../Misc/cacheStorage";
 import { Notification_B } from "../../../Misc/notification";
 import LeftTop from "../../../left/components/l-top";
@@ -20,10 +20,8 @@ import LeftBottom from "../../../left/components/l-bottom";
 // App
 const Register = (props) => {
     const Dispatch = useDispatch();
-    const navigate = useNavigate();
-    const services = useSelector((state) => state.services);
-    const personal = useSelector((state) => state.personal);
-    const company = useSelector((state) => state.company);
+    const navigate = useNavigate;
+    const { personal, company } = useSelector((state) => state);
     const image = domain + "image/" + personal.display;
     const { setSpin } = props;
 
@@ -32,33 +30,37 @@ const Register = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
+    const pid = () => {
+        let data = ""
+        if (parseInt(company.pid) < 1000) {
+            data = "00" + (company.pid + 1).toString()
+        } else {
+            data = (company.pid + 1).toString()
+        }
+
+        return data
+    }
+
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -84,7 +86,7 @@ const Register = (props) => {
         diagnosis: "",
         specimen: [],
         selectedTest: [],
-        account: status.ff,
+        account: personal.account,
         result: {},
         total: 0,
         paid: 0,
@@ -92,9 +94,10 @@ const Register = (props) => {
     });
 
     useEffect(() => {
-        const _id = company.name[0].toUpperCase() + Date.now();
+        const _id = "PHDN-" + pid()
         updateFormData({ ...formData, id: _id });
-        document.getElementById("identity").innerHTML = _id;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSpecimen = (e) => {
@@ -176,62 +179,67 @@ const Register = (props) => {
         data["date"] = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
 
         // Source Account
-        data["source"] = `${personal.lastname}`;
+        data["source"] = `${personal.lastname} ${personal.firstname}`;
+
+        // Get position
+        if (personal.account !== "administrator") {
+            data["position"] = company.users.filter((item, index) => {
+                return item.email === personal.email ? index : ""
+            })[0]
+        }
 
         //  Send
         try {
             const response = await axios({
                 method: "POST",
                 url: domain + "laboratory/tests/booking",
-                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+                data: {
+                    ...data,
+                    type: personal.company.type,
+                    companyID: company.cid,
+                    email: personal.email
+                },
             });
 
             const result = response.data;
 
             window.scrollTo(0, 0);
 
-            // Update User
-            if (status.ff === "admin") {
-                await set("admin", result.admin, store);
-            } else {
-                await set("users", result.user, store);
-            }
+            // Sort Pending Data
+            const _data = {}
 
-            // Update stats
-            await set("stats", result.stats, store);
+            // Loop
+            response.data.pending.forEach((prop, index) => {
+                const date = prop.date.split("-")
+                if (_data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`] !== undefined) {
+                    prop["position"] = index
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`].push(prop)
+                } else {
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`] = []
+                    prop["position"] = index
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`].push(prop)
+                }
+            })
 
-            // Update top_5
-            await set("top_5", result.top_5, store);
+            // Update Company
+            response.data.pending = _data
 
-            // Update hourly
-            await set("hourly", result.hourly, store);
+            // Update Services
+            await set("company", response.data, store);
 
-            // Update lab_activities
-            await set("lab_activities", result.lab_activities, store);
-
-            // Update storage
-            await set("storage", result.storage, store);
-
-            // Update revenue
-            await set("revenue", result.revenue, store);
-
-            // Update unsettled
-            const tests = await get("tests", store);
-            tests.unsettled = result.unsettled;
-            await set("tests", tests, store);
+            // Update State
+            Dispatch({ type: "company", payload: response.data });
 
             setTimeout(() => {
                 // Notify
                 Notification_B(response.data.message, true);
-
-                // State
-                Dispatch({ type: "bookTest", payload: response.data });
             }, 500);
         } catch (error) {
             // Notify
-            Notification_B(error.response.data.error, false);
+            Notification_B(error.response.data.message, false);
         }
-        form.reset();
+
+        // form.reset();
     };
 
     return status.loggedIn === true && status.session > Date.now() ? (
@@ -289,7 +297,7 @@ const Register = (props) => {
                                                 {personal["lastname"]} {personal["other"]}
                                             </p>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personal["account"]}
+                                                {personal["account"].replaceAll("_", " ")}
                                             </p>
                                         </div>
                                     </div>
@@ -304,7 +312,7 @@ const Register = (props) => {
                     <div>
                         <form action="#" method="post" id="register" onSubmit={handleSubmit}>
                             <FormTop data={formData} setData={updateFormData} specimenHandler={handleSpecimen} />
-                            <FormBottom data={formData} testData={services} setData={updateFormData} selectedTestHandler={handleSelectedTest} />
+                            <FormBottom data={formData} testData={company.services} setData={updateFormData} selectedTestHandler={handleSelectedTest} />
                         </form>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
 // ========================================================================
 
 // Import libraries
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5db98228a4df4-1200x381.jpg";
 import visa from "../../../../assets/images/visa-svgrepo-com.svg";
 import mastercard from "../../../../assets/images/mastercard-svgrepo-com.svg";
@@ -12,47 +12,39 @@ import LeftBottom from "../../../left/components/l-bottom";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { domain } from "../../../Misc/helper";
-import axios from "axios";
 
 // App
 const Payment = (props) => {
-    const navigate = useNavigate();
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const { personal } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
     const { setSpin } = props;
+    const navigate = useNavigate;
 
     // Confirm log In status
     const [status] = useState(
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -113,10 +105,10 @@ const Payment = (props) => {
                                             </div>
                                             <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["lastname"]} {personalData["other"]}
+                                                    {personal["lastname"]} {personal["other"]}
                                                 </p>
                                                 <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                    {personalData["account"]}
+                                                    {personal["account"].replaceAll("_", " ")}
                                                 </p>
                                             </div>
                                         </div>

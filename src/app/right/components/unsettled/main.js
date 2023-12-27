@@ -20,11 +20,9 @@ import LeftBottom from "../../../left/components/l-bottom";
 // App
 const Unsettled = (props) => {
     const Dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { unsettled } = useSelector((state) => state.tests) || {};
-    const { pending } = useSelector((state) => state.storage) || {};
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const navigate = useNavigate;
+    const { personal, company } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -32,33 +30,26 @@ const Unsettled = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -73,12 +64,7 @@ const Unsettled = (props) => {
     });
 
     const fetchData = () => {
-        if (parseInt(sortData.year) === parseInt(year)) {
-            return unsettled[`${sortData["month"]} ${sortData["day"]}`] || {};
-        } else {
-            const empty = {};
-            return empty;
-        }
+        return company.pending[`${sortData["month"]}_${sortData["day"]}_${sortData.year}`] || {};
     };
 
     const xxx = fetchData();
@@ -206,10 +192,10 @@ const Unsettled = (props) => {
                                         </div>
                                         <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["lastname"]} {personalData["other"]}
+                                                {personal["lastname"]} {personal["other"]}
                                             </p>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["account"]}
+                                                {personal["account"].replaceAll("_", " ")}
                                             </p>
                                         </div>
                                     </div>
@@ -219,10 +205,10 @@ const Unsettled = (props) => {
                     </nav>
                 </header>
 
-                {Object.keys(unsettled).length > 0 ? (
+                {Object.keys(company.pending).length > 0 ? (
                     <Fragment>
                         <div className="l1 rg_f d-flex justify-content-between py-2">
-                            <div className="py-1 px-2 d-none d-md-block">Pending Tests: {pending}</div>
+                            <div className="py-1 px-2 d-none d-md-block">Pending Tests: {company.storage.pending}</div>
                             <div className="d-md-flex">
                                 <div style={{ fontSize: ".88rem" }}>Sort By Date:</div>
                                 <form action="#" method="get">
@@ -268,7 +254,7 @@ const Unsettled = (props) => {
                                                             </g>
                                                         </svg>
                                                         <div className="d-flex justify-content-between ps-2" style={{ width: "505px", fontSize: "15px" }}>
-                                                            <p style={{ marginBottom: 0 }}>{item}</p>
+                                                            <p style={{ marginBottom: 0 }}>{xxx[item].id}</p>
                                                             <p className="d-none d-lg-block" style={{ marginBottom: 0 }}>{` ${xxx[item]["date"]} | ${xxx[item]["time"]}`}</p>
                                                         </div>
                                                     </div>
@@ -350,7 +336,7 @@ const Unsettled = (props) => {
                                                     </div>
 
                                                     <div className="modal fade" id={"staticBackdrop" + index} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby={"staticBackdropLabel" + index} aria-hidden="true">
-                                                        <div className="modal-dialog modal-dialog-centered modal-xl" style={{ width: "850px" }}>
+                                                        <div className="modal-dialog modal-dialog-centered modal-xl" style={{ width: "950px" }}>
                                                             <div className="modal-content">
                                                                 <div className="modal-header">
                                                                     <h5 className="modal-title ms-1 text-uppercase" id={"staticBackdropLabel" + index} style={{ fontSize: "18px" }}>

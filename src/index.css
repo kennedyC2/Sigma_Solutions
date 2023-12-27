@@ -884,7 +884,7 @@ div.nav-link > * {
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
     .modal-dialog {
-        /* max-width: unset; */
+        max-width: 950px;
     }
 
     .stats {
@@ -1096,6 +1096,7 @@ div.nav-link > * {
 
     .serv_2 .input-group {
         flex-direction: row;
+        flex-wrap: nowrap;
     }
 
     .serv_2 .form-control {
@@ -1111,7 +1112,8 @@ div.nav-link > * {
     .s_sed {
         flex-direction: row;
         width: 100%;
-        height: calc(623px - 68px);
+        /* height: calc(623px - 68px); */
+        height: calc(623px - 18px);
     }
 
     .s_sed > div:first-child {
@@ -1351,6 +1353,10 @@ div.nav-link > * {
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+    .right .navbar {
+        padding-top: 15px;
+    }
+
     .l-top {
         display: block;
         height: 32%;

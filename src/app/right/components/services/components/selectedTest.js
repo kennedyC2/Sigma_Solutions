@@ -1,8 +1,44 @@
 // Import Dependencies
+import axios from "axios";
+import { domain } from "../../../../Misc/helper";
+import { set } from "idb-keyval";
+import { store } from "../../../../Misc/cacheStorage";
+import { Notification_B } from "../../../../Misc/notification";
+import { useDispatch } from "react-redux";
 
 // Component
 const SelectedTests = (props) => {
-    const { data } = props;
+    const Dispatch = useDispatch();
+    const { data, companyID, type } = props;
+
+    // Click the submit button
+    const submitForm = async (category, test) => {
+        //  Send
+        try {
+            const response = await axios({
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                url: domain + "laboratory/delete/services",
+                data: {
+                    test: test,
+                    category: category,
+                    type: type,
+                    companyID: companyID
+                },
+            });
+
+            // Update Services
+            await set("company", response.data, store);
+
+            // Update State
+            Dispatch({ type: "company", payload: response.data });
+        } catch (error) {
+            // Notify
+            Notification_B(error.response.data.error, false);
+        }
+    };
 
     return (
         <div className="tab-pane s_sel fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -39,7 +75,10 @@ const SelectedTests = (props) => {
                                                             <td className="align-middle text-capitalize" style={{ width: "442px" }}>
                                                                 {test.replaceAll("_", " ")}
                                                             </td>
-                                                            <td className="align-middle text-end"> ₦{new Intl.NumberFormat("en-US", {}).format(data[key]["testList"][test]["cost"])}</td>
+                                                            <td className="align-middle text-end"> ₦ {new Intl.NumberFormat("en-US", {}).format(data[key]["testList"][test]["cost"])}</td>
+                                                            <td className="align-middle text-end" onClick={(e) => submitForm(key, test)}>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="red" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM9 17h2V8H9zm4 0h2V8h-2zM7 6v13z" /></svg>
+                                                            </td>
                                                         </tr>
                                                     ))}
                                             </tbody>

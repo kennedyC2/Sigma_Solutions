@@ -4,7 +4,7 @@
 
 // Import libraries
 import axios from "axios";
-import { get, set } from "idb-keyval";
+import { set } from "idb-keyval";
 import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -19,46 +19,37 @@ import { domain } from "../../../Misc/helper";
 // App
 const Users = (props) => {
     // fetch Data From Storage
-    const users = useSelector((state) => state.users);
-    const personal = useSelector((state) => state.personal);
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const { personal, company } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
     const Dispatch = useDispatch();
-    const navigate = useNavigate();
-    const {setSpin} = props
+    const navigate = useNavigate;
+    const { setSpin } = props
 
     // Confirm log In status
     const [status] = useState(
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                key: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -83,6 +74,7 @@ const Users = (props) => {
         data["account_type"] = e.target[9].value;
         data["password"] = e.target[10].value;
         data["admin"] = personal.email;
+        data["company"] = personal.company;
 
         //  Send
         try {
@@ -92,25 +84,17 @@ const Users = (props) => {
                     "Content-Type": "application/json",
                 },
                 url: domain + "laboratory/users/create",
-                data: { ...data, type: status.path.type, tokenID: status.key, companyID: status.path.companyID },
+                data: data,
             });
 
-            const result = response.data;
-
-            // Update Users
-            const users = await get("users", store);
-            users[result.user.details.email.split("@")[0]] = result.user;
-            await set("users", users, store);
-
-            // Update Stats
-            await set("stats", result.stats, store);
+            // Update Services
+            await set("company", response.data, store);
 
             // Close
             e.target.parentNode.parentNode.childNodes[1].childNodes[0].click();
 
             // Update State
-            Dispatch({ type: "addUser", payload: result });
-            document.getElementById(e.target.id).reset();
+            Dispatch({ type: "company", payload: response.data });
         } catch (error) {
             // Notify
             Notification_A(error.response.data.error, false);
@@ -174,10 +158,10 @@ const Users = (props) => {
                                         </div>
                                         <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["lastname"]} {personalData["other"]}
+                                                {personal["lastname"]} {personal["other"]}
                                             </p>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["account"]}
+                                                {personal["account"].replaceAll("_", " ")}
                                             </p>
                                         </div>
                                     </div>
@@ -197,7 +181,7 @@ const Users = (props) => {
                     </div>
                 </div>
                 <div className="tab-content" id="nav-tabContent">
-                    <ListUsers data={users} />
+                    <ListUsers data={company.users} />
 
                     {/* Modal */}
                     <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

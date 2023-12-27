@@ -4,7 +4,27 @@ import thunk from "redux-thunk";
 import testData from "./../Misc/testData";
 
 const InitialState = {
-    personal: {},
+    personal: {
+        firstname: "",
+        lastname: "",
+        other: "",
+        sex: "",
+        day: "",
+        month: "",
+        year: "",
+        time: "",
+        date: "",
+        phone: "",
+        email: "",
+        password: "",
+        state: "",
+        country: "",
+        company: {},
+        display: "default.png",
+        account: "",
+        verified: false,
+        fetched: false
+    },
     company: {
         hourly: {},
         lab_activities: {},
@@ -16,10 +36,10 @@ const InitialState = {
         testKits: {},
         tests: {},
         top_5: {},
-        users: {},
+        users: [],
         fetched: false,
     },
-    data: testData
+    testData: testData
 };
 
 const appReducer = (state = InitialState, action) => {
@@ -36,21 +56,36 @@ const appReducer = (state = InitialState, action) => {
         // Personal Profile
         // ====================================================================================================================
         case "personal": {
-            const data = {};
-            data["personal"] = action.payload;
-
             return {
                 ...state,
-                ...data,
+                personal: action.payload,
+            };
+        }
+
+        // Company Profile
+        // ====================================================================================================================
+        case "company": {
+            return {
+                ...state,
+                company: action.payload,
+            };
+        }
+
+        // home
+        // ====================================================================================================================
+        case "login": {
+            return {
+                ...state,
+                personal: action.payload.user,
+                company: action.payload.company,
             };
         }
 
         // Full Profile
         // ====================================================================================================================
         case "full_acct": {
-            const data = {};
-            data["personal"] = state.personal;
-            data["personal"]["company"] = action.payload.company
+            const data = state.personal;
+            data["company"] = action.payload.company
 
             return {
                 ...state,
@@ -214,19 +249,6 @@ const appReducer = (state = InitialState, action) => {
             return {
                 ...state,
                 personal: { ...data },
-            };
-        }
-
-        // Add Company
-        // ====================================================================================================================
-        case "company": {
-            // Profile Data
-            const data = action.payload;
-
-            // Upload
-            return {
-                ...state,
-                company: { ...data },
             };
         }
 

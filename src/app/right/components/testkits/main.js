@@ -19,11 +19,10 @@ import LeftBottom from "../../../left/components/l-bottom";
 // App
 const TestKits = (props) => {
     // fetch Data From Storage
-    const navigate = useNavigate();
-    const testKits = useSelector((state) => state.testKits);
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const { personal, company } = useSelector((state) => state);
+    const image = domain + "image/" + personal.display;
     const Dispatch = useDispatch();
+    const navigate = useNavigate;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -31,33 +30,26 @@ const TestKits = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                key: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -164,10 +156,10 @@ const TestKits = (props) => {
                                     </div>
                                     <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                         <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                            {personalData["lastname"]} {personalData["other"]}
+                                            {personal["lastname"]} {personal["other"]}
                                         </p>
                                         <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                            {personalData["account"]}
+                                            {personal["account"].replaceAll("_", " ")}
                                         </p>
                                     </div>
                                 </div>
@@ -188,7 +180,7 @@ const TestKits = (props) => {
                     </div>
                 </div>
                 <div className="tab-content" id="nav-tabContent">
-                    <ListKits data={testKits} />
+                    <ListKits data={company.testKits} />
 
                     {/* Modal */}
                     <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

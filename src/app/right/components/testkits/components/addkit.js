@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 // Component
 const AddKit = (props) => {
     const { saveKit } = props;
-    const services = useSelector((state) => state.services);
+    const { company } = useSelector((state) => state);
 
     return (
         <form action="#" method="POST" className="pt-3" id="formT" onSubmit={saveKit}>
@@ -26,11 +26,11 @@ const AddKit = (props) => {
                     <label htmlFor="quantity" className="form-label">
                         Test:
                     </label>
-                    {Object.keys(services).length > 0 ? (
+                    {Object.keys(company.services).length > 0 ? (
                         <Fragment>
-                            <select name="test" className="form-select form-select-sm" defaultValue={`${Object.keys(services)[0]}:${Object.keys(services)[0]["testList"]}`}>
-                                {Object.keys(services).map((key) =>
-                                    Object.keys(services[key]["testList"]).map((item, index) => (
+                            <select name="test" className="form-select form-select-sm" defaultValue={`${Object.keys(company.services)[0]}:${Object.keys(company.services)[0]["testList"]}`}>
+                                {Object.keys(company.services).map((key) =>
+                                    Object.keys(company.services[key]["testList"]).map((item, index) => (
                                         <option key={index} value={`${key}:${item.replaceAll(" ", "_")}`}>
                                             {item.replaceAll("_", " ")}
                                         </option>

@@ -10,10 +10,10 @@ const Personal = (props) => {
             <li className="list-group-item">
                 <div className="me-3">Name:</div>
                 <div className="d-lg-none text-capitalize">
-                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"][0].toUpperCase()}.
+                    {personalData["lastname"]} {personalData["firstname"]} {personalData["other"][0].toUpperCase()}.
                 </div>
                 <div className="d-none d-lg-block text-capitalize">
-                    {personalData["firstname"]} {personalData["lastname"]} {personalData["other"]}
+                    {personalData["lastname"]} {personalData["firstname"]} {personalData["other"]}
                 </div>
             </li>
             <li className="list-group-item">

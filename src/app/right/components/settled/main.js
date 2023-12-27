@@ -12,15 +12,12 @@ import bg from "../../../../assets/images/Medical-Lab-Water-Filtration-Systems-5
 import { domain } from "../../../Misc/helper";
 import LeftTop from "../../../left/components/l-top";
 import LeftBottom from "../../../left/components/l-bottom";
-import axios from "axios";
 
 // App
 const Database = (props) => {
-    const navigate = useNavigate();
-    const { settled } = useSelector((state) => state.tests);
-    const { completed } = useSelector((state) => state.storage);
-    const personalData = useSelector((state) => state.personal);
-    const image = domain + "image/" + personalData.display;
+    const { personal, company } = useSelector((state) => state);
+    const navigate = useNavigate;
+    const image = domain + "image/" + personal.display;
     const { setSpin } = props;
 
     // Confirm log In status
@@ -28,33 +25,26 @@ const Database = (props) => {
         () =>
             JSON.parse(localStorage.getItem("status")) || {
                 loggedIn: false,
-                token: false,
-                path: {
-                    type: false,
-                    companyID: false,
-                },
+                session: false,
             }
     );
 
     useEffect(() => {
-        (async () => {
-            const response = await axios({
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                url: domain + "session/update",
-                data: { email: status.email, tokenID: status.key, companyID: status.path.companyID },
-            });
-
-            status.session = response.data.session;
-            localStorage.setItem("status", JSON.stringify(status));
-        })();
-
         const session = setInterval(async () => {
+            if (status.session - Date.now() > 0 && status.session - Date.now() < 1000 * 60 * 5) {
+                const session = 1000 * 60 * 30
+                localStorage.setItem("status", JSON.stringify({
+                    loggedIn: true,
+                    session: session,
+                }))
+
+                status.session = session
+            }
+
             if (status.session < Date.now()) {
                 navigate("/login", { replace: true });
             }
+
         }, 1000 * 60);
 
         return () => {
@@ -70,7 +60,7 @@ const Database = (props) => {
 
     const fetchData = () => {
         if (parseInt(sortData.year) === parseInt(year)) {
-            return settled[`${sortData["month"]} ${sortData["day"]}`] || [];
+            return company.tests.settled[`${sortData["month"]} ${sortData["day"]}`] || [];
         } else {
             const empty = [];
             return empty;
@@ -131,10 +121,10 @@ const Database = (props) => {
                                         </div>
                                         <div className="text-start" style={{ paddingTop: ".2rem" }}>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["lastname"]} {personalData["other"]}
+                                                {personal["lastname"]} {personal["other"]}
                                             </p>
                                             <p className="text-capitalize" style={{ fontSize: ".8rem", margin: "0" }}>
-                                                {personalData["account"]}
+                                                {personal["account"].replaceAll("_", " ")}
                                             </p>
                                         </div>
                                     </div>
@@ -144,10 +134,10 @@ const Database = (props) => {
                     </nav>
                 </header>
 
-                {Object.keys(settled).length > 0 ? (
+                {Object.keys(company.tests.settled).length > 0 ? (
                     <Fragment>
                         <div className="l1 rg_f d-flex justify-content-between py-2">
-                            <div className="py-1 px-2 d-none d-md-block">Completed Tests: {completed}</div>
+                            <div className="py-1 px-2 d-none d-md-block">Completed Tests: {company.storage.completed}</div>
                             <div className="d-md-flex">
                                 <div className="py-1 px-3" style={{ fontSize: ".88rem" }}>
                                     Sort By Date:

@@ -6,7 +6,7 @@ import Spinner from "../Misc/spinner";
 import { store } from "../Misc/cacheStorage";
 import { useDispatch } from "react-redux";
 import { Notification_A } from "../Misc/notification";
-import { domain } from "../Misc/helper";
+import { domain, months } from "../Misc/helper";
 import { set } from "idb-keyval";
 
 // Component
@@ -25,7 +25,7 @@ const Login = () => {
         const data = {};
         data["email"] = e.target[0].value;
         data["password"] = e.target[1].value;
-        data["account"] = e.target[2].checked === true ? "admin" : "user";
+        data["account"] = e.target[2].value;
 
         // Hide
         setHide(1);
@@ -46,14 +46,39 @@ const Login = () => {
                 session: Date.now() + 1000 * 60 * 30,
             }));
 
+            // Sort Pending Data
+            const _data = {}
+
+            // Loop
+            response.data.company.pending.forEach((prop, index) => {
+                const date = prop.date.split("-")
+                if (_data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`] !== undefined) {
+                    prop["position"] = index
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`].push(prop)
+                } else {
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`] = []
+                    prop["position"] = index
+                    _data[`${months[parseInt(date[1]) - 1]}_${date[0]}_${date[2]}`].push(prop)
+                }
+            })
+
+            // Update Company
+            response.data.company.pending = _data
+
+            // fetched
+            response.data["fetched"] = true
+
             // Update User
-            set("personal", response.data, store);
+            set("personal", response.data.user, store);
+
+            // Update Company
+            set("company", response.data.company, store);
 
             // Update State
-            Dispatch({ type: "personal", payload: response.data });
+            Dispatch({ type: "home", payload: response.data });
 
             // Navigate
-            if (response.data.account === "admin") {
+            if (response.data.user.account === "administrator") {
                 setTimeout(() => {
                     navigate("/app", { replace: true });
                 }, 2000);
@@ -107,11 +132,18 @@ const Login = () => {
                             Must be 8-20 characters long.
                         </div>
                     </div>
-                    <div className="form-check mb-3 pt-2">
-                        <input className="form-check-input" type="checkbox" value="admin" id="adminCheck" />
-                        <label className="form-check-label ps-1" htmlFor="adminCheck">
-                            Administrator
+                    <div className="mb-3">
+                        <label htmlFor="type" className="form-label">
+                            Account Type:
                         </label>
+                        <select className="form-select form-select-sm" name="type" id="type" defaultValue="Administrator" required>
+                            <option value="Administrator">Administrator</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="Laboratory_Scientist">Laboratory Scientist</option>
+                            <option value="Radiologist">Radiologist</option>
+                            <option value="Receptionist,_Laboratory Scientist">Receptionist + Laboratory Scientist</option>
+                            <option value="Receptionist,_Technician">Receptionist + Technician</option>
+                        </select>
                     </div>
                     <div className="text-end pt-3 d-flex justify-content-end">
                         <div className="d-inline-flex pt-1" style={{ fontSize: ".9rem" }}>
